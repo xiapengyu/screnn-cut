@@ -145,6 +145,8 @@ public class Constant {
 
 	public static final String FAIL_CODE = "10000";
 	public static final String FAIL_MESSAGE = "FAIL";
+	
+	public static final String TOKEN_IVALID_CODE = "10001";
 
 	public static final String COMMON_ERROR_CODE = "00002";
 	public static final String NO_LOGIN_ERROR_MESSAGE = "没有用户权限";

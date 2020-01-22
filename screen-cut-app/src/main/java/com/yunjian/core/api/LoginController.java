@@ -55,10 +55,10 @@ public class LoginController {
 	@ResponseBody
 	public ResponseDto register(@RequestBody AccountDto param) {
 		logger.info("用户注册{}", JsonUtil.toJsonString(param));
-		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword())) {
-			return new ResponseDto(Constant.FAIL_CODE, null, "邮箱、密码不能为空");
-		}else if(StringUtil.isEmpty(param.getSerialNo())) {
-			return new ResponseDto(Constant.FAIL_CODE, null, "注册序列号不能为空");
+		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword()) 
+				|| StringUtil.isEmpty(param.getCode()) || StringUtil.isEmpty(param.getConfirmPassword()) 
+				|| StringUtil.isEmpty(param.getSerialNo())) {
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_CHECK_MSG);
 		}
 		return accountServiceImpl.register(param);
 	}

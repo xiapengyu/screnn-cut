@@ -40,12 +40,12 @@ import com.yunjian.core.service.IEmailCodeService;
  */
 @Service
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> implements IAccountService {
-	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	private IEmailCodeService emailCodeServiceImpl;
-	
+
 	@Autowired
 	private IAccountCacheService accountCacheServiceImpl;
 
@@ -53,6 +53,17 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 	public ResponseDto register(AccountDto param) {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
+			if (this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())) != null) {
+				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "该邮箱已经注册");
+			} else if (this.getOne(new QueryWrapper<Account>().eq("serial_no", param.getSerialNo())) != null) {
+				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "序列号已经存在");
+			} else if(!param.getPassword().equals(param.getConfirmPassword())) {
+				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "输入密码不一致");
+			}
+			
+			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())
+					.eq("email", param.getEmail()).eq("delete_flag", 1).gt("expire_time", new Date()));
+			if(emalCode != null) {
 				Account account = new Account();
 				account.setEmail(param.getEmail());
 				account.setPassword(MD5Util.getMD5String(param.getPassword()));
@@ -62,6 +73,12 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				account.setUpdateTime(new Date());
 				account.setDeleteFlag(1);
 				this.save(account);
+				
+				// 删除验证码
+				emailCodeServiceImpl.remove(new QueryWrapper<EmailCode>().eq("id", emalCode.getId()));
+			}else {
+				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码输入错误");
+			}
 		} catch (Exception e) {
 			logger.error("用户注册失败", e);
 			return new ResponseDto(Constant.FAIL_CODE, null, "用户注册失败");
@@ -73,13 +90,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 	public ResponseDto login(Account param) {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
-			Account account = this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())
-					.eq("password", MD5Util.getMD5String(param.getPassword())));
-			if(account != null) {
-				//删除旧缓存
+			Account account = this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail()).eq("password",
+					MD5Util.getMD5String(param.getPassword())));
+			if (account != null) {
+				// 删除旧缓存
 				accountCacheServiceImpl.remove(new QueryWrapper<AccountCache>().eq("account_id", account.getId()));
-				
-				//保存新的缓存
+
+				// 保存新的缓存
 				String token = UUIDUtil.getUUID();
 				AccountCache cache = new AccountCache();
 				cache.setAccountId(account.getId());
@@ -89,13 +106,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				cache.setUpdateTime(new Date());
 				cache.setToken(token);
 				accountCacheServiceImpl.save(cache);
-				//保存到会话
+				// 保存到会话
 				SecurityContext.setUserPrincipal(account);
 				Map<String, Object> resultMap = new HashMap<>();
 				resultMap.put("account", account);
 				resultMap.put("token", token);
 				response.setData(resultMap);
-			}else {
+			} else {
 				return new ResponseDto(Constant.FAIL_CODE, null, "用户名或密码错误");
 			}
 		} catch (Exception e) {
@@ -113,13 +130,14 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 					.getRequest();
 			String requestToken = request.getHeader("token");
 			logger.info("用户退出登录,token>>>[{}]", requestToken);
-			AccountCache cache = accountCacheServiceImpl.getOne(new QueryWrapper<AccountCache>().eq("token", requestToken));
-			if(cache != null) {
+			AccountCache cache = accountCacheServiceImpl
+					.getOne(new QueryWrapper<AccountCache>().eq("token", requestToken));
+			if (cache != null) {
 				Account account = this.getOne(new QueryWrapper<Account>().eq("id", cache.getAccountId()));
 				logger.info("用户退出登录{}", JsonUtil.toJsonString(account));
-				//清空会话
+				// 清空会话
 				SecurityContext.setUserPrincipal(null);
-				//删除缓存
+				// 删除缓存
 				accountCacheServiceImpl.remove(new QueryWrapper<AccountCache>().eq("account_id", account.getId()));
 			}
 		} catch (Exception e) {
@@ -133,22 +151,21 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 	public ResponseDto resetPassword(AccountDto param) {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
-			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>()
-					.eq("code", param.getCode()).eq("email", param.getEmail())
-					.eq("delete_flag", 1).gt("expire_time", new Date()));
-			if(emalCode != null) {
-				Account account = this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())
-						.eq("serial_no", param.getSerialNo()));
-				if(account == null) {
+			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())
+					.eq("email", param.getEmail()).eq("delete_flag", 1).gt("expire_time", new Date()));
+			if (emalCode != null) {
+				Account account = this.getOne(
+						new QueryWrapper<Account>().eq("email", param.getEmail()).eq("serial_no", param.getSerialNo()));
+				if (account == null) {
 					return new ResponseDto(Constant.FAIL_CODE, null, "未查到相关用户");
-				}else {
-					//更新用户信息
+				} else {
+					// 更新用户信息
 					account.setPassword(MD5Util.getMD5String(param.getPassword()));
 					this.saveOrUpdate(account);
 				}
-				//删除验证码
+				// 删除验证码
 				emailCodeServiceImpl.remove(new QueryWrapper<EmailCode>().eq("id", emalCode.getId()));
-			}else {
+			} else {
 				return new ResponseDto(Constant.FAIL_CODE, null, "验证码错误");
 			}
 		} catch (Exception e) {

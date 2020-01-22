@@ -86,7 +86,7 @@ public class SessionFilter implements Filter {
 			logger.info("Token无效，请重新登录");
 			resp.setHeader("Content-type", "application/json;charset=UTF-8");
 			resp.setCharacterEncoding("UTF-8");
-			String msg = JsonUtil.toJsonString(new ResponseDto(Constant.FAIL_CODE, null, "Token无效，请重新登录"));
+			String msg = JsonUtil.toJsonString(new ResponseDto(Constant.TOKEN_IVALID_CODE, null, "Token无效，请重新登录"));
 			response.getWriter().print(msg);
 			response.getWriter().flush();
 		}
