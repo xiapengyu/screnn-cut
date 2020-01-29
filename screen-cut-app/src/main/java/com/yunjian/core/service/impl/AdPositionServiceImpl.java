@@ -40,7 +40,7 @@ public class AdPositionServiceImpl extends ServiceImpl<AdPositionMapper, AdPosit
         QueryWrapper<AdPosition> queryWrapper = new QueryWrapper<AdPosition>();
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
         if(StringUtils.isNotBlank(name)){
-            queryWrapper.eq("name", name);
+            queryWrapper.like("name", name);
         }
 
         IPage<AdPosition> page = this.page(new Query<AdPosition>().getPage(params),queryWrapper);

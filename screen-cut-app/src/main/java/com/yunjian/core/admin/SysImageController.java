@@ -12,6 +12,7 @@ import com.yunjian.core.entity.Ad;
 import com.yunjian.core.entity.AdPosition;
 import com.yunjian.core.service.IAdPositionService;
 import com.yunjian.core.service.IAdService;
+import com.yunjian.core.service.IImageService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,22 +41,22 @@ public class SysImageController {
     private String fileUploadServer = "";
 
     @Autowired
-    private IAdService adService;
+    private IImageService imageService;
 
     /**
-     * 上传广告图片
+     * 上传广告图片(多处复用)
      */
-    @PostMapping("/uploadAdInfoImage")
+    @PostMapping("/uploadImage")
     public R uploadAdInfoImage(@RequestParam("file") MultipartFile file){
         try {
             String name = file.getOriginalFilename();
             String extName = "";
-            logger.info("上传广告图片[{}]", name);
+            logger.info("上传图片[{}]", name);
             if (name.lastIndexOf(".") >= 0){
                 extName = name.substring(file.getOriginalFilename().lastIndexOf("."));
             }
-            ResponseDto response = adService.uploadImage(file.getBytes(), fileUploadServer + "ad/", extName);
-            return R.ok().put("adImage", response.getData());
+            ResponseDto response = imageService.uploadImage(file.getBytes(), fileUploadServer + "ad/", extName);
+            return R.ok().put("imagePath", response.getData());
         } catch (IOException e) {
             logger.info("上传文件失败", e);
             return R.error("上传图片失败");

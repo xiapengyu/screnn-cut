@@ -56,7 +56,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/captcha.jpg", "anon");
-        filterMap.put("/sys/image/uploadAdInfoImage", "anon");
+        filterMap.put("/sys/image/uploadImage", "anon");
         filterMap.put("/**", "oauth2");
         filterMap.put("/captcha.jpg", "anon");
         shiroFilter.setFilterChainDefinitionMap(filterMap);

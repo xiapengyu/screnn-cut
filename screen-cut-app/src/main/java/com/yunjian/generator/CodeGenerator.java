@@ -46,7 +46,7 @@ public class CodeGenerator {
 		mpg.setDataSource(dsc);
 
 		List<String> list = new ArrayList<>(); // 数据表的列表
-		list.add("tb_ad_position");
+		list.add("tb_phone_model");
 		for (String tablename : list) {
 			// 包配置
 			PackageConfig pc = new PackageConfig();

@@ -2,24 +2,23 @@ package com.yunjian.core.service;
 
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
-import com.yunjian.core.dto.ResponseDto;
-import com.yunjian.core.entity.Ad;
+import com.yunjian.core.entity.PhoneModel;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Map;
 
 /**
  * <p>
- *  服务类
+ * 手机机型信息表 服务类
  * </p>
  *
  * @author xiapengyu
  * @since 2020-01-29
  */
-public interface IAdService extends IService<Ad> {
+public interface IPhoneModelService extends IService<PhoneModel> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    R saveAdInfo(Map<String, Object> params);
+    R savePhoneModelInfo(Map<String, Object> params);
 
 }

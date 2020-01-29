@@ -41,7 +41,7 @@ public class SysAdController {
     private IAdPositionService adPositionService;
 
     /**
-     * 所有广告位列表
+     * 分页查询广告位列表
      */
     @PostMapping("/adPositionList")
     public R adPositionList(@RequestBody Map<String, Object> params){
