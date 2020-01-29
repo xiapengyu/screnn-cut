@@ -1,5 +1,6 @@
 package com.yunjian.core.api;
 
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.yunjian.core.service.IEmailCodeService;
 
 import jodd.util.StringUtil;
 
+@Api("用户账号与登录相关接口")
 @RestController
 @RequestMapping("/account")
 public class LoginController {
@@ -80,7 +82,6 @@ public class LoginController {
 	
 	/**
 	 * 退出登录
-	 * @param param
 	 * @return
 	 */
 	@RequestMapping(value="/logout", method = RequestMethod.POST)
