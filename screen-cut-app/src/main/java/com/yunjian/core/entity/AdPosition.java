@@ -1,10 +1,9 @@
 package com.yunjian.core.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

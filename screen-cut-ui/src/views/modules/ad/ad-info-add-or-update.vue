@@ -27,7 +27,7 @@
           </el-select>
       </el-form-item>
       <el-form-item label="排序码" prop="sortNum" :class="{ 'is-required': true }">
-        <el-input v-model="dataForm.sortNum" type="number" placeholder="排序码"></el-input>
+        <el-input-number v-model="dataForm.sortNum" controls-position="right" :min="0" label="排序码"></el-input-number>
       </el-form-item>
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">

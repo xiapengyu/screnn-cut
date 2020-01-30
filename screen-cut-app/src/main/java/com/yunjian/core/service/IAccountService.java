@@ -1,8 +1,13 @@
 package com.yunjian.core.service;
 
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.R;
 import com.yunjian.core.dto.AccountDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Account;
+
+import java.util.Map;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -22,5 +27,9 @@ public interface IAccountService extends IService<Account> {
 	ResponseDto logout();
 
 	ResponseDto resetPassword(AccountDto param);
+
+	PageUtils queryPage(Map<String, Object> params);
+
+	R saveAccount(Map<String, Object> params);
 
 }

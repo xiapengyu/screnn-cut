@@ -10,14 +10,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.common.utils.MD5Util;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.Query;
+import com.yunjian.common.utils.R;
+import com.yunjian.common.utils.StringUtil;
 import com.yunjian.common.utils.UUIDUtil;
 import com.yunjian.core.dto.AccountDto;
 import com.yunjian.core.dto.ResponseDto;
@@ -72,6 +78,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				account.setCreateTime(new Date());
 				account.setUpdateTime(new Date());
 				account.setDeleteFlag(1);
+				account.setDeviceName("");
+				account.setPhoneModelId(null);
+				account.setPhoneModelName("");
+				account.setUseAmount(0);
+				account.setUnuseAmount(0);
+				account.setUserName("");
+				account.setStatus(1);
 				this.save(account);
 				
 				// 删除验证码
@@ -173,6 +186,47 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 			return new ResponseDto(Constant.FAIL_CODE, null, "重置密码失败");
 		}
 		return response;
+	}
+
+	@Override
+	public PageUtils queryPage(Map<String, Object> params) {
+		String userName = StringUtil.obj2String(params.get("useNamer"));
+		String email = StringUtil.obj2String(params.get("email"));
+		
+		QueryWrapper<Account> queryWrapper = new QueryWrapper<Account>();
+        queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
+        if(!StringUtils.isEmpty(userName)){
+            queryWrapper.like("user_name", userName);
+        }
+        if(!StringUtils.isEmpty(email)){
+            queryWrapper.like("email", email);
+        }
+
+        IPage<Account> page = this.page(new Query<Account>().getPage(params), queryWrapper);
+        return new PageUtils(page);
+	}
+
+	@Override
+	public R saveAccount(Map<String, Object> params) {
+		String id = StringUtil.obj2String(params.get("id"));
+        try {
+        	Account account = null;
+            if(StringUtils.isEmpty(id)){   //新增
+            	account = new Account();
+            	account.setCreateTime(new Date());
+            	account.setDeleteFlag(1);
+            }else{  //修改
+            	account = this.getOne(new QueryWrapper<Account>().eq("id", id));
+            }
+            account.setStatus(Integer.parseInt(params.get("status").toString()));
+            account.setUnuseAmount(Integer.parseInt(params.get("unuseAmount").toString()));
+            account.setUpdateTime(new Date());
+            this.saveOrUpdate(account);
+        } catch (Exception e) {
+            logger.error("保存广告位信息失败", e);
+            return R.error("保存广告位信息失败");
+        }
+        return R.ok();
 	}
 
 }

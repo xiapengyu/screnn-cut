@@ -1,12 +1,6 @@
 package com.yunjian.core.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
 import com.yunjian.core.dto.ResponseDto;
-import com.yunjian.core.entity.Ad;
-
-import java.util.Map;
 
 /**
  * <p>

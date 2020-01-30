@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.MailUtils;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.EmailCode;

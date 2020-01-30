@@ -42,11 +42,11 @@ public class CodeGenerator {
 				"jdbc:mysql://127.0.0.1:3306/screen?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false");
 		dsc.setDriverName("com.mysql.jdbc.Driver");
 		dsc.setUsername("root");
-		dsc.setPassword("xia4698083");
+		dsc.setPassword("123456");
 		mpg.setDataSource(dsc);
 
 		List<String> list = new ArrayList<>(); // 数据表的列表
-		list.add("tb_phone_model");
+		list.add("tb_push_record");
 		for (String tablename : list) {
 			// 包配置
 			PackageConfig pc = new PackageConfig();

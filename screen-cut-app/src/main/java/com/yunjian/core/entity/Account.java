@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author xiapengyu
- * @since 2020-01-21
+ * @since 2020-01-30
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 public class Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer id;
 
 	/**
@@ -46,6 +46,41 @@ public class Account implements Serializable {
 	 * 机器序列码
 	 */
 	private String serialNo;
+
+	/**
+	 * 机型ID
+	 */
+	private Integer phoneModelId;
+
+	/**
+	 * 机型名称
+	 */
+	private String phoneModelName;
+
+	/**
+	 * 用户名
+	 */
+	private String userName;
+
+	/**
+	 * 设备名称
+	 */
+	private String deviceName;
+
+	/**
+	 * 已用次数
+	 */
+	private Integer useAmount;
+
+	/**
+	 * 未用次数
+	 */
+	private Integer unuseAmount;
+
+	/**
+	 * 状态 1启用 0禁用
+	 */
+	private Integer status;
 
 	/**
 	 * 注册时间
