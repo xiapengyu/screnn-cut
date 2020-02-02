@@ -68,8 +68,8 @@ public class PushMsgServiceImpl extends ServiceImpl<PushMsgMapper, PushMsg> impl
 			msg.setUpdateTime(new Date());
 			this.saveOrUpdate(msg);
 		} catch (Exception e) {
-			logger.error("保存广告位信息失败", e);
-			return R.error("保存广告位信息失败");
+			logger.error("保存推送信息失败", e);
+			return R.error("保存推送信息失败");
 		}
 		return R.ok();
 	}

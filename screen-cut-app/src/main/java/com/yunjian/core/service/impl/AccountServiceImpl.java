@@ -223,8 +223,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
             account.setUpdateTime(new Date());
             this.saveOrUpdate(account);
         } catch (Exception e) {
-            logger.error("保存广告位信息失败", e);
-            return R.error("保存广告位信息失败");
+            logger.error("保存用户信息失败", e);
+            return R.error("保存用户信息失败");
         }
         return R.ok();
 	}

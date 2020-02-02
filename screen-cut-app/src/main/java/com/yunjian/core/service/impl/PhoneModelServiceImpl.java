@@ -69,8 +69,8 @@ public class PhoneModelServiceImpl extends ServiceImpl<PhoneModelMapper, PhoneMo
             model.setUpdateTime(new Date());
             this.saveOrUpdate(model);
         } catch (Exception e) {
-            logger.error("保存广告位信息失败", e);
-            return R.error("保存广告位信息失败");
+            logger.error("保存手机型号失败", e);
+            return R.error("保存手机型号失败");
         }
         return R.ok();
     }

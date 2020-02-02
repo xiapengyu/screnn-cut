@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2020-01-30 17:49:46
+Date: 2020-02-02 22:58:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,6 +29,7 @@ CREATE TABLE `sys_captcha` (
 -- ----------------------------
 -- Records of sys_captcha
 -- ----------------------------
+INSERT INTO `sys_captcha` VALUES ('fdcbc030-d484-40bb-8020-e115d4e2ac63', 'dd24d', '2020-02-02 15:50:05');
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -99,7 +100,7 @@ CREATE TABLE `sys_log` (
   `ip` varchar(64) DEFAULT NULL COMMENT 'IP地址',
   `create_date` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8 COMMENT='系统日志';
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8 COMMENT='系统日志';
 
 -- ----------------------------
 -- Records of sys_log
@@ -188,6 +189,13 @@ INSERT INTO `sys_log` VALUES ('81', 'admin', '修改菜单', 'com.yunjian.core.a
 INSERT INTO `sys_log` VALUES ('82', 'admin', '修改菜单', 'com.yunjian.core.admin.SysMenuController.update()', '[{\"menuId\":64,\"parentId\":0,\"name\":\"推送信息管理\",\"url\":\"push/push-info\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":6}]', '3', '0:0:0:0:0:0:0:1', '2020-01-30 17:08:34');
 INSERT INTO `sys_log` VALUES ('83', 'admin', '修改菜单', 'com.yunjian.core.admin.SysMenuController.update()', '[{\"menuId\":64,\"parentId\":0,\"name\":\"推送信息管理\",\"url\":\"account/account-info\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":6}]', '3', '0:0:0:0:0:0:0:1', '2020-01-30 17:09:02');
 INSERT INTO `sys_log` VALUES ('84', 'admin', '修改菜单', 'com.yunjian.core.admin.SysMenuController.update()', '[{\"menuId\":64,\"parentId\":0,\"name\":\"推送信息管理\",\"url\":\"push/push-info\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":6}]', '3', '0:0:0:0:0:0:0:1', '2020-01-30 17:09:25');
+INSERT INTO `sys_log` VALUES ('85', 'admin', '保存菜单', 'com.yunjian.core.admin.SysMenuController.save()', '[{\"menuId\":69,\"parentId\":0,\"name\":\"商品管理\",\"url\":\"\",\"perms\":\"\",\"type\":0,\"icon\":\"menu\",\"orderNum\":8}]', '7', '127.0.0.1', '2020-02-02 14:49:25');
+INSERT INTO `sys_log` VALUES ('86', 'admin', '保存菜单', 'com.yunjian.core.admin.SysMenuController.save()', '[{\"menuId\":70,\"parentId\":69,\"name\":\"添加商品\",\"url\":\"暂未开发\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":1}]', '4', '0:0:0:0:0:0:0:1', '2020-02-02 14:50:55');
+INSERT INTO `sys_log` VALUES ('87', 'admin', '保存菜单', 'com.yunjian.core.admin.SysMenuController.save()', '[{\"menuId\":71,\"parentId\":69,\"name\":\"商品列表\",\"url\":\"暂未开发\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":2}]', '3', '0:0:0:0:0:0:0:1', '2020-02-02 14:51:34');
+INSERT INTO `sys_log` VALUES ('88', 'admin', '修改菜单', 'com.yunjian.core.admin.SysMenuController.update()', '[{\"menuId\":65,\"parentId\":0,\"name\":\"品牌管理\",\"url\":\"\",\"perms\":\"\",\"type\":0,\"icon\":\"menu\",\"orderNum\":7}]', '13', '0:0:0:0:0:0:0:1', '2020-02-02 14:52:05');
+INSERT INTO `sys_log` VALUES ('89', 'admin', '删除菜单', 'com.yunjian.core.admin.SysMenuController.delete()', '[70]', '17', '0:0:0:0:0:0:0:1', '2020-02-02 15:45:29');
+INSERT INTO `sys_log` VALUES ('90', 'admin', '修改菜单', 'com.yunjian.core.admin.SysMenuController.update()', '[{\"menuId\":71,\"parentId\":69,\"name\":\"商品列表\",\"url\":\"goods/goods-info\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":1}]', '6', '0:0:0:0:0:0:0:1', '2020-02-02 15:45:49');
+INSERT INTO `sys_log` VALUES ('91', 'admin', '修改菜单', 'com.yunjian.core.admin.SysMenuController.update()', '[{\"menuId\":71,\"parentId\":69,\"name\":\"商品信息管理\",\"url\":\"goods/goods-info\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":1}]', '5', '0:0:0:0:0:0:0:1', '2020-02-02 15:46:09');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -203,7 +211,7 @@ CREATE TABLE `sys_menu` (
   `icon` varchar(50) DEFAULT NULL COMMENT '菜单图标',
   `order_num` int(11) DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8 COMMENT='菜单管理';
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COMMENT='菜单管理';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -247,8 +255,10 @@ INSERT INTO `sys_menu` VALUES ('53', '0', '广告管理', '', '', '0', 'menu', '
 INSERT INTO `sys_menu` VALUES ('54', '53', '广告信息管理', 'ad/ad-info', '', '1', 'menu', '1');
 INSERT INTO `sys_menu` VALUES ('55', '53', '广告位管理', 'ad/ad-position', '', '1', 'menu', '2');
 INSERT INTO `sys_menu` VALUES ('64', '0', '推送信息管理', 'push/push-info', '', '1', 'menu', '6');
-INSERT INTO `sys_menu` VALUES ('65', '0', '品牌管理', '暂未开发', '', '0', 'menu', '7');
+INSERT INTO `sys_menu` VALUES ('65', '0', '品牌管理', '', '', '0', 'menu', '7');
 INSERT INTO `sys_menu` VALUES ('68', '65', '机型管理', 'phone/phone-info', '', '1', 'menu', '1');
+INSERT INTO `sys_menu` VALUES ('69', '0', '商品管理', '', '', '0', 'menu', '8');
+INSERT INTO `sys_menu` VALUES ('71', '69', '商品信息管理', 'goods/goods-info', '', '1', 'menu', '1');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -391,7 +401,7 @@ CREATE TABLE `sys_user_token` (
 -- ----------------------------
 -- Records of sys_user_token
 -- ----------------------------
-INSERT INTO `sys_user_token` VALUES ('1', '7ccccef223862cebf0c3a0613aa0eb4c', '2020-01-31 05:07:00', '2020-01-30 17:07:00');
+INSERT INTO `sys_user_token` VALUES ('1', 'd48e8922d41fff79f853d59930561bea', '2020-02-03 08:49:39', '2020-02-02 20:49:39');
 
 -- ----------------------------
 -- Table structure for tb_account
@@ -433,7 +443,7 @@ CREATE TABLE `tb_account_cache` (
   `expire_time` timestamp NULL DEFAULT NULL,
   `update_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_account_cache
@@ -492,11 +502,74 @@ CREATE TABLE `tb_email_code` (
   `update_time` timestamp NULL DEFAULT NULL,
   `delete_flag` int(2) NOT NULL COMMENT '删除标记',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_email_code
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for tb_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_goods`;
+CREATE TABLE `tb_goods` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL COMMENT '商品名称',
+  `comment` varchar(512) DEFAULT NULL COMMENT '商品介绍',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '原价',
+  `is_discount` int(2) DEFAULT NULL COMMENT '是否打折',
+  `discount_price` decimal(10,2) DEFAULT NULL COMMENT '折扣价',
+  `sale_amount` int(10) DEFAULT NULL COMMENT '销量',
+  `stock` int(10) DEFAULT NULL COMMENT '库存',
+  `type` varchar(64) DEFAULT NULL COMMENT '商品类型ID 支持多类型 以逗号分割',
+  `status` int(2) DEFAULT NULL COMMENT '状态 1上架 0下架',
+  `create_time` timestamp NULL DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL,
+  `delete_flag` int(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='商品信息表';
+
+-- ----------------------------
+-- Records of tb_goods
+-- ----------------------------
+INSERT INTO `tb_goods` VALUES ('9', '小米贴膜', '小米贴膜', '12.00', '0', '0.00', '0', '1', '1,2', '1', '2020-02-02 22:55:25', '2020-02-02 22:55:25', '1');
+
+-- ----------------------------
+-- Table structure for tb_goods_img
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_goods_img`;
+CREATE TABLE `tb_goods_img` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(10) DEFAULT NULL COMMENT '商品id',
+  `image_url` varchar(255) DEFAULT NULL COMMENT '图片URL',
+  `create_time` timestamp NULL DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL,
+  `delete_flag` int(2) DEFAULT NULL COMMENT '逻辑删除标志',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+
+-- ----------------------------
+-- Records of tb_goods_img
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for tb_goods_type
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_goods_type`;
+CREATE TABLE `tb_goods_type` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL COMMENT '手机膜类型(钢化膜，磨砂膜等，初始化数据)',
+  `delete_flag` int(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='手机膜类型表';
+
+-- ----------------------------
+-- Records of tb_goods_type
+-- ----------------------------
+INSERT INTO `tb_goods_type` VALUES ('1', '钢化膜', '1');
+INSERT INTO `tb_goods_type` VALUES ('2', '磨砂膜', '1');
+INSERT INTO `tb_goods_type` VALUES ('3', '普通膜', '1');
+INSERT INTO `tb_goods_type` VALUES ('4', '橡胶膜', '1');
 
 -- ----------------------------
 -- Table structure for tb_phone_model

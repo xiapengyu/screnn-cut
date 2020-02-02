@@ -74,8 +74,8 @@ public class AdServiceImpl extends ServiceImpl<AdMapper, Ad> implements IAdServi
             ad.setUpdateTime(new Date());
             this.saveOrUpdate(ad);
         } catch (Exception e) {
-            logger.error("保存广告位信息失败", e);
-            return R.error("保存广告位信息失败");
+            logger.error("保存广告信息失败", e);
+            return R.error("保存广告信息失败");
         }
         return R.ok();
     }
