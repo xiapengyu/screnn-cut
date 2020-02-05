@@ -58,7 +58,7 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">推送</el-button>
+          <el-button type="text" size="small" @click="pushHandle(scope.row.id)">推送</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
@@ -75,11 +75,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <push-msg  v-if="pushMsgVisible" ref="pushMsg" @refreshDataList="getDataList"></push-msg>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './push-info-add-or-update'
+  import PushMsg from './push-msg'
   export default {
     data () {
       return {
@@ -92,11 +94,13 @@
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        pushMsgVisible: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      PushMsg
     },
     activated () {
       this.getDataList()
@@ -142,6 +146,12 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      pushHandle (id) {
+        this.pushMsgVisible = true
+        this.$nextTick(() => {
+          this.$refs.pushMsg.init(id)
         })
       },
       // 删除

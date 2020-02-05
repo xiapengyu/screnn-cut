@@ -1,6 +1,7 @@
 package com.yunjian.core.admin;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -48,16 +49,25 @@ public class SysAccountController {
     }
 
     /**
-     * 所有广告位列表
+     * 所有用户列表
      */
-//    @PostMapping("/queryTotalPosition")
-//    public R queryTotalPosition(){
-//        logger.info("查询全部广告位列表");
-//        List<AdPosition> list = adPositionService.list(new QueryWrapper<AdPosition>()
-//                .eq("delete_flag", 1)
-//                .orderByDesc("create_time"));
-//        return R.ok().put("positionList", list);
-//    }
+    @PostMapping("/queryTotalAccount")
+    public R queryTotalAccount(){
+        logger.info("所有用户列表");
+        try {
+			List<Account> list = accountService.list(new QueryWrapper<Account>()
+			        .eq("delete_flag", 1)
+			        .orderByDesc("create_time"));
+			Account temp = new Account();
+			temp.setId(0);
+			temp.setUserName("全部");
+			list.add(0, temp);
+			return R.ok().put("accountList", list);
+		} catch (Exception e) {
+			logger.error("查询用户列表失败", e);
+			return R.error("查询用户列表失败");
+		}
+    }
 
     /**
      * 删除用户

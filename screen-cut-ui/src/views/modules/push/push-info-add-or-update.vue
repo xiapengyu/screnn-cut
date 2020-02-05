@@ -5,10 +5,10 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
       <el-form-item label="标题" prop="title" :class="{ 'is-required': true }">
-        <textarea rows="5" cols="100" v-model="dataForm.title" ></textarea>
+        <el-input v-model="dataForm.title" placeholder="标题"></el-input>
       </el-form-item>
       <el-form-item label="内容" prop="content" :class="{ 'is-required': true }">
-        <textarea rows="5" cols="100" v-model="dataForm.content" ></textarea>
+        <el-input type='textarea' rows="5" placeholder="内容" v-model="dataForm.content"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

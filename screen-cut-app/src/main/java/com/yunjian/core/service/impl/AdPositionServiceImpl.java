@@ -54,8 +54,8 @@ public class AdPositionServiceImpl extends ServiceImpl<AdPositionMapper, AdPosit
             this.saveOrUpdate(position);
             return R.ok();
         } catch (Exception e) {
-            logger.error("逻辑删除广告位", e);
-            return R.error("逻辑删除广告位");
+            logger.error("逻辑删除广告位失败", e);
+            return R.error("逻辑删除广告位失败");
         }
     }
 

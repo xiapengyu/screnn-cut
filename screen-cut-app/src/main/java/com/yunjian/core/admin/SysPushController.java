@@ -82,12 +82,21 @@ public class SysPushController {
     }
 
     /**
-     * 保存手推送消息
+     * 保存推送消息
      */
     @PostMapping("/savePushMsg")
     public R savePushMsg(@RequestBody Map<String, Object> params){
         logger.info("保存手推送消息{}", JsonUtil.toJsonString(params));
         return pushMsgService.savePushMsg(params);
+    }
+    
+    /**
+     * 推送消息
+     */
+    @PostMapping("/pushMsg")
+    public R pushMsg(@RequestBody Map<String, Object> params){
+        logger.info("推送消息{}", JsonUtil.toJsonString(params));
+        return R.ok("暂未开发");
     }
 
 }
