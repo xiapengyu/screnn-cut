@@ -22,4 +22,6 @@ public interface IDeviceService extends IService<Device> {
 
 	R saveDeviceInfo(Map<String, Object> params);
 
+	R deleteDevice(String id);
+
 }

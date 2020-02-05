@@ -1,6 +1,7 @@
 package com.yunjian.core.admin;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -50,6 +51,16 @@ public class SysDistributorController {
     }
     
     /**
+     * 查询全部经销商列表
+     */
+    @PostMapping("/queryTotalDistributor")
+    public R queryTotalDistributor(){
+        logger.info("查询全部经销商列表");
+        List<Distributor> distributorList = distributorService.list(new QueryWrapper<Distributor>().eq("delete_flag", 1));
+        return R.ok().put("distributorList", distributorList);
+    } 
+    
+    /**
      * 删除经销商
      */
     @PostMapping("/delete")
@@ -90,7 +101,7 @@ public class SysDistributorController {
     /**
      * 下载经销商信息模板
      */
-    @PostMapping("/downTemplate")
+    @PostMapping("/downDistributorTemplate")
     public R downTemplate() {
     	return null;
     }
@@ -100,6 +111,22 @@ public class SysDistributorController {
      */
     @PostMapping("/importDistributor")
     public R importDistributor(@RequestParam("file") MultipartFile file) {
+    	return null;
+    }
+    
+    /**
+     * 下载设备信息模板
+     */
+    @PostMapping("/downDeviceTemplate")
+    public R downDeviceTemplate() {
+    	return null;
+    }
+	
+	 /**
+     * 导入设备信息
+     */
+    @PostMapping("/importDevice")
+    public R importDevice(@RequestParam("file") MultipartFile file) {
     	return null;
     }
     

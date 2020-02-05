@@ -1,6 +1,7 @@
 package com.yunjian.core.admin;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -20,7 +21,9 @@ import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Device;
+import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.service.IDeviceService;
+import com.yunjian.core.service.IDistributorService;
 
 /**
  * <p>
@@ -38,6 +41,9 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private IDeviceService deviceService;
+	
+	@Autowired
+	private IDistributorService distributorService;
 	
 	/**
      * 分页查询设备列表
@@ -57,8 +63,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
         logger.info("删除设备{}", JsonUtil.toJsonString(params));
         String id = StringUtil.obj2String(params.get("id"));
         if(!StringUtils.isEmpty(id)){
-        	deviceService.remove(new QueryWrapper<Device>().eq("id", id));
-        	return R.ok();
+        	return deviceService.deleteDevice(id);
         }else{
             return R.error("参数错误");
         }
@@ -73,7 +78,8 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
         String id = StringUtil.obj2String(params.get("id"));
         if(!StringUtils.isEmpty(id)){
         	Device device = deviceService.getOne(new QueryWrapper<Device>().eq("id", id));
-            return R.ok().put("device", device);
+        	 List<Distributor> distributorList = distributorService.list(new QueryWrapper<Distributor>().eq("delete_flag", 1));
+            return R.ok().put("device", device).put("distributorList", distributorList);
         }else{
             return R.error("参数错误");
         }
@@ -86,22 +92,6 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
     public R saveDeviceInfo(@RequestBody Map<String, Object> params){
         logger.info("保存设备信息{}", JsonUtil.toJsonString(params));
         return deviceService.saveDeviceInfo(params);
-    }
-    
-    /**
-     * 下载设备信息模板
-     */
-    @PostMapping("/downTemplate")
-    public R downTemplate() {
-    	return null;
-    }
-	
-	 /**
-     * 导入设备信息
-     */
-    @PostMapping("/importDevice")
-    public R importDevice(@RequestParam("file") MultipartFile file) {
-    	return null;
     }
 
 }
