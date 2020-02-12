@@ -41,7 +41,7 @@ public class SysImageController {
      * 上传广告图片(多处复用)
      */
     @PostMapping("/uploadImage")
-    public R uploadAdInfoImage(@RequestParam("file") MultipartFile file){
+    public R uploadAdInfoImage(@RequestParam("file") MultipartFile file, Integer i){
         try {
             String name = file.getOriginalFilename();
             String extName = "";

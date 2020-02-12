@@ -48,6 +48,7 @@ public class ShiroConfig {
         filterMap.put("/app/**", "anon");
         filterMap.put("/api/**", "anon");
         filterMap.put("/account/**", "anon");
+        filterMap.put("/region/**", "anon");
         filterMap.put("/login/**", "anon");
         filterMap.put("/home/**", "anon");
         filterMap.put("/sys/login", "anon");
@@ -57,6 +58,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/sys/image/uploadImage", "anon");
+        filterMap.put("/sys/distributor/uploadDistributorFile", "anon");
         filterMap.put("/**", "oauth2");
         filterMap.put("/captcha.jpg", "anon");
         shiroFilter.setFilterChainDefinitionMap(filterMap);

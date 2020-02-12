@@ -85,7 +85,7 @@
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">查看</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
-          <el-button type="text" size="small" @click="importHandle(scope.row.id, 0)">导入设备</el-button>
+          <el-button type="text" size="small" @click="importHandle(scope.row.id)">导入设备</el-button>
           <el-button type="text" size="small" @click="importHandle(scope.row.id, 0)">查看设备</el-button>
         </template>
       </el-table-column>
@@ -102,12 +102,14 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <add-distributor v-if="addDistributor" ref="addDistributor" @refreshDataList="getDataList"></add-distributor>
+    <import-distributor v-if="importDistributor" ref="importDistributor" @refreshDataList="getDataList"></import-distributor>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './distributor-info-add-or-update'
   import AddDistributor from './distributor-info-add'
+  import ImportDistributor from './distributor-import'
   export default {
     data () {
       return {
@@ -120,12 +122,14 @@
         totalPage: 0,
         dataListLoading: false,
         addOrUpdateVisible: false,
-        addDistributor: false
+        addDistributor: false,
+        importDistributor: false
       }
     },
     components: {
       AddOrUpdate,
-      AddDistributor
+      AddDistributor,
+      ImportDistributor
     },
     activated () {
       this.getDataList()
@@ -176,6 +180,12 @@
         this.addDistributor = true
         this.$nextTick(() => {
           this.$refs.addDistributor.init()
+        })
+      },
+      importHandle (id) {
+        this.importDistributor = true
+        this.$nextTick(() => {
+          this.$refs.importDistributor.init(id)
         })
       },
       // 删除

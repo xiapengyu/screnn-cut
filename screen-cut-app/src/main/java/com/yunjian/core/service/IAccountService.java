@@ -32,4 +32,6 @@ public interface IAccountService extends IService<Account> {
 
 	R saveAccount(Map<String, Object> params);
 
+	ResponseDto modifyAccountInfo(Account param);
+
 }

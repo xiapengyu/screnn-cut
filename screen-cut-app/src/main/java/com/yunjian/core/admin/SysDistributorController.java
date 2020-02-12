@@ -1,12 +1,14 @@
 package com.yunjian.core.admin;
 
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.ExcelUtil;
+import com.yunjian.common.utils.FileUtil;
 import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.service.IDistributorService;
+
+import net.sf.json.JSONArray;
 
 /**
  * <p>
@@ -39,6 +45,12 @@ public class SysDistributorController {
 	
 	@Autowired
 	private IDistributorService distributorService;
+	
+	@Value("${template.distributor.url}")
+    private String distributorTemplate = "";
+	
+	@Value("${template.device.url}")
+    private String deviceTemplate = "";
 	
 	/**
      * 分页查询经销商列表
@@ -103,14 +115,26 @@ public class SysDistributorController {
      */
     @PostMapping("/downDistributorTemplate")
     public R downTemplate() {
-    	return null;
+    	logger.info("经销商模板文件地址：{}", distributorTemplate);
+    	return R.ok().put("distributorTemplate", distributorTemplate);
     }
     
     /**
      * 导入经销商信息
      */
-    @PostMapping("/importDistributor")
+    @PostMapping("/uploadDistributorFile")
     public R importDistributor(@RequestParam("file") MultipartFile file) {
+    	File uploadFile = FileUtil.multipartFileToFile(file);
+    	JSONArray array = ExcelUtil.readExcel(uploadFile);
+    	logger.info("解析数据{}", JsonUtil.toJsonString(array));
+    	return R.ok();
+    }
+    
+    /**
+     * 保存导入的经销商信息
+     */
+    @PostMapping("/batchSaveDistributorInfo")
+    public R importDistributor(@RequestBody Map<String, Object> params) {
     	return null;
     }
     

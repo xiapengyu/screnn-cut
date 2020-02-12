@@ -229,4 +229,24 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return R.ok();
 	}
 
+	@Override
+	public ResponseDto modifyAccountInfo(Account param) {
+		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+		try {
+			Account account = this.getOne(new QueryWrapper<Account>().eq("id", param.getId()));
+			if(!StringUtils.isEmpty(param.getAvatar())) {
+				account.setAvatar(param.getAvatar());
+			}
+			if(!StringUtils.isEmpty(param.getUserName())) {
+				account.setUserName(param.getUserName());
+			}
+			account.setUpdateTime(new Date());
+			this.saveOrUpdate(account);
+		} catch (Exception e) {
+			 logger.error("修改用户信息失败", e);
+			 return new ResponseDto(Constant.FAIL_CODE, null, Constant.FAIL_MESSAGE);
+		}
+		return response;
+	}
+
 }

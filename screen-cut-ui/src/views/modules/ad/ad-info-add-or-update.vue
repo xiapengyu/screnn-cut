@@ -11,8 +11,7 @@
           :action= this.uploadUrl
           :show-file-list="false"
           :on-success="handleUploadSuccess"
-          :before-upload="beforeUpload"
-          multiple>
+          :before-upload="beforeUpload">
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           <div class="el-upload__tip" slot="tip">文件大小不能超过50M</div>

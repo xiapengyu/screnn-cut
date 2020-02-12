@@ -51,3 +51,9 @@ spring:
 tomcat:
   file:
     server: http://49.235.168.70:8085/upload/
+    
+template:
+  distributor:
+    url: http://49.235.168.70:8085/upload/template/123456.xls
+  device:
+    url: http://49.235.168.70:8085/upload/template/456789.xls
