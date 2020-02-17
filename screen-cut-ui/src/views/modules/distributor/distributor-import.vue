@@ -3,7 +3,7 @@
     title="导入"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
+    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
       <el-form-item label="经销商信息" prop="uploadFile" :class="{ 'is-required': true }">
         <el-upload
           class="upload-demo"
@@ -20,8 +20,6 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <a class='download' target="_blank" :href='dataForm.templateFileUrl' title="下载模板" style="margin-right:10px">下载模板</a>
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定导入</el-button>
     </span>
   </el-dialog>
 </template>
@@ -32,28 +30,21 @@
       return {
         visible: false,
         uploadUrl: '',
-        dialogVisible: false,
         dataForm: {
-          id: 0,
           uploadFile: '',
-          recordList: [],
           templateFileUrl: ''
-        },
-        dataRule: {
-          uploadFile: [
-            { required: true, message: '文件不能为空', trigger: 'blur' }
-          ]
         }
       }
     },
     methods: {
-      init (id) {
-        this.dataForm.id = id
+      init () {
         this.visible = true
+        // 模板文件上传接口
         this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/distributor/uploadDistributorFile'
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }
+        // 获取模板文件地址
         this.$http({
           url: this.$http.adornUrl(`/sys/distributor/downDistributorTemplate`),
           method: 'post',
@@ -66,37 +57,21 @@
           }
         })
       },
-      // 表单提交
-      dataFormSubmit () {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.$http({
-              url: this.$http.adornUrl(`/sys/distributor/batchSaveDistributorInfo`),
-              method: 'post',
-              data: this.$http.adornData({
-                'recordList': this.dataForm.recordList
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$message({
-                  message: '操作成功',
-                  type: 'success',
-                  duration: 1500,
-                  onClose: () => {
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-              }
-            })
-          }
-        })
-      },
       handleUploadSuccess: function (response) {
-        this.dataForm.uploadFile = response.uploadFile
-        this.dialogVisible = true
+        console.log(response.code)
+        if (response.code === 0) {
+          this.$message({
+            message: '文件上传成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
+            }
+          })
+        } else {
+          this.$message.error('文件上传失败')
+        }
       },
       beforeUpload (file) {
         var FileExt = file.name.replace(/.+\./, '')
@@ -106,7 +81,7 @@
           this.$message.error('上传图片格式不对，只支持(xls|xlsx)')
         }
         if (!isLt5M) {
-          this.$message.error('上传图片大小不能超过50M')
+          this.$message.error('文件大小不能超过50M')
         }
         return isLt5M
       }

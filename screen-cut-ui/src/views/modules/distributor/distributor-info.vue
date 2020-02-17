@@ -8,6 +8,7 @@
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
         <el-button type="primary" @click="addHandle()">新增</el-button>
+        <el-button type="primary" @click="importDistributorHandle()">导入经销商</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -180,6 +181,12 @@
         this.addDistributor = true
         this.$nextTick(() => {
           this.$refs.addDistributor.init()
+        })
+      },
+      importDistributorHandle () {
+        this.importDistributor = true
+        this.$nextTick(() => {
+          this.$refs.importDistributor.init()
         })
       },
       importHandle (id) {

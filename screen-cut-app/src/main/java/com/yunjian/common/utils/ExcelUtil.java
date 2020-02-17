@@ -15,7 +15,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -132,10 +131,11 @@ public class ExcelUtil {
 		Row firstRow = sheet.getRow(rowStart);
 		int cellStart = firstRow.getFirstCellNum();
 		int cellEnd = firstRow.getLastCellNum();
-		Map<Integer, String> keyMap = new HashMap<Integer, String>();
-		for (int j = cellStart; j < cellEnd; j++) {
-			keyMap.put(j, getValue(firstRow.getCell(j), rowStart, j, book, true));
-		}
+		/*
+		 * Map<Integer, String> keyMap = new HashMap<Integer, String>(); for (int j =
+		 * cellStart; j < cellEnd; j++) { keyMap.put(j, getValue(firstRow.getCell(j),
+		 * rowStart, j, book, true)); }
+		 */
 		// 获取每行JSON对象的值
 		JSONArray array = new JSONArray();
 		for (int i = rowStart + 1; i <= rowEnd; i++) {
@@ -146,7 +146,7 @@ public class ExcelUtil {
 				if (eachRow != null) {
 					String val = getValue(eachRow.getCell(k), i, k, book, false);
 					sb.append(val); // 所有数据添加到里面，用于判断该行是否为空
-					obj.put(keyMap.get(k), val);
+					obj.put(k, val);
 				}
 			}
 			if (sb.toString().length() > 0) {

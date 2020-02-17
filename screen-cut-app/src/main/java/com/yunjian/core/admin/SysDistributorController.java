@@ -120,7 +120,7 @@ public class SysDistributorController {
     }
     
     /**
-     * 导入经销商信息
+     * 导入并保存经销商信息
      */
     @PostMapping("/uploadDistributorFile")
     public R importDistributor(@RequestParam("file") MultipartFile file) {
@@ -128,14 +128,6 @@ public class SysDistributorController {
     	JSONArray array = ExcelUtil.readExcel(uploadFile);
     	logger.info("解析数据{}", JsonUtil.toJsonString(array));
     	return R.ok();
-    }
-    
-    /**
-     * 保存导入的经销商信息
-     */
-    @PostMapping("/batchSaveDistributorInfo")
-    public R importDistributor(@RequestBody Map<String, Object> params) {
-    	return null;
     }
     
     /**
@@ -147,7 +139,7 @@ public class SysDistributorController {
     }
 	
 	 /**
-     * 导入设备信息
+     * 导入并保存设备信息
      */
     @PostMapping("/importDevice")
     public R importDevice(@RequestParam("file") MultipartFile file) {
