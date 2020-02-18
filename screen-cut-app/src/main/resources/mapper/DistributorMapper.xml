@@ -2,4 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yunjian.core.mapper.DistributorMapper">
 
+    <select id="queryIdentifierList" resultType="java.lang.String">
+      select identifier from tb_distributor
+    </select>
+
+    <select id="queryNameList" resultType="java.lang.String">
+      select name from tb_distributor
+    </select>
+
 </mapper>

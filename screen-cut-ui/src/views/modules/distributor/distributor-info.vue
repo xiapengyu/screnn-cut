@@ -86,8 +86,7 @@
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">查看</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
-          <el-button type="text" size="small" @click="importHandle(scope.row.id)">导入设备</el-button>
-          <el-button type="text" size="small" @click="importHandle(scope.row.id, 0)">查看设备</el-button>
+          <!-- <el-button type="text" size="small" @click="importHandle(scope.row.id, 0)">查看设备</el-button> -->
         </template>
       </el-table-column>
     </el-table>

@@ -1,10 +1,12 @@
 package com.yunjian.core.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +21,8 @@ import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.mapper.DistributorMapper;
 import com.yunjian.core.service.IDistributorService;
 
+import javax.annotation.Resource;
+
 /**
  * <p>
  * 经销商信息表 服务实现类
@@ -31,6 +35,9 @@ import com.yunjian.core.service.IDistributorService;
 public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distributor> implements IDistributorService {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Resource
+	private DistributorMapper distributorMapper;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -98,6 +105,30 @@ public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distr
 		} catch (Exception e) {
 			logger.error("保存经销商信息失败", e);
 			return R.error("保存经销商信息失败");
+		}
+		return R.ok();
+	}
+
+	@Override
+	public R saveBatchRecord(List<Distributor> resultList) {
+		// 校验是否有重复数据
+		List<String> identifierList = distributorMapper.queryIdentifierList();
+		List<String> nameList = distributorMapper.queryNameList();
+		logger.info("导入经销商数量{}", resultList.size());
+		resultList.forEach(item -> {
+			if(identifierList.contains(item.getIdentifier())){
+				logger.info("经销商标识已经存在{}", item);
+				resultList.remove(item);
+			}
+			if(nameList.contains(item.getName())){
+				logger.info("经销商名称已经存在{}", item);
+				resultList.remove(item);
+			}
+		});
+
+		logger.info("过滤后经销商数量{}", resultList.size());
+		if(resultList.size() > 0){
+			this.saveBatch(resultList);
 		}
 		return R.ok();
 	}

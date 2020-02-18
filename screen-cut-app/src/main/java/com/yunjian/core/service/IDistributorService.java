@@ -4,6 +4,7 @@ import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.Distributor;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -23,5 +24,7 @@ public interface IDistributorService extends IService<Distributor> {
 	R delete(String id);
 
 	R saveDistributorInfo(Map<String, Object> params);
+
+    R saveBatchRecord(List<Distributor> resultList);
 
 }

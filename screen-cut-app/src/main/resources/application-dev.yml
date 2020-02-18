@@ -19,7 +19,7 @@ spring:
             #password: $$$cutting^_^
             url: jdbc:mysql://127.0.0.1:3306/screen?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
             username: root
-            password: 123456
+            password: xia4698083
             initial-size: 10
             max-active: 100
             min-idle: 10
@@ -54,6 +54,6 @@ tomcat:
     
 template:
   distributor:
-    url: http://49.235.168.70:8085/upload/template/123456.xls
+    url: http://49.235.168.70:8085/upload/template/distributorTemplate.xls
   device:
-    url: http://49.235.168.70:8085/upload/template/456789.xls
+    url: http://49.235.168.70:8085/upload/template/deviceTemplate.xls

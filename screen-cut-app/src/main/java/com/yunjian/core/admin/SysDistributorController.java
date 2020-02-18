@@ -2,6 +2,8 @@ package com.yunjian.core.admin;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +129,28 @@ public class SysDistributorController {
     	File uploadFile = FileUtil.multipartFileToFile(file);
     	JSONArray array = ExcelUtil.readExcel(uploadFile);
     	logger.info("解析数据{}", JsonUtil.toJsonString(array));
-    	return R.ok();
+    	List<Distributor> resultList = new ArrayList<>();
+    	if(array.size() > 0){
+            array.forEach(item -> {
+                logger.info("解析对象{}", item.toString());
+                Map<String, Object> map = JsonUtil.toMap(item.toString());
+                Distributor distributor = new Distributor();
+                distributor.setName(map.get("0").toString().trim());
+                distributor.setAddress(map.get("1").toString().trim());
+                distributor.setContact(map.get("2").toString().trim());
+                distributor.setPhone(map.get("3").toString().trim());
+                distributor.setEmail(map.get("4").toString().trim());
+                distributor.setIdentifier(map.get("5").toString().trim());
+                distributor.setStatus(1);
+                distributor.setCreateTime(new Date());
+                distributor.setUpdateTime(new Date());
+                distributor.setDeleteFlag(1);
+                resultList.add(distributor);
+            });
+            return distributorService.saveBatchRecord(resultList);
+        }else{
+    	    return R.error("经销商内容为空");
+        }
     }
     
     /**
