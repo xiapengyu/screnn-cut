@@ -6,19 +6,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
+import com.yunjian.core.dto.GoodsDetailDto;
+import com.yunjian.core.dto.GoodsDto;
+import com.yunjian.core.dto.ResponseDto;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Goods;
 import com.yunjian.core.entity.GoodsImg;
 import com.yunjian.core.mapper.GoodsMapper;
@@ -149,6 +150,59 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 			return R.error("新增商品信息失败");
 		}
 		return R.ok();
+	}
+
+	@Override
+	public PageUtils queryGoodsByPage(Map<String, Object> params) {
+		String name = StringUtil.obj2String(params.get("name"));
+		String field = StringUtil.obj2String(params.get("field"));
+		Boolean isAsc = Boolean.parseBoolean(params.get("isAsc").toString());
+
+		QueryWrapper<Goods> query = new QueryWrapper<Goods>();
+		if(!StringUtils.isEmpty(name)){
+			query.like("name", name);
+		}
+		if(!StringUtils.isEmpty(field) && isAsc != null){
+			if("name".equals(field)){
+				query.orderBy(true, isAsc, "name");
+			}else if("saleAmount".equals(field)){
+				query.orderBy(true, isAsc, "saleAmount");
+			}
+		}else{
+			query.orderByDesc("create_time");
+		}
+		IPage<Goods> page = this.page(new AppQuery<Goods>().getPage(params), query);
+		List<GoodsDto> result = new ArrayList<>();
+		page.getRecords().forEach(item -> {
+			GoodsDto dto = new GoodsDto();
+			BeanUtils.copyProperties(item, dto);
+			List<GoodsImg> imgList = goodsImgService.list(
+					new QueryWrapper<GoodsImg>()
+							.eq("goods_id", item.getId()).orderByAsc("create_time"));
+			if(!imgList.isEmpty()){
+				dto.setCoverImg(imgList.get(0).getImageUrl());
+			}
+			result.add(dto);
+		});
+		return new PageUtils(result, (int)page.getTotal(), (int)page.getSize(), (int)page.getCurrent());
+	}
+
+	@Override
+	public GoodsDetailDto queryGoodsDetail(String id) {
+		GoodsDetailDto dto = new GoodsDetailDto();
+		Goods goods = this.getOne(new QueryWrapper<Goods>().eq("id", Integer.parseInt(id)));
+		BeanUtils.copyProperties(goods, dto);
+		List<GoodsImg> imgList = goodsImgService.list(
+				new QueryWrapper<GoodsImg>()
+						.eq("goods_id", Integer.parseInt(id)).orderByAsc("create_time"));
+		List<String> imgUrlList = new ArrayList<>();
+		if(!imgList.isEmpty()){
+			imgList.forEach(item -> {
+				imgUrlList.add(item.getImageUrl());
+			});
+			dto.setImageList(imgUrlList);
+		}
+		return dto;
 	}
 
 }

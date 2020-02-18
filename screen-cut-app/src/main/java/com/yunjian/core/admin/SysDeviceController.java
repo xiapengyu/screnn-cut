@@ -112,6 +112,7 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
         File uploadFile = FileUtil.multipartFileToFile(file);
         JSONArray array = ExcelUtil.readExcel(uploadFile);
         logger.info("解析数据{}", JsonUtil.toJsonString(array));
+        uploadFile.delete();
         List<Device> resultList = new ArrayList<>();
         try {
             if(array.size() > 0){

@@ -1,9 +1,13 @@
 package com.yunjian.core.service;
 
+import com.yunjian.common.utils.AppPageUtils;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
+import com.yunjian.core.dto.GoodsDetailDto;
+import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Goods;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -23,5 +27,9 @@ public interface IGoodsService extends IService<Goods> {
 	R saveGoods(Map<String, Object> params);
 
 	R newGoods(Map<String, Object> params);
+
+	PageUtils queryGoodsByPage(Map<String, Object> params);
+
+	GoodsDetailDto queryGoodsDetail(String id);
 
 }

@@ -126,6 +126,7 @@ public class SysDistributorController {
     	File uploadFile = FileUtil.multipartFileToFile(file);
     	JSONArray array = ExcelUtil.readExcel(uploadFile);
     	logger.info("解析数据{}", JsonUtil.toJsonString(array));
+        uploadFile.delete();
     	List<Distributor> resultList = new ArrayList<>();
         try {
             if(array.size() > 0){
