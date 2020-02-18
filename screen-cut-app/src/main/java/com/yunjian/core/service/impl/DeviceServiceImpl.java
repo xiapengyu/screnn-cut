@@ -1,6 +1,7 @@
 package com.yunjian.core.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
-		String serialNo = StringUtil.obj2String(params.get("name"));
+		String serialNo = StringUtil.obj2String(params.get("serialNo"));
 		String distributorName = StringUtil.obj2String(params.get("distributorName"));
 		String type = StringUtil.obj2String(params.get("type"));
 		String status = StringUtil.obj2String(params.get("status"));
@@ -129,6 +130,21 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 			logger.error("逻辑删除设备失败", e);
 			return R.error("逻辑删除设备失败");
 		}
+	}
+
+	@Override
+	public R saveBatchRecord(List<Device> resultList) {
+		// 校验设备是否已经
+		for (Device device : resultList){
+			Device record = this.getOne(new QueryWrapper<Device>().eq("serial_no", device.getSerialNo()));
+			if(record == null){
+				this.saveOrUpdate(device);
+			}else{
+				logger.info("设备序列号已经存在{}", device);
+				continue;
+			}
+		}
+		return R.ok();
 	}
 
 }

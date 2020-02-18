@@ -1,27 +1,27 @@
 package com.yunjian.core.admin;
 
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
+import net.sf.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.service.IDeviceService;
 import com.yunjian.core.service.IDistributorService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -42,6 +42,9 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private IDistributorService distributorService;
+
+    @Value("${template.device.url}")
+    private String deviceTemplate = "";
 	
 	/**
      * 分页查询设备列表
@@ -90,6 +93,57 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
     public R saveDeviceInfo(@RequestBody Map<String, Object> params){
         logger.info("保存设备信息{}", JsonUtil.toJsonString(params));
         return deviceService.saveDeviceInfo(params);
+    }
+
+    /**
+     * 下载设备信息模板
+     */
+    @PostMapping("/downDeviceTemplate")
+    public R downDeviceTemplate() {
+        logger.info("设备信息模板文件地址：{}", deviceTemplate);
+        return R.ok().put("deviceTemplate", deviceTemplate);
+    }
+
+    /**
+     * 导入并保存设备信息
+     */
+    @PostMapping("/uploadDeviceFile")
+    public R importDevice(@RequestParam("file") MultipartFile file) {
+        File uploadFile = FileUtil.multipartFileToFile(file);
+        JSONArray array = ExcelUtil.readExcel(uploadFile);
+        logger.info("解析数据{}", JsonUtil.toJsonString(array));
+        List<Device> resultList = new ArrayList<>();
+        try {
+            if(array.size() > 0){
+                array.forEach(item -> {
+                    logger.info("解析对象{}", item.toString());
+                    Map<String, Object> map = JsonUtil.toMap(item.toString());
+                    Device device = new Device();
+                    device.setSerialNo(map.get("0").toString().trim());
+                    device.setType((int)Double.parseDouble(map.get("1").toString().trim()));
+                    device.setEmail(map.get("2").toString().trim());
+                    device.setRemainTimes((int)Double.parseDouble(map.get("3").toString().trim()));
+                    device.setIdentifier(map.get("4").toString().trim());
+                    device.setBuyTime(new Date());
+                    device.setStatus(1);
+                    device.setCreateTime(new Date());
+                    device.setUpdateTime(new Date());
+                    device.setDeleteFlag(1);
+                    Distributor distributor = distributorService.getOne(new QueryWrapper<Distributor>().eq("identifier", map.get("4").toString().trim()));
+                    if(distributor != null){
+                        device.setDistributorId(distributor.getId());
+                        device.setDistributorName(distributor.getName());
+                        resultList.add(device);
+                    }
+                });
+                return deviceService.saveBatchRecord(resultList);
+            }else{
+                return R.error("经销商内容为空");
+            }
+        } catch (Exception e) {
+            logger.error("导入经销商信息失败", e);
+            return R.error("导入经销商信息失败");
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.Device;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -23,5 +24,7 @@ public interface IDeviceService extends IService<Device> {
 	R saveDeviceInfo(Map<String, Object> params);
 
 	R deleteDevice(String id);
+
+    R saveBatchRecord(List<Device> resultList);
 
 }

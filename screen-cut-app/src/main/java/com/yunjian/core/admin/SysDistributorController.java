@@ -50,10 +50,7 @@ public class SysDistributorController {
 	
 	@Value("${template.distributor.url}")
     private String distributorTemplate = "";
-	
-	@Value("${template.device.url}")
-    private String deviceTemplate = "";
-	
+
 	/**
      * 分页查询经销商列表
      */
@@ -130,43 +127,32 @@ public class SysDistributorController {
     	JSONArray array = ExcelUtil.readExcel(uploadFile);
     	logger.info("解析数据{}", JsonUtil.toJsonString(array));
     	List<Distributor> resultList = new ArrayList<>();
-    	if(array.size() > 0){
-            array.forEach(item -> {
-                logger.info("解析对象{}", item.toString());
-                Map<String, Object> map = JsonUtil.toMap(item.toString());
-                Distributor distributor = new Distributor();
-                distributor.setName(map.get("0").toString().trim());
-                distributor.setAddress(map.get("1").toString().trim());
-                distributor.setContact(map.get("2").toString().trim());
-                distributor.setPhone(map.get("3").toString().trim());
-                distributor.setEmail(map.get("4").toString().trim());
-                distributor.setIdentifier(map.get("5").toString().trim());
-                distributor.setStatus(1);
-                distributor.setCreateTime(new Date());
-                distributor.setUpdateTime(new Date());
-                distributor.setDeleteFlag(1);
-                resultList.add(distributor);
-            });
-            return distributorService.saveBatchRecord(resultList);
-        }else{
-    	    return R.error("经销商内容为空");
+        try {
+            if(array.size() > 0){
+                array.forEach(item -> {
+                    logger.info("解析对象{}", item.toString());
+                    Map<String, Object> map = JsonUtil.toMap(item.toString());
+                    Distributor distributor = new Distributor();
+                    distributor.setName(map.get("0").toString().trim());
+                    distributor.setAddress(map.get("1").toString().trim());
+                    distributor.setContact(map.get("2").toString().trim());
+                    distributor.setPhone(map.get("3").toString().trim());
+                    distributor.setEmail(map.get("4").toString().trim());
+                    distributor.setIdentifier(map.get("5").toString().trim());
+                    distributor.setStatus(1);
+                    distributor.setCreateTime(new Date());
+                    distributor.setUpdateTime(new Date());
+                    distributor.setDeleteFlag(1);
+                    resultList.add(distributor);
+                });
+                return distributorService.saveBatchRecord(resultList);
+            }else{
+                return R.error("经销商内容为空");
+            }
+        } catch (Exception e) {
+            logger.error("导入经销商信息失败", e);
+            return R.error("导入经销商信息失败");
         }
     }
-    
-    /**
-     * 下载设备信息模板
-     */
-    @PostMapping("/downDeviceTemplate")
-    public R downDeviceTemplate() {
-    	return null;
-    }
-	
-	 /**
-     * 导入并保存设备信息
-     */
-    @PostMapping("/importDevice")
-    public R importDevice(@RequestParam("file") MultipartFile file) {
-    	return null;
-    }
-    
+
 }

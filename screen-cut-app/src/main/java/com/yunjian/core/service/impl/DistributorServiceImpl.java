@@ -3,7 +3,10 @@ package com.yunjian.core.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.yunjian.core.entity.Device;
+import com.yunjian.core.service.IDeviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,9 @@ public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distr
 	@Resource
 	private DistributorMapper distributorMapper;
 
+	@Autowired
+	private IDeviceService deviceService;
+
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		String name = StringUtil.obj2String(params.get("name"));
@@ -55,13 +61,17 @@ public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distr
 	@Override
 	public R delete(String id) {
 		try {
-			Distributor distributor = this.getOne(new QueryWrapper<Distributor>().eq("id", id));
-			distributor.setDeleteFlag(0);
-			this.saveOrUpdate(distributor);
+			List<Device> deviceList = deviceService.list(new QueryWrapper<Device>()
+					.eq("distributor_id", id)
+					.eq("delete_flag", 1));
+			if(!deviceList.isEmpty()){
+				return R.error("经销商有关联的设备，无法删除");
+			}
+			this.remove(new QueryWrapper<Distributor>().eq("id", id));
 			return R.ok();
 		} catch (Exception e) {
-			logger.error("逻辑删除经销商失败", e);
-			return R.error("逻辑删除经销商失败");
+			logger.error("删除经销商失败", e);
+			return R.error("删除经销商失败");
 		}
 	}
 
@@ -111,24 +121,14 @@ public class DistributorServiceImpl extends ServiceImpl<DistributorMapper, Distr
 
 	@Override
 	public R saveBatchRecord(List<Distributor> resultList) {
-		// 校验是否有重复数据
-		List<String> identifierList = distributorMapper.queryIdentifierList();
-		List<String> nameList = distributorMapper.queryNameList();
-		logger.info("导入经销商数量{}", resultList.size());
-		resultList.forEach(item -> {
-			if(identifierList.contains(item.getIdentifier())){
-				logger.info("经销商标识已经存在{}", item);
-				resultList.remove(item);
+		for (Distributor distributor : resultList){
+			Distributor record = this.getOne(new QueryWrapper<Distributor>().eq("identifier", distributor.getIdentifier()));
+			if (record == null){
+				this.saveOrUpdate(distributor);
+			}else{
+				logger.info("经销商标识已经存在{}", distributor);
+				continue;
 			}
-			if(nameList.contains(item.getName())){
-				logger.info("经销商名称已经存在{}", item);
-				resultList.remove(item);
-			}
-		});
-
-		logger.info("过滤后经销商数量{}", resultList.size());
-		if(resultList.size() > 0){
-			this.saveBatch(resultList);
 		}
 		return R.ok();
 	}

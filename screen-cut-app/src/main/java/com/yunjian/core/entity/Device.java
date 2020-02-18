@@ -61,7 +61,7 @@ public class Device implements Serializable {
 	/**
 	 * 购买时间
 	 */
-	private LocalDateTime buyTime;
+	private Date buyTime;
 
 	/**
 	 * 绑定邮箱

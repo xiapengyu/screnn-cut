@@ -31,6 +31,7 @@
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
         <el-button type="primary" @click="addHandle()">新增</el-button>
+        <el-button type="primary" @click="importDeviceHandle()">导入设备</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -109,12 +110,14 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <add-device v-if="addVisible" ref="addDevice" @refreshDataList="getDataList"></add-device>
+    <import-device v-if="importDevice" ref="importDevice" @refreshDataList="getDataList"></import-device>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './device-info-add-or-update'
   import AddDevice from './device-info-add'
+  import ImportDevice from './device-import'
   export default {
     data () {
       return {
@@ -132,12 +135,14 @@
         totalPage: 0,
         dataListLoading: false,
         addOrUpdateVisible: false,
-        addVisible: false
+        addVisible: false,
+        importDevice: false
       }
     },
     components: {
       AddOrUpdate,
-      AddDevice
+      AddDevice,
+      ImportDevice
     },
     activated () {
       this.getDataList()
@@ -190,6 +195,12 @@
         this.addVisible = true
         this.$nextTick(() => {
           this.$refs.addDevice.init()
+        })
+      },
+      importDeviceHandle () {
+        this.importDevice = true
+        this.$nextTick(() => {
+          this.$refs.importDevice.init()
         })
       },
       // 删除
