@@ -2,21 +2,21 @@
 Navicat MySQL Data Transfer
 
 Source Server         : 127.0.0.1
-Source Server Version : 50716
+Source Server Version : 50726
 Source Host           : 127.0.0.1:3306
 Source Database       : screen
 
 Target Server Type    : MYSQL
-Target Server Version : 50716
+Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-02-12 19:43:21
+Date: 2020-02-18 16:56:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for sys_captcha
+-- Table structure for `sys_captcha`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_captcha`;
 CREATE TABLE `sys_captcha` (
@@ -34,7 +34,7 @@ INSERT INTO `sys_captcha` VALUES ('a241ce03-df2b-46f7-8354-301e67f2e186', 'by863
 INSERT INTO `sys_captcha` VALUES ('fdcbc030-d484-40bb-8020-e115d4e2ac63', 'dd24d', '2020-02-02 15:50:05');
 
 -- ----------------------------
--- Table structure for sys_config
+-- Table structure for `sys_config`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_config`;
 CREATE TABLE `sys_config` (
@@ -53,7 +53,7 @@ CREATE TABLE `sys_config` (
 INSERT INTO `sys_config` VALUES ('1', 'CLOUD_STORAGE_CONFIG_KEY', '{\"aliyunAccessKeyId\":\"\",\"aliyunAccessKeySecret\":\"\",\"aliyunBucketName\":\"\",\"aliyunDomain\":\"\",\"aliyunEndPoint\":\"\",\"aliyunPrefix\":\"\",\"qcloudBucketName\":\"\",\"qcloudDomain\":\"\",\"qcloudPrefix\":\"\",\"qcloudSecretId\":\"\",\"qcloudSecretKey\":\"\",\"qiniuAccessKey\":\"NrgMfABZxWLo5B-YYSjoE8-AZ1EISdi1Z3ubLOeZ\",\"qiniuBucketName\":\"ios-app\",\"qiniuDomain\":\"http://7xqbwh.dl1.z0.glb.clouddn.com\",\"qiniuPrefix\":\"upload\",\"qiniuSecretKey\":\"uIwJHevMRWU0VLxFvgy0tAcOdGqasdtVlJkdy6vV\",\"type\":1}', '0', '云存储配置信息');
 
 -- ----------------------------
--- Table structure for sys_dict_data
+-- Table structure for `sys_dict_data`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict_data`;
 CREATE TABLE `sys_dict_data` (
@@ -71,7 +71,7 @@ CREATE TABLE `sys_dict_data` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sys_dict_type
+-- Table structure for `sys_dict_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dict_type`;
 CREATE TABLE `sys_dict_type` (
@@ -89,7 +89,7 @@ CREATE TABLE `sys_dict_type` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sys_log
+-- Table structure for `sys_log`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
@@ -205,7 +205,7 @@ INSERT INTO `sys_log` VALUES ('95', 'admin', '删除菜单', 'com.yunjian.core.a
 INSERT INTO `sys_log` VALUES ('96', 'admin', '修改菜单', 'com.yunjian.core.admin.SysMenuController.update()', '[{\"menuId\":47,\"parentId\":0,\"name\":\"设备管理\",\"url\":\"device/device-info\",\"perms\":\"\",\"type\":1,\"icon\":\"menu\",\"orderNum\":2}]', '3', '0:0:0:0:0:0:0:1', '2020-02-05 21:10:28');
 
 -- ----------------------------
--- Table structure for sys_menu
+-- Table structure for `sys_menu`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu` (
@@ -268,7 +268,7 @@ INSERT INTO `sys_menu` VALUES ('71', '69', '商品信息管理', 'goods/goods-in
 INSERT INTO `sys_menu` VALUES ('72', '43', '经销商列表', 'distributor/distributor-info', '', '1', 'menu', '0');
 
 -- ----------------------------
--- Table structure for sys_role
+-- Table structure for `sys_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
@@ -286,7 +286,7 @@ CREATE TABLE `sys_role` (
 INSERT INTO `sys_role` VALUES ('1', '系统管理员', '系统管理员', '1', '2019-06-02 16:48:39');
 
 -- ----------------------------
--- Table structure for sys_role_menu
+-- Table structure for `sys_role_menu`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_menu`;
 CREATE TABLE `sys_role_menu` (
@@ -354,7 +354,7 @@ INSERT INTO `sys_role_menu` VALUES ('64', '1', '65');
 INSERT INTO `sys_role_menu` VALUES ('67', '1', '-666666');
 
 -- ----------------------------
--- Table structure for sys_user
+-- Table structure for `sys_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
@@ -377,7 +377,7 @@ CREATE TABLE `sys_user` (
 INSERT INTO `sys_user` VALUES ('1', 'admin', '9ec9750e709431dad22365cabc5c625482e574c74adaebba7dd02f1129e4ce1d', 'YzcmCZNvbXocrsz9dm8e', 'root@qq.com', '13612345678', '1', '1', '2016-11-11 11:11:11');
 
 -- ----------------------------
--- Table structure for sys_user_role
+-- Table structure for `sys_user_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_role`;
 CREATE TABLE `sys_user_role` (
@@ -392,7 +392,7 @@ CREATE TABLE `sys_user_role` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for sys_user_token
+-- Table structure for `sys_user_token`
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_token`;
 CREATE TABLE `sys_user_token` (
@@ -407,10 +407,10 @@ CREATE TABLE `sys_user_token` (
 -- ----------------------------
 -- Records of sys_user_token
 -- ----------------------------
-INSERT INTO `sys_user_token` VALUES ('1', '1f5654ebc3aaad3bcfaf671d16332971', '2020-02-06 22:26:38', '2020-02-06 10:26:38');
+INSERT INTO `sys_user_token` VALUES ('1', '9b059b21c29d002f5c4096035e678813', '2020-02-18 22:31:47', '2020-02-18 10:31:47');
 
 -- ----------------------------
--- Table structure for tb_account
+-- Table structure for `tb_account`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_account`;
 CREATE TABLE `tb_account` (
@@ -438,7 +438,7 @@ CREATE TABLE `tb_account` (
 INSERT INTO `tb_account` VALUES ('1', '635642897@qq.com', '9dc63b007f7dc2ef6aae087920277c92', '', 'IMEI20109059', '1', 'HUWEI P30', '小地精', '贴膜切割机', '0', '1', '1', '2020-01-22 09:11:46', '2020-01-30 16:43:56', '1');
 
 -- ----------------------------
--- Table structure for tb_account_cache
+-- Table structure for `tb_account_cache`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_account_cache`;
 CREATE TABLE `tb_account_cache` (
@@ -456,7 +456,7 @@ CREATE TABLE `tb_account_cache` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for tb_ad
+-- Table structure for `tb_ad`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_ad`;
 CREATE TABLE `tb_ad` (
@@ -470,14 +470,15 @@ CREATE TABLE `tb_ad` (
   `update_time` timestamp NULL DEFAULT NULL,
   `delete_flag` int(2) DEFAULT NULL COMMENT '逻辑删除标记 1未删除 0已删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_ad
 -- ----------------------------
+INSERT INTO `tb_ad` VALUES ('1', 'http://49.235.168.70:8085/upload/ad/734b5854234d404cb5cdb0dcc81cb49b.png', '1', '头部广告位', '1', '1', '2020-02-18 11:03:15', '2020-02-18 11:03:15', '1');
 
 -- ----------------------------
--- Table structure for tb_address
+-- Table structure for `tb_address`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_address`;
 CREATE TABLE `tb_address` (
@@ -504,7 +505,7 @@ CREATE TABLE `tb_address` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for tb_ad_position
+-- Table structure for `tb_ad_position`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_ad_position`;
 CREATE TABLE `tb_ad_position` (
@@ -524,7 +525,7 @@ CREATE TABLE `tb_ad_position` (
 INSERT INTO `tb_ad_position` VALUES ('1', '头部广告位', '1', '1', '2020-01-30 15:27:11', '2020-01-30 15:27:11', '1');
 
 -- ----------------------------
--- Table structure for tb_device
+-- Table structure for `tb_device`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_device`;
 CREATE TABLE `tb_device` (
@@ -542,15 +543,15 @@ CREATE TABLE `tb_device` (
   `update_time` timestamp NULL DEFAULT NULL,
   `delete_flag` int(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='设备信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='设备信息表';
 
 -- ----------------------------
 -- Records of tb_device
 -- ----------------------------
-INSERT INTO `tb_device` VALUES ('1', '12323000', '1', '1', '百度', 'ERFD345234234234', '1', null, '', '0', '2020-02-05 21:44:00', '2020-02-05 21:59:05', '1');
+INSERT INTO `tb_device` VALUES ('3', 'NO123456789', '1', '4', '阿里巴巴', 'ERFDFDG87907898', '1', '2020-02-18 11:18:18', '4566666@qq.com', '100', '2020-02-18 11:18:18', '2020-02-18 11:18:18', '1');
 
 -- ----------------------------
--- Table structure for tb_distributor
+-- Table structure for `tb_distributor`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_distributor`;
 CREATE TABLE `tb_distributor` (
@@ -566,15 +567,16 @@ CREATE TABLE `tb_distributor` (
   `update_time` timestamp NULL DEFAULT NULL,
   `delete_flag` int(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='经销商信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='经销商信息表';
 
 -- ----------------------------
 -- Records of tb_distributor
 -- ----------------------------
 INSERT INTO `tb_distributor` VALUES ('1', '百度', '广东省深圳市南山区', '李彦宏', '17855555555', '635642897@qq.com', 'ERFD345234234234', '1', '2020-02-05 20:47:33', '2020-02-05 21:05:10', '1');
+INSERT INTO `tb_distributor` VALUES ('4', '阿里巴巴', '中国浙江杭州', '马云', '17588996541', '4566666@qq.com', 'ERFDFDG87907898', '1', '2020-02-18 11:17:16', '2020-02-18 11:17:16', '1');
 
 -- ----------------------------
--- Table structure for tb_email_code
+-- Table structure for `tb_email_code`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_email_code`;
 CREATE TABLE `tb_email_code` (
@@ -592,7 +594,7 @@ CREATE TABLE `tb_email_code` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for tb_goods
+-- Table structure for `tb_goods`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_goods`;
 CREATE TABLE `tb_goods` (
@@ -619,7 +621,24 @@ INSERT INTO `tb_goods` VALUES ('9', '小米贴膜', '小米贴膜', '12.00', '0'
 INSERT INTO `tb_goods` VALUES ('10', '华为贴膜', '华为贴膜', '11.00', '1', '10.00', '0', '100', '2', '1', '2020-02-04 09:44:31', '2020-02-04 09:44:31', '1');
 
 -- ----------------------------
--- Table structure for tb_goods_img
+-- Table structure for `tb_goods_cart`
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_goods_cart`;
+CREATE TABLE `tb_goods_cart` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(10) DEFAULT NULL COMMENT '商品名称',
+  `amount` int(10) DEFAULT NULL COMMENT '商品数量',
+  `total_price` decimal(10,2) DEFAULT NULL COMMENT '总价',
+  `account_id` int(10) DEFAULT NULL COMMENT '用户id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='购物车信息表';
+
+-- ----------------------------
+-- Records of tb_goods_cart
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `tb_goods_img`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_goods_img`;
 CREATE TABLE `tb_goods_img` (
@@ -638,7 +657,7 @@ CREATE TABLE `tb_goods_img` (
 INSERT INTO `tb_goods_img` VALUES ('1', '10', 'http://49.235.168.70:8085/upload/ad/4f47ee3826354b92886d9ceb547ee530.png', '2020-02-04 09:44:31', '2020-02-04 09:44:31', '1');
 
 -- ----------------------------
--- Table structure for tb_goods_type
+-- Table structure for `tb_goods_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_goods_type`;
 CREATE TABLE `tb_goods_type` (
@@ -657,7 +676,7 @@ INSERT INTO `tb_goods_type` VALUES ('3', '普通膜', '1');
 INSERT INTO `tb_goods_type` VALUES ('4', '橡胶膜', '1');
 
 -- ----------------------------
--- Table structure for tb_message_center
+-- Table structure for `tb_message_center`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_message_center`;
 CREATE TABLE `tb_message_center` (
@@ -677,7 +696,7 @@ CREATE TABLE `tb_message_center` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for tb_phone_model
+-- Table structure for `tb_phone_model`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_phone_model`;
 CREATE TABLE `tb_phone_model` (
@@ -698,7 +717,45 @@ CREATE TABLE `tb_phone_model` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for tb_push_msg
+-- Table structure for `tb_purchase_detail`
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_purchase_detail`;
+CREATE TABLE `tb_purchase_detail` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(64) DEFAULT NULL COMMENT '采购单编号',
+  `goods_id` int(10) DEFAULT NULL COMMENT '商品id',
+  `amount` int(10) DEFAULT NULL COMMENT '数量',
+  `unit_price` decimal(10,2) DEFAULT NULL COMMENT '单价',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '总价',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单详情表';
+
+-- ----------------------------
+-- Records of tb_purchase_detail
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `tb_purchase_order`
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_purchase_order`;
+CREATE TABLE `tb_purchase_order` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(64) DEFAULT NULL COMMENT '采购单编号',
+  `comment` varchar(255) DEFAULT NULL COMMENT '备注',
+  `account_id` int(10) DEFAULT NULL COMMENT '用户id',
+  `status` int(2) DEFAULT NULL COMMENT '状态，预留字段',
+  `create_time` timestamp NULL DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL,
+  `delete_flag` int(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购订单信息表';
+
+-- ----------------------------
+-- Records of tb_purchase_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `tb_push_msg`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_push_msg`;
 CREATE TABLE `tb_push_msg` (
@@ -719,7 +776,7 @@ INSERT INTO `tb_push_msg` VALUES ('4', '啊啊啊啊', '啊啊啊啊啊啊啊啊
 INSERT INTO `tb_push_msg` VALUES ('5', '小三', '小三小三小三小三小三小三小三', '2020-01-30 17:33:53', '2020-02-04 10:16:12', null, '1');
 
 -- ----------------------------
--- Table structure for tb_push_record
+-- Table structure for `tb_push_record`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_push_record`;
 CREATE TABLE `tb_push_record` (
@@ -734,7 +791,7 @@ CREATE TABLE `tb_push_record` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for tb_region
+-- Table structure for `tb_region`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_region`;
 CREATE TABLE `tb_region` (
