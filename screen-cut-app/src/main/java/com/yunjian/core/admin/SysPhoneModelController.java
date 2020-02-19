@@ -7,7 +7,9 @@ import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.entity.PhoneBrand;
 import com.yunjian.core.entity.PhoneModel;
+import com.yunjian.core.service.IPhoneBrandService;
 import com.yunjian.core.service.IPhoneModelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +39,9 @@ public class SysPhoneModelController {
     @Autowired
     private IPhoneModelService phoneModelService;
 
+    @Autowired
+    private IPhoneBrandService phoneBrandService;
+
     /**
      * 分页查询手机机型列表
      */
@@ -43,7 +49,8 @@ public class SysPhoneModelController {
     public R phoneModelList(@RequestBody Map<String, Object> params){
         logger.info("分页查询手机机型列表{}", JsonUtil.toJsonString(params));
         PageUtils page = phoneModelService.queryPage(params);
-        return R.ok().put("page", page);
+        List<PhoneBrand> brandList = phoneBrandService.list();
+        return R.ok().put("page", page).put("brandList", brandList);
     }
 
     /**
@@ -55,10 +62,22 @@ public class SysPhoneModelController {
         String id = StringUtil.obj2String(params.get("id"));
         if(!StringUtils.isEmpty(id)){
             PhoneModel model = phoneModelService.getOne(new QueryWrapper<PhoneModel>().eq("id", id));
+            List<PhoneBrand> brandList = phoneBrandService.list();
             return R.ok().put("model", model);
         }else{
             return R.error("参数错误");
         }
+    }
+
+    /**
+     * 查询手机品牌列表
+     */
+    @PostMapping("/queryTotalBrand")
+    public R queryTotalBrand(@RequestBody Map<String, Object> params){
+        logger.info("查询手机品牌列表{}", JsonUtil.toJsonString(params));
+        String id = StringUtil.obj2String(params.get("id"));
+        List<PhoneBrand> brandList = phoneBrandService.list();
+        return R.ok().put("brandList", brandList);
     }
 
     /**

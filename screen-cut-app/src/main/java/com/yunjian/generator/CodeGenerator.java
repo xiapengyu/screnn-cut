@@ -39,14 +39,14 @@ public class CodeGenerator {
 		// 数据源配置
 		DataSourceConfig dsc = new DataSourceConfig();
 		dsc.setUrl(
-				"jdbc:mysql://127.0.0.1:3306/screen?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false");
+				"jdbc:mysql://134.175.242.78:3306/cutting_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false");
 		dsc.setDriverName("com.mysql.jdbc.Driver");
-		dsc.setUsername("root");
-		dsc.setPassword("xia4698083");
+		dsc.setUsername("cutting");
+		dsc.setPassword("$$$cutting^_^");
 		mpg.setDataSource(dsc);
 
 		List<String> list = new ArrayList<>(); // 数据表的列表
-		list.add("tb_purchase_detail");
+		list.add("tb_phone_brand");
 		for (String tablename : list) {
 			// 包配置
 			PackageConfig pc = new PackageConfig();

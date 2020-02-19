@@ -6,13 +6,16 @@ import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.Query;
 import com.yunjian.common.utils.R;
 import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.entity.PhoneBrand;
 import com.yunjian.core.entity.PhoneModel;
 import com.yunjian.core.mapper.PhoneModelMapper;
+import com.yunjian.core.service.IPhoneBrandService;
 import com.yunjian.core.service.IPhoneModelService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -30,6 +33,9 @@ import java.util.Map;
 public class PhoneModelServiceImpl extends ServiceImpl<PhoneModelMapper, PhoneModel> implements IPhoneModelService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private IPhoneBrandService phoneBrandService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -62,15 +68,20 @@ public class PhoneModelServiceImpl extends ServiceImpl<PhoneModelMapper, PhoneMo
                 model = this.getOne(new QueryWrapper<PhoneModel>().eq("id", id));
             }
             model.setPhoneImage(StringUtil.obj2String(params.get("phoneImage")));
-            model.setPhoneBrand(StringUtil.obj2String(params.get("phoneBrand")));
+            String brandId = StringUtil.obj2String(params.get("brandId"));
+            PhoneBrand brand = phoneBrandService.getOne(new QueryWrapper<PhoneBrand>().eq("id", Integer.parseInt(brandId)));
+            model.setBrandId(Integer.parseInt(brandId));
+            model.setPhoneBrand(brand.getBrandName());
             model.setPhoneModel(StringUtil.obj2String(params.get("phoneModel")));
+            model.setWidth(Integer.parseInt(StringUtil.obj2String(params.get("width"))));
+            model.setHeight(Integer.parseInt(StringUtil.obj2String(params.get("height"))));
             model.setSortNum(Integer.parseInt(StringUtil.obj2String(params.get("sortNum"))));
             model.setStatus(Integer.parseInt(StringUtil.obj2String(params.get("status"))));
             model.setUpdateTime(new Date());
             this.saveOrUpdate(model);
         } catch (Exception e) {
-            logger.error("保存手机型号失败", e);
-            return R.error("保存手机型号失败");
+            logger.error("保存手机机型失败", e);
+            return R.error("保存手机机型失败");
         }
         return R.ok();
     }

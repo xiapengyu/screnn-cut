@@ -21,11 +21,19 @@
       <el-form-item label="" prop="">
           <img :src="dataForm.phoneImage" alt="" height="200" width="200">
       </el-form-item>
-      <el-form-item label="手机品牌" prop="phoneBrand" :class="{ 'is-required': true }">
-          <el-input v-model="dataForm.phoneBrand" placeholder="手机品牌"></el-input>
+      <el-form-item label="手机品牌" prop="brandId" :class="{ 'is-required': true }">
+          <el-select v-model="dataForm.brandId">
+            <el-option v-for="item in brandList" :key="item.id" :label="item.brandName" :value="item.id" />
+          </el-select>
       </el-form-item>
       <el-form-item label="手机型号" prop="phoneModel" :class="{ 'is-required': true }">
           <el-input v-model="dataForm.phoneModel" placeholder="手机型号"></el-input>
+      </el-form-item>
+      <el-form-item label="屏幕宽度(单位:毫米)" prop="width" :class="{ 'is-required': true }">
+          <el-input v-model="dataForm.width" placeholder="屏幕宽度"></el-input>
+      </el-form-item>
+      <el-form-item label="屏幕高度(单位:毫米)" prop="height" :class="{ 'is-required': true }">
+          <el-input v-model="dataForm.height" placeholder="屏幕高度"></el-input>
       </el-form-item>
       <el-form-item label="排序码" prop="sortNum" :class="{ 'is-required': true }">
         <el-input-number v-model="dataForm.sortNum" controls-position="right" :min="0" label="排序码"></el-input-number>
@@ -52,19 +60,23 @@
         uploadUrl: '',
         dialogVisible: false,
         dialogImageUrl: '',
+        brandList: [],
         dataForm: {
           id: 0,
           phoneImage: '',
+          brandId: '',
           phoneBrand: '',
           phoneModel: '',
           sortNum: 1,
-          status: 1
+          status: 1,
+          width: '',
+          height: ''
         },
         dataRule: {
           phoneImage: [
             { required: true, message: '手机图片不能为空', trigger: 'blur' }
           ],
-          phoneBrand: [
+          brandId: [
             { required: true, message: '手机品牌不能为空', trigger: 'blur' }
           ],
           phoneModel: [
@@ -72,6 +84,12 @@
           ],
           sortNum: [
             { required: true, message: '排序码不能为空', trigger: 'blur' }
+          ],
+          width: [
+            { required: true, message: '屏幕宽度不能为空', trigger: 'blur' }
+          ],
+          height: [
+            { required: true, message: '屏幕高度不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -84,6 +102,17 @@
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }
+        this.$http({
+          url: this.$http.adornUrl(`/sys/phone/queryTotalBrand`),
+          method: 'post',
+          data: this.$http.adornData()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.brandList = data.brandList
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
         if (this.dataForm.id) {
           this.$http({
             url: this.$http.adornUrl(`/sys/phone/queryPhoneModelInfo`),
@@ -95,10 +124,13 @@
             if (data && data.code === 0) {
               this.dataForm.id = data.model.id
               this.dataForm.phoneImage = data.model.phoneImage
-              this.dataForm.phoneBrand = data.model.phoneBrand
+              this.dataForm.brandId = data.model.brandId
               this.dataForm.phoneModel = data.model.phoneModel
               this.dataForm.status = data.model.status
               this.dataForm.sortNum = data.model.sortNum
+              this.dataForm.width = data.model.width
+              this.dataForm.height = data.model.height
+              this.brandList = data.brandList
             } else {
               this.$message.error(data.msg)
             }
@@ -115,8 +147,10 @@
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
                 'phoneImage': this.dataForm.phoneImage,
-                'phoneBrand': this.dataForm.phoneBrand,
                 'phoneModel': this.dataForm.phoneModel,
+                'brandId': this.dataForm.brandId,
+                'width': this.dataForm.width,
+                'height': this.dataForm.height,
                 'sortNum': this.dataForm.sortNum,
                 'status': this.dataForm.status
               })
@@ -125,7 +159,7 @@
                 this.$message({
                   message: '操作成功',
                   type: 'success',
-                  duration: 1500,
+                  duration: 500,
                   onClose: () => {
                     this.visible = false
                     this.$emit('refreshDataList')

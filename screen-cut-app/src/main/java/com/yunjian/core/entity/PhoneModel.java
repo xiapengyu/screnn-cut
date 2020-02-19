@@ -58,5 +58,10 @@ public class PhoneModel implements Serializable {
 
     private Integer deleteFlag;
 
+    private Integer width;
+
+    private Integer height;
+
+    private Integer brandId;
 
 }

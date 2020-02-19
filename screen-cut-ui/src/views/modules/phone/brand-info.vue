@@ -2,10 +2,7 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.phoneBrand" placeholder="品牌" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.phoneModel" placeholder="型号" clearable></el-input>
+        <el-input v-model="dataForm.brandName" placeholder="品牌名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -25,53 +22,19 @@
         width="80"
         label="ID">
       </el-table-column>
-      <el-table-column
-        prop="phoneImage"
+       <el-table-column
+        prop="brandName"
         header-align="center"
         align="center"
-        label="手机图片">
+        label="品牌名称">
+      </el-table-column>
+      <el-table-column
+        prop="brandImg"
+        header-align="center"
+        align="center"
+        label="品牌图片">
         <template slot-scope="scope">
-          <div><img :src="scope.row.phoneImage"  min-width="55" height="55"></div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="phoneBrand"
-        header-align="center"
-        align="center"
-        label="品牌">
-      </el-table-column>
-      <el-table-column
-        prop="phoneModel"
-        header-align="center"
-        align="center"
-        label="型号">
-      </el-table-column>
-      <el-table-column
-        prop="width"
-        header-align="center"
-        align="center"
-        label="屏幕宽度(mm)">
-      </el-table-column>
-      <el-table-column
-        prop="height"
-        header-align="center"
-        align="center"
-        label="屏幕高度(mm)">
-      </el-table-column>
-      <el-table-column
-        prop="sortNum"
-        header-align="center"
-        align="center"
-        label="排序号">
-      </el-table-column>
-      <el-table-column
-        prop="status"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
-          <el-tag v-else size="small">正常</el-tag>
+          <div><img :src="scope.row.brandImg"  min-width="55" height="55"></div>
         </template>
       </el-table-column>
       <el-table-column
@@ -108,13 +71,13 @@
 </template>
 
 <script>
-  import AddOrUpdate from './phone-info-add-or-update'
+  import AddOrUpdate from './brand-info-add-or-update'
   export default {
     data () {
       return {
         dataForm: {
-          phoneBrand: '',
-          phoneModel: ''
+          brandImg: '',
+          brandName: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -135,19 +98,17 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/phone/phoneModelList'),
+          url: this.$http.adornUrl('/sys/phoneBrand/phoneBrandList'),
           method: 'post',
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'phoneBrand': this.dataForm.phoneBrand,
-            'phoneModel': this.dataForm.phoneModel
+            'phoneBrand': this.dataForm.brandName
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
-            this.positionList = data.positionList
           } else {
             this.dataList = []
             this.totalPage = 0
@@ -181,7 +142,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/phone/deletePhoneModelInfo'),
+            url: this.$http.adornUrl('/sys/phoneBrand/deletePhoneBrand'),
             method: 'post',
             data: this.$http.adornData({
               'id': id
@@ -203,8 +164,7 @@
         }).catch(() => {})
       },
       clearQueryData () {
-        this.dataForm.phoneBrand = ''
-        this.dataForm.phoneModel = ''
+        this.dataForm.brandName = ''
         this.getDataList()
       }
     }
