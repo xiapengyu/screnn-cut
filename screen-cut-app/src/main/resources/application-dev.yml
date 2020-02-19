@@ -14,12 +14,12 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
             driver-class-name: com.mysql.jdbc.Driver
-            #url: jdbc:mysql://134.175.242.78:3306/cutting_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
-            #username: cutting
-            #password: $$$cutting^_^
-            url: jdbc:mysql://127.0.0.1:3306/screen?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
-            username: root
-            password: xia4698083
+            url: jdbc:mysql://134.175.242.78:3306/cutting_db?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+            username: cutting
+            password: $$$cutting^_^
+            #url: jdbc:mysql://127.0.0.1:3306/screen?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+            #username: root
+            #password: xia4698083
             initial-size: 10
             max-active: 100
             min-idle: 10
