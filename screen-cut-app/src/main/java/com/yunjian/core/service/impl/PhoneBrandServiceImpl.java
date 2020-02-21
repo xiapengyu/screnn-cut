@@ -42,18 +42,6 @@ public class PhoneBrandServiceImpl extends ServiceImpl<PhoneBrandMapper, PhoneBr
     }
 
     @Override
-    public AppPageUtils queryAppPage(Map<String, Object> param) {
-        String brandName = StringUtil.obj2String(param.get("brandName"));
-        QueryWrapper<PhoneBrand> queryWrapper = new QueryWrapper<PhoneBrand>();
-        queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
-        if(StringUtils.isNotBlank(brandName)){
-            queryWrapper.like("brand_name", brandName);
-        }
-        IPage<PhoneBrand> page = this.page(new Query<PhoneBrand>().getPage(param),queryWrapper);
-        return new AppPageUtils(page);
-    }
-
-    @Override
     public R savePhoneBrandInfo(Map<String, Object> params) {
         String id = StringUtil.obj2String(params.get("id"));
         try {

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/goods")
+@RequestMapping("/goods")
 public class GoodsController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -72,86 +72,4 @@ public class GoodsController {
         return response;
     }
 
-    /**
-     * 商品加入购物车
-     */
-    @PostMapping("/addGoodsToCart")
-    public ResponseDto addGoodsToCart(@RequestBody Map<String, Object> params){
-        logger.info("商品加入购物车{}", JsonUtil.toJsonString(params));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-        if(params.get("id") == null){
-            return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
-        }
-        return goodsCartService.addGoodsToCart(StringUtil.obj2String(params.get("id")));
-    }
-
-    /**
-     * 查看购物车详情
-     */
-    @PostMapping("/viewGoodsCartDetail")
-    public ResponseDto viewGoodsCartDetail(){
-        logger.info("查看购物车详情");
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-        return goodsCartService.viewGoodsCartDetail();
-    }
-
-    /**
-     * 从购物车移除商品
-     */
-    @PostMapping("/removeGoodsFromCart")
-    public ResponseDto removeGoodsFromCart(@RequestBody Map<String, Object> params){
-        logger.info("从购物车移除商品{}", JsonUtil.toJsonString(params));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-        if(params.get("id") == null){
-            return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
-        }
-        return goodsCartService.removeGoodsFromCart(Integer.parseInt(StringUtil.obj2String(params.get("id"))));
-    }
-
-    /**
-     * 修改购物车商品数量
-     */
-    @PostMapping("/modifyGoodsCartAmount")
-    public ResponseDto modifyGoodsCartAmount(@RequestBody Map<String, Object> params){
-        logger.info("修改购物车商品数量{}", JsonUtil.toJsonString(params));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-        if(params.get("id") == null || params.get("amount") == null){
-            return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
-        }
-        return goodsCartService.modifyGoodsCartAmount(Integer.parseInt(StringUtil.obj2String(params.get("id"))),
-                Integer.parseInt(StringUtil.obj2String(params.get("amount"))));
-    }
-
-    /**
-     * 一键清空用户购物车
-     */
-    @PostMapping("/clearUserGoodsCart")
-    public ResponseDto clearUserGoodsCart(){
-        logger.info("一键清空购物车");
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-        try {
-            Account account = SecurityContext.getUserPrincipal();
-            goodsCartService.remove(new QueryWrapper<GoodsCart>().eq("account_id", account.getId()));
-        } catch (Exception e) {
-            logger.error("一键清空购物车失败", e);
-            return new ResponseDto(Constant.FAIL_CODE, null, "一键清空购物车失败");
-        }
-        return response;
-    }
-
-    /**
-     * 提交采购清单
-     */
-    @PostMapping("/submitCart")
-    public ResponseDto submitCart(@RequestBody OrderReqDto param){
-        logger.info("提交采购清单{}", JsonUtil.toJsonString(param));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-        if(param.getAddressId() == null){
-            return new ResponseDto(Constant.FAIL_CODE, null, "没有收货地址信息");
-        }
-        if(param.getGoodsList().isEmpty()){
-            return new ResponseDto(Constant.FAIL_CODE, null, "没有采购的商品信息");
-        }
-        return purchaseOrderService.submitCart(param);
-    }
 }

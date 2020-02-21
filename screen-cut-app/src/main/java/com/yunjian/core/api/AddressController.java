@@ -3,6 +3,7 @@ package com.yunjian.core.api;
 
 import java.util.Map;
 
+import com.yunjian.common.utils.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class AddressController {
 		logger.info("分页查询用户地址信息{}", JsonUtil.toJsonString(param));
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
-			AppPageUtils page = addressServiceImpl.queryPage(param);
+			PageUtils page = addressServiceImpl.queryPage(param);
 			response.setData(page);
 		} catch (Exception e) {
 			logger.error("分页查询用户地址信息失败", e);

@@ -1,5 +1,6 @@
 package com.yunjian.core.service;
 
+import com.yunjian.common.utils.PageUtils;
 import com.yunjian.core.entity.MessageCenter;
 
 import java.util.Map;
@@ -16,6 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMessageCenterService extends IService<MessageCenter> {
 
-	AppPageUtils queryPage(Map<String, Object> param);
+	PageUtils queryPage(Map<String, Object> param);
 
 }

@@ -3,6 +3,7 @@ package com.yunjian.core.api;
 
 import java.util.Map;
 
+import com.yunjian.common.utils.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class MessageCenterController {
 		logger.info("分页用户消息列表信息{}", JsonUtil.toJsonString(param));
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
-			AppPageUtils page = messageCenterServiceImpl.queryPage(param);
+			PageUtils page = messageCenterServiceImpl.queryPage(param);
 			response.setData(page);
 		} catch (Exception e) {
 			logger.error("分页用户消息列表信息失败", e);

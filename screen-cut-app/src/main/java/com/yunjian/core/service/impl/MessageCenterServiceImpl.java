@@ -2,6 +2,7 @@ package com.yunjian.core.service.impl;
 
 import java.util.Map;
 
+import com.yunjian.common.utils.PageUtils;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +13,7 @@ import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.MessageCenter;
 import com.yunjian.core.mapper.MessageCenterMapper;
 import com.yunjian.core.service.IMessageCenterService;
+import com.yunjian.common.utils.*;
 
 /**
  * <p>
@@ -25,11 +27,11 @@ import com.yunjian.core.service.IMessageCenterService;
 public class MessageCenterServiceImpl extends ServiceImpl<MessageCenterMapper, MessageCenter> implements IMessageCenterService {
 
 	@Override
-	public AppPageUtils queryPage(Map<String, Object> param) {
+	public PageUtils queryPage(Map<String, Object> param) {
 		Account account = SecurityContext.getUserPrincipal();
-		IPage<MessageCenter> page = this.page(new AppQuery<MessageCenter>().getPage(param),
+		IPage<MessageCenter> page = this.page(new Query<MessageCenter>().getPage(param),
 				new QueryWrapper<MessageCenter>().like("account_id", account.getId()));
-		return new AppPageUtils(page);
+		return new PageUtils(page);
 	}
 
 }

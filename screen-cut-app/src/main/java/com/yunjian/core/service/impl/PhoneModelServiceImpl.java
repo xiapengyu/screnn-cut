@@ -84,7 +84,7 @@ public class PhoneModelServiceImpl extends ServiceImpl<PhoneModelMapper, PhoneMo
     }
 
     @Override
-    public AppPageUtils queryAppPage(Map<String, Object> param) {
+    public PageUtils queryAppPage(Map<String, Object> param) {
         String brandId = StringUtil.obj2String(param.get("id"));
         QueryWrapper<PhoneModel> queryWrapper = new QueryWrapper<PhoneModel>();
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
@@ -92,6 +92,6 @@ public class PhoneModelServiceImpl extends ServiceImpl<PhoneModelMapper, PhoneMo
             queryWrapper.like("brand_id", brandId);
         }
         IPage<PhoneModel> page = this.page(new Query<PhoneModel>().getPage(param),queryWrapper);
-        return new AppPageUtils(page);
+        return new PageUtils(page);
     }
 }

@@ -4,6 +4,7 @@ package com.yunjian.core.api;
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.PhoneBrand;
@@ -62,7 +63,7 @@ public class PhoneBrandController {
         logger.info("分页查询品牌列表{}", param);
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         try {
-            AppPageUtils page = phoneBrandService.queryAppPage(param);
+            PageUtils page = phoneBrandService.queryPage(param);
             response.setData(page);
         } catch (Exception e) {
             logger.error("分页查询品牌列表失败", e);
@@ -103,7 +104,7 @@ public class PhoneBrandController {
             return new ResponseDto(Constant.FAIL_CODE, null, "参数错误");
         }
         try {
-            AppPageUtils page = phoneModelService.queryAppPage(param);
+            PageUtils page = phoneModelService.queryAppPage(param);
             response.setData(page);
         } catch (Exception e) {
             logger.error("根据品牌分页查询机型", e);
