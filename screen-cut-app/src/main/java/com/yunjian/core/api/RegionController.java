@@ -24,7 +24,7 @@ import com.yunjian.core.service.IRegionService;
  * @since 2020-02-11
  */
 @RestController
-@RequestMapping("/region")
+@RequestMapping("/api/region")
 public class RegionController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -34,7 +34,6 @@ public class RegionController {
 	
 	/**
 	 *查询省份列表
-	 * @param param
 	 * @return
 	 */
 	@RequestMapping(value="/queryProvinceList", method = RequestMethod.POST)

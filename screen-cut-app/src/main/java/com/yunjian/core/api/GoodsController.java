@@ -21,17 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/goods")
+@RequestMapping("/api/goods")
 public class GoodsController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private IGoodsService goodsService;
-    @Autowired
-    private IGoodsCartService goodsCartService;
-    @Autowired
-    private IPurchaseOrderService purchaseOrderService;
 
     /**
      * 分页查询商品列表

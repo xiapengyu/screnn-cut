@@ -22,7 +22,7 @@ import jodd.util.StringUtil;
 
 @Api("用户账号与登录相关接口")
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/api/account")
 public class LoginController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -42,15 +42,16 @@ public class ShiroConfig {
         Map<String, Filter> filters = new HashMap<>();
         filters.put("oauth2", new OAuth2Filter());
         shiroFilter.setFilters(filters);
+        //anon表示不过滤,不拦截
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/druid/**", "anon");
-        filterMap.put("/app/**", "anon");
-        filterMap.put("/api/**", "anon");
-        filterMap.put("/account/**", "anon");
-        filterMap.put("/region/**", "anon");
-        filterMap.put("/login/**", "anon");
-        filterMap.put("/home/**", "anon");
+        filterMap.put("/api/account/**", "anon");
+        filterMap.put("/api/goods/**", "anon");
+        filterMap.put("/api/phoneBrand/**", "anon");
+        filterMap.put("/api/region/**", "anon");
+        /*filterMap.put("/login/**", "anon");
+        filterMap.put("/home/**", "anon");*/
         filterMap.put("/sys/login", "anon");
         filterMap.put("/swagger/**", "anon");
         filterMap.put("/v2/api-docs", "anon");
@@ -60,8 +61,9 @@ public class ShiroConfig {
         filterMap.put("/sys/image/uploadImage", "anon");
         filterMap.put("/sys/distributor/uploadDistributorFile", "anon");
         filterMap.put("/sys/device/uploadDeviceFile", "anon");
-        filterMap.put("/**", "oauth2");
         filterMap.put("/captcha.jpg", "anon");
+
+        filterMap.put("/**", "oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
         return shiroFilter;
     }
