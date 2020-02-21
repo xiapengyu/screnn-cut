@@ -1,5 +1,7 @@
 package com.yunjian.core.service;
 
+import com.yunjian.core.dto.OrderReqDto;
+import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.GoodsCart;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +14,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-02-18
  */
 public interface IGoodsCartService extends IService<GoodsCart> {
+
+    ResponseDto addGoodsToCart(String id);
+
+    ResponseDto viewGoodsCartDetail();
+
+    ResponseDto removeGoodsFromCart(int id);
+
+    ResponseDto modifyGoodsCartAmount(int id, int amount);
 
 }

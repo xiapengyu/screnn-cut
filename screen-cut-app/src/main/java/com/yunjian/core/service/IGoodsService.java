@@ -1,13 +1,10 @@
 package com.yunjian.core.service;
 
-import com.yunjian.common.utils.AppPageUtils;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.dto.GoodsDetailDto;
-import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Goods;
 
-import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;

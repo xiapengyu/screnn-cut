@@ -1,15 +1,14 @@
 package com.yunjian.core.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.yunjian.common.utils.*;
 import com.yunjian.core.dto.GoodsDetailDto;
 import com.yunjian.core.dto.GoodsDto;
 import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.entity.GoodsType;
+import com.yunjian.core.service.IGoodsTypeService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +40,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 	
 	@Autowired
 	private IGoodsImgService goodsImgService;
+	@Autowired
+	private IGoodsTypeService goodsTypeService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -171,7 +172,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 		}else{
 			query.orderByDesc("create_time");
 		}
-		IPage<Goods> page = this.page(new AppQuery<Goods>().getPage(params), query);
+		IPage<Goods> page = this.page(new Query<Goods>().getPage(params), query);
 		List<GoodsDto> result = new ArrayList<>();
 		page.getRecords().forEach(item -> {
 			GoodsDto dto = new GoodsDto();
@@ -195,6 +196,17 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 		List<GoodsImg> imgList = goodsImgService.list(
 				new QueryWrapper<GoodsImg>()
 						.eq("goods_id", Integer.parseInt(id)).orderByAsc("create_time"));
+
+		//商品类型信息
+		List<String> typeIds = Arrays.asList(goods.getType().split(","));
+		List<GoodsType> typeList = goodsTypeService.list(new QueryWrapper<GoodsType>().in("id", typeIds));
+		/*String typeDesc = "";
+		for(GoodsType type : typeList){
+			typeDesc = typeDesc + type.getName() + " ";
+		}*/
+		dto.setTypeList(typeList);
+
+		//商品图片信息
 		List<String> imgUrlList = new ArrayList<>();
 		if(!imgList.isEmpty()){
 			imgList.forEach(item -> {

@@ -1,6 +1,5 @@
 package com.yunjian.core.service;
 
-import com.yunjian.common.utils.AppPageUtils;
 import com.yunjian.core.entity.MessageCenter;
 
 import java.util.Map;

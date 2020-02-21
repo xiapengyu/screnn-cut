@@ -2,10 +2,7 @@ package com.yunjian.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
+import com.yunjian.common.utils.*;
 import com.yunjian.core.entity.PhoneBrand;
 import com.yunjian.core.entity.PhoneModel;
 import com.yunjian.core.mapper.PhoneModelMapper;
@@ -84,5 +81,17 @@ public class PhoneModelServiceImpl extends ServiceImpl<PhoneModelMapper, PhoneMo
             return R.error("保存手机机型失败");
         }
         return R.ok();
+    }
+
+    @Override
+    public AppPageUtils queryAppPage(Map<String, Object> param) {
+        String brandId = StringUtil.obj2String(param.get("id"));
+        QueryWrapper<PhoneModel> queryWrapper = new QueryWrapper<PhoneModel>();
+        queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
+        if(StringUtils.isNotBlank(brandId)){
+            queryWrapper.like("brand_id", brandId);
+        }
+        IPage<PhoneModel> page = this.page(new Query<PhoneModel>().getPage(param),queryWrapper);
+        return new AppPageUtils(page);
     }
 }

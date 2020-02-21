@@ -3,6 +3,8 @@ package com.yunjian.core.service.impl;
 import java.util.Date;
 import java.util.Map;
 
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,6 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.utils.AppPageUtils;
-import com.yunjian.common.utils.AppQuery;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.core.dto.ResponseDto;
@@ -92,6 +92,12 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 
 	@Override
 	public ResponseDto deleteAddress(Address param) {
+		Account account = SecurityContext.getUserPrincipal();
+		Address defaultAddress = this
+				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("id_default", 1));
+		if(defaultAddress.getId() == param.getId()){
+			return new ResponseDto(Constant.FAIL_CODE, null, "不能删除默认收货地址");
+		}
 		this.remove(new QueryWrapper<Address>().eq("id", param.getId()));
 		return new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 	}
@@ -112,11 +118,11 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 	}
 
 	@Override
-	public AppPageUtils queryPage(Map<String, Object> param) {
+	public PageUtils queryPage(Map<String, Object> param) {
 		Account account = SecurityContext.getUserPrincipal();
-		IPage<Address> page = this.page(new AppQuery<Address>().getPage(param),
+		IPage<Address> page = this.page(new Query<Address>().getPage(param),
 				new QueryWrapper<Address>().like("account_id", account.getId()));
-		return new AppPageUtils(page);
+		return new PageUtils(page);
 	}
 
 }

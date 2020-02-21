@@ -1,7 +1,12 @@
 package com.yunjian.core.service;
 
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.core.dto.OrderReqDto;
+import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.PurchaseOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -12,5 +17,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-02-18
  */
 public interface IPurchaseOrderService extends IService<PurchaseOrder> {
+
+    ResponseDto submitCart(OrderReqDto param);
+
+    PageUtils queryOrderByPage(Map<String, Object> params);
+
+    ResponseDto queryOrderDetail(String orderNo);
 
 }

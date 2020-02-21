@@ -2,10 +2,7 @@ package com.yunjian.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
+import com.yunjian.common.utils.*;
 import com.yunjian.core.entity.PhoneBrand;
 import com.yunjian.core.entity.PhoneModel;
 import com.yunjian.core.mapper.PhoneBrandMapper;
@@ -34,15 +31,26 @@ public class PhoneBrandServiceImpl extends ServiceImpl<PhoneBrandMapper, PhoneBr
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        String brandName = (String)params.get("brandName");
-
+        String brandName = StringUtil.obj2String(params.get("brandName"));
         QueryWrapper<PhoneBrand> queryWrapper = new QueryWrapper<PhoneBrand>();
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
         if(StringUtils.isNotBlank(brandName)){
-            queryWrapper.like("phone_name", brandName);
+            queryWrapper.like("brand_name", brandName);
         }
         IPage<PhoneBrand> page = this.page(new Query<PhoneBrand>().getPage(params),queryWrapper);
         return new PageUtils(page);
+    }
+
+    @Override
+    public AppPageUtils queryAppPage(Map<String, Object> param) {
+        String brandName = StringUtil.obj2String(param.get("brandName"));
+        QueryWrapper<PhoneBrand> queryWrapper = new QueryWrapper<PhoneBrand>();
+        queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
+        if(StringUtils.isNotBlank(brandName)){
+            queryWrapper.like("brand_name", brandName);
+        }
+        IPage<PhoneBrand> page = this.page(new Query<PhoneBrand>().getPage(param),queryWrapper);
+        return new AppPageUtils(page);
     }
 
     @Override
@@ -68,4 +76,5 @@ public class PhoneBrandServiceImpl extends ServiceImpl<PhoneBrandMapper, PhoneBr
         }
         return R.ok();
     }
+
 }

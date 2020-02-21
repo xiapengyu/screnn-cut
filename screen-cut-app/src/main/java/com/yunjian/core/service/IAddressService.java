@@ -1,6 +1,6 @@
 package com.yunjian.core.service;
 
-import com.yunjian.common.utils.AppPageUtils;
+import com.yunjian.common.utils.PageUtils;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Address;
 
@@ -24,6 +24,6 @@ public interface IAddressService extends IService<Address> {
 
 	ResponseDto setDefaultAddress(Address param);
 
-	AppPageUtils queryPage(Map<String, Object> param);
+	PageUtils queryPage(Map<String, Object> param);
 
 }

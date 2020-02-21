@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.yunjian.core.entity.Device;
+import com.yunjian.core.service.IDeviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,14 +57,19 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 	@Autowired
 	private IAccountCacheService accountCacheServiceImpl;
 
+	@Autowired
+	private IDeviceService deviceServiceImpl;
+
 	@Override
 	public ResponseDto register(AccountDto param) {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
-			if (this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())) != null) {
+			if (deviceServiceImpl.getOne(new QueryWrapper<Device>().eq("serial_no", param.getSerialNo())) == null){
+				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "序列码不存在");
+			}else if (this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())) != null) {
 				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "该邮箱已经注册");
 			} else if (this.getOne(new QueryWrapper<Account>().eq("serial_no", param.getSerialNo())) != null) {
-				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "序列号已经存在");
+				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "序列码已经被注册");
 			} else if(!param.getPassword().equals(param.getConfirmPassword())) {
 				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "输入密码不一致");
 			}

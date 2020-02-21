@@ -21,4 +21,6 @@ public interface IPhoneBrandService extends IService<PhoneBrand> {
 
     R savePhoneBrandInfo(Map<String, Object> params);
 
+    AppPageUtils queryAppPage(Map<String, Object> param);
+
 }

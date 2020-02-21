@@ -26,6 +26,8 @@ public class PurchaseOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
+
     /**
      * 采购单编号
      */
@@ -52,5 +54,9 @@ public class PurchaseOrder implements Serializable {
 
     private Integer deleteFlag;
 
+    private String userName;
 
+    private String phone;
+
+    private String address;
 }

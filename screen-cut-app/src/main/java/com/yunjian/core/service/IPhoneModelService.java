@@ -21,4 +21,6 @@ public interface IPhoneModelService extends IService<PhoneModel> {
 
     R savePhoneModelInfo(Map<String, Object> params);
 
+    AppPageUtils queryAppPage(Map<String, Object> param);
+
 }
