@@ -3,6 +3,7 @@ package com.yunjian.core.service;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.dto.GoodsDetailDto;
+import com.yunjian.core.dto.GoodsReqDto;
 import com.yunjian.core.entity.Goods;
 
 import java.util.Map;
@@ -25,7 +26,7 @@ public interface IGoodsService extends IService<Goods> {
 
 	R newGoods(Map<String, Object> params);
 
-	PageUtils queryGoodsByPage(Map<String, Object> params);
+	PageUtils queryGoodsByPage(GoodsReqDto params);
 
 	GoodsDetailDto queryGoodsDetail(String id);
 

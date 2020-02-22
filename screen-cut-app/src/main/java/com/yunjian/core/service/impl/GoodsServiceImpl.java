@@ -6,6 +6,7 @@ import java.util.*;
 import com.yunjian.common.utils.*;
 import com.yunjian.core.dto.GoodsDetailDto;
 import com.yunjian.core.dto.GoodsDto;
+import com.yunjian.core.dto.GoodsReqDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.GoodsType;
 import com.yunjian.core.service.IGoodsTypeService;
@@ -154,25 +155,25 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 	}
 
 	@Override
-	public PageUtils queryGoodsByPage(Map<String, Object> params) {
-		String name = StringUtil.obj2String(params.get("name"));
-		String field = StringUtil.obj2String(params.get("field"));
-		Boolean isAsc = Boolean.parseBoolean(params.get("isAsc").toString());
-
+	public PageUtils queryGoodsByPage(GoodsReqDto params) {
 		QueryWrapper<Goods> query = new QueryWrapper<Goods>();
-		if(!StringUtils.isEmpty(name)){
-			query.like("name", name);
+		if(!StringUtils.isEmpty(params.getName())){
+			query.like("name", params.getName());
 		}
-		if(!StringUtils.isEmpty(field) && isAsc != null){
-			if("name".equals(field)){
+		boolean isAsc = (params.getIsAsc() == null || params.getIsAsc() == 0) ? false : true;
+		if(!StringUtils.isEmpty(params.getSortField())){
+			if("name".equals(params.getSortField())){
 				query.orderBy(true, isAsc, "name");
-			}else if("saleAmount".equals(field)){
+			}else if("saleAmount".equals(params.getSortField())){
 				query.orderBy(true, isAsc, "saleAmount");
+			}else{
+				query.orderByDesc("create_time");
 			}
 		}else{
 			query.orderByDesc("create_time");
 		}
-		IPage<Goods> page = this.page(new Query<Goods>().getPage(params), query);
+		Map<String, Object> map = JsonUtil.toMap(JsonUtil.toJsonString(params));
+		IPage<Goods> page = this.page(new Query<Goods>().getPage(map), query);
 		List<GoodsDto> result = new ArrayList<>();
 		page.getRecords().forEach(item -> {
 			GoodsDto dto = new GoodsDto();
