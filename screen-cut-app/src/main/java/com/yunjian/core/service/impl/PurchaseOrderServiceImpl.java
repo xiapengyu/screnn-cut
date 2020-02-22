@@ -1,22 +1,44 @@
 package com.yunjian.core.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yunjian.common.utils.*;
-import com.yunjian.core.dto.*;
-import com.yunjian.core.entity.*;
-import com.yunjian.core.mapper.PurchaseOrderMapper;
-import com.yunjian.core.service.*;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.*;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.DateUtils;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.Query;
+import com.yunjian.core.dto.GoodsCartInfo;
+import com.yunjian.core.dto.OrderReqDto;
+import com.yunjian.core.dto.OrderRespDto;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.dto.SecurityContext;
+import com.yunjian.core.entity.Account;
+import com.yunjian.core.entity.Address;
+import com.yunjian.core.entity.Goods;
+import com.yunjian.core.entity.GoodsCart;
+import com.yunjian.core.entity.GoodsImg;
+import com.yunjian.core.entity.PurchaseDetail;
+import com.yunjian.core.entity.PurchaseOrder;
+import com.yunjian.core.mapper.PurchaseOrderMapper;
+import com.yunjian.core.service.IAccountService;
+import com.yunjian.core.service.IAddressService;
+import com.yunjian.core.service.IGoodsImgService;
+import com.yunjian.core.service.IGoodsService;
+import com.yunjian.core.service.IPurchaseDetailService;
+import com.yunjian.core.service.IPurchaseOrderService;
 
 /**
  * <p>
@@ -89,6 +111,13 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
         queryWrapper.eq("account_id", account.getId())
                 .eq("delete_flag", 1)
                 .orderByDesc("create_time");
+        IPage<PurchaseOrder> page = this.page(new Query<PurchaseOrder>().getPage(params), queryWrapper);
+        return new PageUtils(page);
+    }
+    
+    @Override
+    public PageUtils queryOrderByPage4Sys(Map<String, Object> params) {
+        QueryWrapper<PurchaseOrder> queryWrapper = new QueryWrapper<PurchaseOrder>();
         IPage<PurchaseOrder> page = this.page(new Query<PurchaseOrder>().getPage(params), queryWrapper);
         return new PageUtils(page);
     }

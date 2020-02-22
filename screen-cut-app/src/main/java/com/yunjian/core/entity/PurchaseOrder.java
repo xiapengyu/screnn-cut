@@ -42,6 +42,8 @@ public class PurchaseOrder implements Serializable {
      * 用户id
      */
     private Integer accountId;
+    
+    private String company;
 
     /**
      * 状态，预留字段
@@ -57,6 +59,9 @@ public class PurchaseOrder implements Serializable {
     private String userName;
 
     private String phone;
+    
+    private String email;
 
     private String address;
+    
 }

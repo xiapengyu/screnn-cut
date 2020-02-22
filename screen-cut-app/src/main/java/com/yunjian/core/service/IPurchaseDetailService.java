@@ -1,6 +1,10 @@
 package com.yunjian.core.service;
 
 import com.yunjian.core.entity.PurchaseDetail;
+import com.yunjian.core.vo.PurchaseDetailVo;
+
+import java.util.List;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -12,5 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-02-18
  */
 public interface IPurchaseDetailService extends IService<PurchaseDetail> {
+
+	List<PurchaseDetailVo> queryPurchaseDetailInfo(String orderNo);
 
 }
