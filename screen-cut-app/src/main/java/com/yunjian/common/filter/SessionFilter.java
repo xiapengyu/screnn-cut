@@ -63,7 +63,8 @@ public class SessionFilter implements Filter {
 		String token = req.getHeader("token");
 		AccountCache accountCache = accountCacheServiceImpl
 				.getOne(new QueryWrapper<AccountCache>().eq("token", token).gt("expire_time", new Date()));
-
+		logger.info("token[{}]", token);
+		logger.info("cache[{}]", JsonUtil.toJsonString(accountCache));
 		if (accountCache != null) {
 			//更新token失效时间
 			long expireTime = new Date().getTime() + 1000 * 60 * 120;

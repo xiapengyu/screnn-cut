@@ -135,7 +135,7 @@ public class Constant {
 
 	public static final int expireTime = 60 * 60 * 24;
 
-	public static final String PARMS_ERROR_CODE = "00001";
+	public static final String PARMS_ERROR_CODE = "10002";
 	public static final String PARMS_ERROR_MSG = "参数错误";
 	public static final String SYSTEM_ERROR_MSG = "系统内部错误";
 	public static final String PARMS_CHECK_MSG = "参数填写有误,请检查各项参数是否正确";

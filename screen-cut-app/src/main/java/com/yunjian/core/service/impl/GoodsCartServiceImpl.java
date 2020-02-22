@@ -95,7 +95,7 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
             dto.setGoodsList(goodsList);
 
             Address defaultAddress = addressService
-                    .getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("id_default", 1));
+                    .getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
             dto.setAddress(defaultAddress);
             response.setData(dto);
             return response;

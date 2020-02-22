@@ -1,10 +1,12 @@
 package com.yunjian.core.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.Query;
+import com.yunjian.core.entity.Ad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 	@Override
 	public ResponseDto saveAddress(Address param) {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+		String detail = param.getAddress();
 		try {
 			Address address = null;
 			if (param.getId() != null) {
@@ -71,15 +74,16 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 			address.setDistrictName(district.getShortName());
 
 			StringBuffer fullName = new StringBuffer("");
-			fullName.append(province.getShortName()).append(city.getShortName()).append(district.getShortName());
+			fullName.append(province.getName()).append(city.getName())
+					.append(district.getName()).append(detail);
 			address.setAddress(fullName.toString());
-			
+
 			Address defaultAddress = this
-					.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("id_default", 1));
+					.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
 			if (defaultAddress != null && defaultAddress.getId() != param.getId() && param.getIsDefault() == 1) {
 				defaultAddress.setIsDefault(0);
 				this.saveOrUpdate(defaultAddress);
-			} 
+			}
 			address.setIsDefault(param.getIsDefault());
 			logger.info("保存的地址信息{}", JsonUtil.toJsonString(address));
 			this.saveOrUpdate(address);
@@ -94,8 +98,8 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 	public ResponseDto deleteAddress(Address param) {
 		Account account = SecurityContext.getUserPrincipal();
 		Address defaultAddress = this
-				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("id_default", 1));
-		if(defaultAddress.getId() == param.getId()){
+				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
+		if(defaultAddress != null && defaultAddress.getId() == param.getId()){
 			return new ResponseDto(Constant.FAIL_CODE, null, "不能删除默认收货地址");
 		}
 		this.remove(new QueryWrapper<Address>().eq("id", param.getId()));
@@ -106,7 +110,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 	public ResponseDto setDefaultAddress(Address param) {
 		Account account = SecurityContext.getUserPrincipal();
 		Address defaultAddress = this
-				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("id_default", 1));
+				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
 		if (defaultAddress != null && defaultAddress.getId() != param.getId()) {
 			defaultAddress.setIsDefault(0);
 			this.saveOrUpdate(defaultAddress);

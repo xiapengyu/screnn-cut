@@ -1,7 +1,9 @@
 package com.yunjian.core.service;
 
 import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.R;
 import com.yunjian.core.dto.OrderReqDto;
+import com.yunjian.core.dto.OrderRespDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.PurchaseOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -26,6 +28,7 @@ public interface IPurchaseOrderService extends IService<PurchaseOrder> {
 
     ResponseDto queryOrderDetail(String orderNo);
 
+    PageUtils queryAccountOrderList(Map<String, Object> params);
 
-
+    OrderRespDto queryOrderInfo(String orderNo);
 }

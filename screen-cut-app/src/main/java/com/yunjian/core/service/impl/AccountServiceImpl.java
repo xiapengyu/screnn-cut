@@ -65,13 +65,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
 			if (deviceServiceImpl.getOne(new QueryWrapper<Device>().eq("serial_no", param.getSerialNo())) == null){
-				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "序列码不存在");
+				return new ResponseDto(Constant.FAIL_CODE, null, "序列码不存在");
 			}else if (this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())) != null) {
-				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "该邮箱已经注册");
+				return new ResponseDto(Constant.FAIL_CODE, null, "该邮箱已经注册");
 			} else if (this.getOne(new QueryWrapper<Account>().eq("serial_no", param.getSerialNo())) != null) {
-				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "序列码已经被注册");
+				return new ResponseDto(Constant.FAIL_CODE, null, "序列码已经被注册");
 			} else if(!param.getPassword().equals(param.getConfirmPassword())) {
-				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "输入密码不一致");
+				return new ResponseDto(Constant.FAIL_CODE, null, "输入密码不一致");
 			}
 			
 			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())
@@ -175,7 +175,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 					.eq("email", param.getEmail()).eq("delete_flag", 1).gt("expire_time", new Date()));
 			if (emalCode != null) {
 				Account account = this.getOne(
-						new QueryWrapper<Account>().eq("email", param.getEmail()).eq("serial_no", param.getSerialNo()));
+						new QueryWrapper<Account>().eq("email", param.getEmail()));
 				if (account == null) {
 					return new ResponseDto(Constant.FAIL_CODE, null, "未查到相关用户");
 				} else {

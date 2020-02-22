@@ -4,6 +4,8 @@ package com.yunjian.core.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.core.dto.OrderRespDto;
+import com.yunjian.core.service.IPurchaseOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,8 @@ public class SysAccountController {
     
     @Autowired
     private IAccountService accountService;
+    @Autowired
+    private IPurchaseOrderService purchaseOrderService;
 
     /**
      * 分页查询用户列表
@@ -106,6 +110,27 @@ public class SysAccountController {
     public R saveAccount(@RequestBody Map<String, Object> params){
         logger.info("保存用户信息{}", JsonUtil.toJsonString(params));
         return accountService.saveAccount(params);
+    }
+
+    /**
+     * 分页查询客户采购需求列表
+     */
+    @PostMapping("/queryAccountOrderList")
+    public R queryAccountOrderList(@RequestBody Map<String, Object> params){
+        logger.info("分页查询客户采购需求列表{}", JsonUtil.toJsonString(params));
+        PageUtils page = purchaseOrderService.queryAccountOrderList(params);
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 查询客户采购需求单详情
+     */
+    @PostMapping("/queryOrderInfo")
+    public R queryOrderDetail(@RequestBody Map<String, Object> params){
+        logger.info("查询客户采购需求单详情{}", JsonUtil.toJsonString(params));
+        String orderNo = StringUtil.obj2String(params.get("orderNo"));
+        OrderRespDto info = purchaseOrderService.queryOrderInfo(orderNo);
+        return R.ok().put("order", info);
     }
     
 }

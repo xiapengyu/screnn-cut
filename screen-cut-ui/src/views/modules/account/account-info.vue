@@ -50,6 +50,12 @@
         label="设备名称">
       </el-table-column>
       <el-table-column
+        prop="serialNo"
+        header-align="center"
+        align="center"
+        label="设备序列号">
+      </el-table-column>
+      <el-table-column
         prop="useAmount"
         header-align="center"
         align="center"
