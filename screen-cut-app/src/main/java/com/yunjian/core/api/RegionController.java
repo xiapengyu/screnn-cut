@@ -24,7 +24,7 @@ import com.yunjian.core.service.IRegionService;
  * @since 2020-02-11
  */
 @RestController
-@RequestMapping("/api/region")
+@RequestMapping("/app/region")
 public class RegionController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -4,6 +4,7 @@ package com.yunjian.core.api;
 import java.util.Map;
 
 import com.yunjian.common.utils.PageUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,11 @@ public class AddressController {
 	@ResponseBody
 	public ResponseDto saveAddress(@RequestBody Address param) {
 		logger.info("保存用户地址信息{}", JsonUtil.toJsonString(param));
+		if(param.getProvinceId() == null || param.getCityId() == null || param.getDistrictId() == null
+				|| StringUtils.isEmpty(param.getAddress()) || StringUtils.isEmpty(param.getUserName()) || StringUtils.isEmpty(param.getPhone())
+				|| param.getIsDefault() == null){
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_ERROR_MSG);
+		}
 		return addressServiceImpl.saveAddress(param);
 	}
 	
@@ -113,7 +119,7 @@ public class AddressController {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		Account account = SecurityContext.getUserPrincipal();
 		Address defaultAddress = addressServiceImpl
-				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("id_default", 1));
+				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
 		response.setData(defaultAddress);
 		return response;
 	}

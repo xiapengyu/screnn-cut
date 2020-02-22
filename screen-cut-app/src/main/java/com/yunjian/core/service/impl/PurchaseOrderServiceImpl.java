@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -95,6 +96,49 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
 
     @Override
     public ResponseDto queryOrderDetail(String orderNo) {
+        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+        try {
+            PurchaseOrder order = this.getOne(new QueryWrapper<PurchaseOrder>().eq("order_no", orderNo));
+            OrderRespDto dto= new OrderRespDto();
+            BeanUtils.copyProperties(order, dto);
+
+            List<GoodsCartInfo> goodsList = new ArrayList<>();
+            List<PurchaseDetail> detailList = purchaseDetailService.list(new QueryWrapper<PurchaseDetail>().eq("order_no", orderNo));
+            for(PurchaseDetail item : detailList){
+                GoodsCartInfo info = new GoodsCartInfo();
+                Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", item.getGoodsId()));
+                info.setId(item.getGoodsId());
+                info.setName(goods.getName());
+                info.setAmount(item.getAmount());
+                info.setUnitPrice(item.getUnitPrice());
+                info.setTotalPrice(item.getPrice());
+                List<GoodsImg> imgList = goodsImgService.list(
+                        new QueryWrapper<GoodsImg>()
+                                .eq("goods_id", item.getId()).orderByAsc("create_time"));
+                if(!imgList.isEmpty()){
+                    info.setCoverImg(imgList.get(0).getImageUrl());
+                }
+                goodsList.add(info);
+            }
+            dto.setGoodsList(goodsList);
+            response.setData(dto);
+        } catch (BeansException e) {
+            logger.error("查看采购详情失败", e);
+            return new ResponseDto(Constant.FAIL_CODE, null, "查看采购详情失败");
+        }
+        return response;
+    }
+
+    @Override
+    public PageUtils queryAccountOrderList(Map<String, Object> params) {
+        QueryWrapper<PurchaseOrder> queryWrapper = new QueryWrapper<PurchaseOrder>();
+        queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
+        IPage<PurchaseOrder> page = this.page(new Query<PurchaseOrder>().getPage(params), queryWrapper);
+        return new PageUtils(page);
+    }
+
+    @Override
+    public OrderRespDto queryOrderInfo(String orderNo) {
         PurchaseOrder order = this.getOne(new QueryWrapper<PurchaseOrder>().eq("order_no", orderNo));
         OrderRespDto dto= new OrderRespDto();
         BeanUtils.copyProperties(order, dto);
@@ -118,9 +162,7 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             goodsList.add(info);
         }
         dto.setGoodsList(goodsList);
-
-
-        return null;
+        return dto;
     }
 
     private String createOrderNo(){

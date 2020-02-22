@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/goods")
+@RequestMapping("/app/goods")
 public class GoodsController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

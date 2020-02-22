@@ -28,7 +28,7 @@ import java.util.Map;
  * @since 2020-02-19
  */
 @RestController
-@RequestMapping("/api/phoneBrand")
+@RequestMapping("/app/phoneBrand")
 public class PhoneBrandController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -85,7 +85,7 @@ public class PhoneBrandController {
         if(StringUtils.isEmpty(brandId)){
             return new ResponseDto(Constant.FAIL_CODE, null, "参数错误");
         }
-        List<PhoneModel> list = phoneModelService.list(new QueryWrapper<PhoneModel>().eq("brandId", Integer.parseInt(brandId)));
+        List<PhoneModel> list = phoneModelService.list(new QueryWrapper<PhoneModel>().eq("brand_id", Integer.parseInt(brandId)));
         response.setData(list);
         return response;
     }

@@ -2,6 +2,7 @@ package com.yunjian.core.service.impl;
 
 import java.util.Date;
 
+import com.yunjian.common.utils.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class EmailCodeServiceImpl extends ServiceImpl<EmailCodeMapper, EmailCode
 			
 			//删除旧的验证码
 			this.remove(new QueryWrapper<EmailCode>().eq("email", param.getEmail()));
-			//保存先的验证码
+			//保存新的验证码
 			Date now = new Date();
 			EmailCode record = new EmailCode();
 			record.setCode(code);
@@ -48,10 +49,11 @@ public class EmailCodeServiceImpl extends ServiceImpl<EmailCodeMapper, EmailCode
 			record.setDeleteFlag(1);
 			this.save(record);
 			//发送邮件
-			//MailUtils.sendMail(param.getEmail(), code);
+			logger.info("发送邮件:收件人[{}],验证码[{}]", param.getEmail(), code);
+			MailUtils.sendMail(param.getEmail(), code);
 		} catch (Exception e) {
 			logger.error("发送邮件报错", e);
-			return new ResponseDto(Constant.FAIL_CODE, null, Constant.FAIL_MESSAGE);
+			return new ResponseDto(Constant.FAIL_CODE, null, "发送邮件报错失败");
 		}
 		return response;
 	}
