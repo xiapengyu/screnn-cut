@@ -1,17 +1,34 @@
 <template>
   <el-dialog
-    :title="详情"
+    :title="'采购单详情'"
     :close-on-click-modal="false"
     :visible.sync="visible">
 
+    <div>
+      <table style="width: 100%;">
+        <tr><td style="width: 50%;">采购单号: {{ order.orderNo }}</td><td>所属公司: {{ order.company }}</td></tr>
+        <tr><td>客户姓名: {{ order.userName }}</td><td>客户邮箱: {{ order.email }}</td></tr>
+        <tr><td>联系方式: {{ order.phone }}</td><td>地址: {{ order.address }}</td></tr>
+        <tr><td colspan="2">回复说明: {{ order.comment }}</td></tr>
+      </table>
+    </div>
 
-    <el-table fixed :data="this.detailList" v-loading="dataListLoading" border style="width: 100%;" height="600">
+    <div>
+      <table style="width: 100%;">
+        <tr>
+          <td><h3>采购单明细： </h3></td>
+          <td><h4>总价： {{ allTotalPrice }}</h4></td>
+        </tr>
+      </table>
+    </div>
+
+    <el-table fixed :data="this.detailList" v-loading="dataListLoading" border style="width: 100%;" height="500">
       <el-table-column
         prop="goods.name"
         label="产品名称">
       </el-table-column>
       <el-table-column
-        prop="gType.typeName"
+        prop="gosType.typeName"
         width="100"
         label="产品类型">
       </el-table-column>
@@ -22,10 +39,13 @@
       </el-table-column>
       <el-table-column
         prop="goods.discountPrice"
-        header-align="center"
-        align="center"
         width="120"
         label="折扣价￥">
+      </el-table-column>
+      <el-table-column
+        prop="amount"
+        width="120"
+        label="数量">
       </el-table-column>
     </el-table>
 
@@ -36,12 +56,17 @@
   </el-dialog>
 </template>
 
+<style scoped>
+
+</style>
+
 <script>
   export default {
     data () {
       return {
         dataListLoading: false,
         visible: false,
+        allTotalPrice: '',
         order: '',
         detailList: []
       }
@@ -59,6 +84,7 @@
             'orderNo': orderNo
           })
         }).then(({data}) => {
+          this.allTotalPrice = data.allTotalPrice
           this.order = data.order
           this.detailList = data.detailList
           this.dataListLoading = false

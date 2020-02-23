@@ -70,12 +70,12 @@
         align="center"
         label="次数">
       </el-table-column>
-      <el-table-column
+<!--      <el-table-column
         prop="comment"
         header-align="center"
         align="center"
         label="回复说明">
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
           prop="status"
           header-align="center"
