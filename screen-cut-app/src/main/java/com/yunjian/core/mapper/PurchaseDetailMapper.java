@@ -1,7 +1,11 @@
 package com.yunjian.core.mapper;
 
 import com.yunjian.core.entity.PurchaseDetail;
+import com.yunjian.core.vo.PurchaseDetailVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -14,5 +18,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PurchaseDetailMapper extends BaseMapper<PurchaseDetail> {
+	
+	public List<PurchaseDetailVo> queryListurchaseDetail(Integer orderNo);
 
 }

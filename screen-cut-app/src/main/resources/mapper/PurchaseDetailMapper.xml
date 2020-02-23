@@ -2,4 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yunjian.core.mapper.PurchaseDetailMapper">
 
+	<!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yunjian.core.entity.PurchaseDetail">
+        <id column="id" property="id" />
+        <result column="goods_id" property="goodsId" />
+        <result column="amount" property="amount" />
+        <result column="unit_price" property="unitPrice" />
+        <result column="price" property="price" />
+    </resultMap>
+    
+    <resultMap id="DetailResultMap" extends="BaseResultMap" type="com.yunjian.core.vo.PurchaseDetailVo">
+    	<association property="goods" javaType="com.yunjian.core.entity.Goods" />
+    </resultMap>
+
+
+	<select id="queryListurchaseDetail" parameterType="java.lang.String" resultMap="DetailResultMap">
+		select d.*,g.* from tb_purchase_detail d
+		left join tb_goods g on g.id=d.goods_id
+		where d.order_no=#{orderNo}
+	</select>
 </mapper>

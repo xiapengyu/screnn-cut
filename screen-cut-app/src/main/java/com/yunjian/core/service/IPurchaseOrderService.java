@@ -23,11 +23,12 @@ public interface IPurchaseOrderService extends IService<PurchaseOrder> {
     ResponseDto submitCart(OrderReqDto param);
 
     PageUtils queryOrderByPage(Map<String, Object> params);
+    
+    PageUtils queryOrderByPage4Sys(Map<String, Object> params);
 
     ResponseDto queryOrderDetail(String orderNo);
 
     PageUtils queryAccountOrderList(Map<String, Object> params);
 
     OrderRespDto queryOrderInfo(String orderNo);
-
 }

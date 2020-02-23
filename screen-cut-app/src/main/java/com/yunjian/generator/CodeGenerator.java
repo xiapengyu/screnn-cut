@@ -32,7 +32,7 @@ public class CodeGenerator {
 		String projectPath = System.getProperty("user.dir");
 		logger.info("项目路径>>>[{}]", projectPath);
 		gc.setOutputDir(projectPath + "/src/main/java");
-		gc.setAuthor("xiapengyu");
+		gc.setAuthor("laizhiwen");
 		gc.setOpen(false);
 		mpg.setGlobalConfig(gc);
 
@@ -46,7 +46,7 @@ public class CodeGenerator {
 		mpg.setDataSource(dsc);
 
 		List<String> list = new ArrayList<>(); // 数据表的列表
-		list.add("tb_phone_brand");
+		list.add("tb_purchase_order");
 		for (String tablename : list) {
 			// 包配置
 			PackageConfig pc = new PackageConfig();
