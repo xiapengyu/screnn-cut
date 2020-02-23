@@ -64,4 +64,6 @@ public class PhoneModel implements Serializable {
 
     private Integer brandId;
 
+    private String pltUrl;
+
 }
