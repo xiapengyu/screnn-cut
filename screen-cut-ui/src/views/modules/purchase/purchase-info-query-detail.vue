@@ -4,9 +4,34 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
 
+
+    <el-table fixed :data="this.detailList" v-loading="dataListLoading" border style="width: 100%;" height="600">
+      <el-table-column
+        prop="goods.name"
+        label="产品名称">
+      </el-table-column>
+      <el-table-column
+        prop="gType.typeName"
+        width="100"
+        label="产品类型">
+      </el-table-column>
+      <el-table-column
+        prop="goods.price"
+        width="100"
+        label="单价￥">
+      </el-table-column>
+      <el-table-column
+        prop="goods.discountPrice"
+        header-align="center"
+        align="center"
+        width="120"
+        label="折扣价￥">
+      </el-table-column>
+    </el-table>
+
+
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">关闭</el-button>
-      <el-button v-if="this.dataForm.op === 1" @click="saveGoodsInfo()">保存</el-button>
     </span>
   </el-dialog>
 </template>
@@ -15,31 +40,15 @@
   export default {
     data () {
       return {
+        dataListLoading: false,
         visible: false,
-        saleStatusList: [],
-        uploadUrl: '',
-        goodsImageList: [],
-        imageDtoList: [],
-        dialogImageUrl: '',
-        dialogVisible: false,
-        typeList: [],
-        typeIdList: [],
-        dataForm: {
-          id: '',
-          name: '',
-          comment: '',
-          price: 0,
-          stock: 0,
-          status: 1
-        }
+        order: '',
+        detailList: []
       }
     },
     methods: {
       init (orderNo) {
-        this.dataForm.orderNo = orderNo
         this.visible = true
-        this.dataForm.isDiscount = 0
-        this.typeIdList = []
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }
@@ -50,19 +59,9 @@
             'orderNo': orderNo
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.visible = true
-            this.dataForm.id = data.goods.id
-            this.dataForm.name = data.goods.name
-            this.dataForm.comment = data.goods.comment
-            this.dataForm.status = data.goods.status
-            this.goodsImageList = data.goodsImageList
-            this.typeList = data.typeList
-            this.typeIdList = data.typeIdList
-            this.imageDtoList = data.imageDtoList
-          } else {
-            this.$message.error(data.msg)
-          }
+          this.order = data.order
+          this.detailList = data.detailList
+          this.dataListLoading = false
         })
       },
       change (item) {

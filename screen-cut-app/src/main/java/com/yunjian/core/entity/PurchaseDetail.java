@@ -37,6 +37,8 @@ public class PurchaseDetail implements Serializable {
      * 商品id
      */
     private Integer goodsId;
+    
+    private Integer goodsType;
 
     /**
      * 数量

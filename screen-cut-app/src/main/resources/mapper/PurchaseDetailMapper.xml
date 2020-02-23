@@ -12,13 +12,25 @@
     </resultMap>
     
     <resultMap id="DetailResultMap" extends="BaseResultMap" type="com.yunjian.core.vo.PurchaseDetailVo">
-    	<association property="goods" javaType="com.yunjian.core.entity.Goods" />
+    	<association property="goods" javaType="com.yunjian.core.entity.Goods" >
+    		<id column="id" property="id"/>
+	    	<result column="name" property="name"/>
+	    	<result column="price" property="price"/>
+	    	<result column="discount_price" property="discountPrice"/>
+	    	<result column="type" property="type"/>
+    	</association>
+    	<association property="gType" javaType="com.yunjian.core.entity.GoodsType" >
+    		<id column="id" property="id"/>
+	    	<result column="type_name" property="typeName"/>
+    	</association>
     </resultMap>
 
 
-	<select id="queryListurchaseDetail" parameterType="java.lang.String" resultMap="DetailResultMap">
-		select d.*,g.* from tb_purchase_detail d
+	<select id="queryPurchaseDetailList" parameterType="java.lang.String" resultMap="DetailResultMap">
+		select d.*,g.id,g.name,g.price,g.discount_price,g.type ,t.id,t.type_name
+		from tb_purchase_detail d
 		left join tb_goods g on g.id=d.goods_id
+		left join tb_goods_type t on t.id = d.goods_type
 		where d.order_no=#{orderNo}
 	</select>
 </mapper>

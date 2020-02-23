@@ -27,7 +27,7 @@ public class GoodsType implements Serializable {
 	/**
 	 * 手机膜类型(钢化膜，磨砂膜等，初始化数据)
 	 */
-	private String name;
+	private String typeName;
 
 	private Integer deleteFlag;
 

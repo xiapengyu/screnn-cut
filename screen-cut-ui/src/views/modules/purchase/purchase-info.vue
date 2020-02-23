@@ -95,7 +95,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo, 0)">详情</el-button>
+<!--          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo, 0)">详情</el-button>-->
+          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo)">详情</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">确认</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">拒绝</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">修改</el-button>
@@ -114,7 +115,7 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
-    <add-or-update v-if="queryDetailVisible" ref="QueryDetail" @refreshDataList="getDataList"></add-or-update>
+    <query-detail v-if="queryDetailVisible" ref="queryDetail" @refreshDataList="getDataList"></query-detail>
     <addGoods v-if="addVisible" ref="addGoods" @refreshDataList="getDataList"></addGoods>
   </div>
 </template>
@@ -136,6 +137,7 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
+        queryDetailVisible: false,
         addVisible: false
       }
     },
