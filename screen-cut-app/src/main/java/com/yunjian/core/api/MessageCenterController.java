@@ -82,4 +82,29 @@ public class MessageCenterController {
 		return response;
 	}
 
+	/**
+	 *保存消息通知信息
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value="/saveMessage", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDto saveMessage(@RequestBody MessageCenter param) {
+		logger.info("保存消息通知信息{}", JsonUtil.toJsonString(param));
+		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+		try {
+			MessageCenter msg = messageCenterServiceImpl.getOne(new QueryWrapper<MessageCenter>().eq("id", param.getId()));
+			response.setData(msg);
+			logger.info("查看消息详情结果{}", JsonUtil.toJsonString(response));
+
+			//更新已读标记
+			msg.setIsRead(1);
+			messageCenterServiceImpl.saveOrUpdate(msg);
+		} catch (Exception e) {
+			logger.error("查看消息详情失败", e);
+			return new ResponseDto(Constant.FAIL_CODE, null, "查看消息详情失败");
+		}
+		return response;
+	}
+
 }
