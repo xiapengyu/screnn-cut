@@ -87,6 +87,8 @@ public class GoodsCartController {
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         if(params.get("id") == null || params.get("amount") == null){
             return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
+        }else if(Integer.parseInt(StringUtil.obj2String(params.get("amount"))) < 0){
+            return new ResponseDto(Constant.FAIL_CODE, null, "商品数量不能小于0");
         }
         return goodsCartService.modifyGoodsCartAmount(Integer.parseInt(StringUtil.obj2String(params.get("id"))),
                 Integer.parseInt(StringUtil.obj2String(params.get("amount"))));

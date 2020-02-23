@@ -47,12 +47,22 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
             if(goods == null){
                 return new ResponseDto(Constant.FAIL_CODE, null, "商品不存在");
             }
-            GoodsCart goodsCart = new GoodsCart();
-            goodsCart.setGoodsId(goods.getId());
-            goodsCart.setAccountId(account.getId());
-            goodsCart.setAmount(1);
+            //商品单价
             BigDecimal unitPrice = (goods.getIsDiscount()) == 1 ? goods.getDiscountPrice() : goods.getPrice();
-            goodsCart.setTotalPrice(unitPrice);
+            //判断购物车中是否已经存在
+            GoodsCart goodsCart = this.getOne(new QueryWrapper<GoodsCart>().eq("account_id", account.getId())
+                    .eq("goods_id", goods.getId()));
+            if(goodsCart != null){
+                goodsCart.setAmount(goodsCart.getAmount() + 1);
+                BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(goodsCart.getAmount().doubleValue()));
+                goodsCart.setTotalPrice(totalPrice);
+            }else{
+                goodsCart = new GoodsCart();
+                goodsCart.setGoodsId(goods.getId());
+                goodsCart.setAccountId(account.getId());
+                goodsCart.setAmount(1);
+                goodsCart.setTotalPrice(unitPrice);
+            }
             this.saveOrUpdate(goodsCart);
 
             //更新销量
@@ -70,9 +80,12 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         Account account = SecurityContext.getUserPrincipal();
         List<GoodsCart> goodsCartList = this.list(new QueryWrapper<GoodsCart>().eq("account_id", account.getId()));
-        if(goodsCartList.isEmpty()){
-            return response;
-        }else{
+
+        GoodsCartDto dto = new GoodsCartDto();
+        Address defaultAddress = addressService
+                .getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
+        dto.setAddress(defaultAddress);
+        if(!goodsCartList.isEmpty()){
             List<GoodsCartInfo> goodsList = new ArrayList<>();
             for(GoodsCart goodsCart : goodsCartList){
                 GoodsCartInfo info = new GoodsCartInfo();
@@ -91,15 +104,10 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
                 }
                 goodsList.add(info);
             }
-            GoodsCartDto dto = new GoodsCartDto();
             dto.setGoodsList(goodsList);
-
-            Address defaultAddress = addressService
-                    .getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
-            dto.setAddress(defaultAddress);
-            response.setData(dto);
-            return response;
         }
+        response.setData(dto);
+        return response;
     }
 
     @Override
@@ -128,13 +136,20 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         try {
             Account account = SecurityContext.getUserPrincipal();
+
+            Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", id));
+            if(goods == null){
+                return new ResponseDto(Constant.FAIL_CODE, null, "商品不存在");
+            }
+            //更新购物车中商品数量与总价
+            BigDecimal unitPrice = (goods.getIsDiscount()) == 1 ? goods.getDiscountPrice() : goods.getPrice();
             GoodsCart goodsCart = this.getOne(new QueryWrapper<GoodsCart>().eq("account_id", account.getId()).eq("goods_id", id));
             int oldAmount = goodsCart.getAmount();
             goodsCart.setAmount(amount);
+            goodsCart.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(Long.parseLong(amount + ""))));
             this.saveOrUpdate(goodsCart);
 
             //更新销量
-            Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", goodsCart.getGoodsId()));
             int sale = amount - oldAmount;
             goods.setSaleAmount(goods.getSaleAmount() + sale);
             goodsService.saveOrUpdate(goods);

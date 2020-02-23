@@ -84,7 +84,14 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 				defaultAddress.setIsDefault(0);
 				this.saveOrUpdate(defaultAddress);
 			}
-			address.setIsDefault(param.getIsDefault());
+
+			//首次添加设为默认
+			List<Address> userAddressList = this.list(new QueryWrapper<Address>().eq("account_id", account.getId()));
+			if(userAddressList.isEmpty()){
+				address.setIsDefault(1);
+			}else{
+				address.setIsDefault(param.getIsDefault());
+			}
 			logger.info("保存的地址信息{}", JsonUtil.toJsonString(address));
 			this.saveOrUpdate(address);
 		} catch (Exception e) {

@@ -61,18 +61,19 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             this.saveOrUpdate(order);
 
             List<PurchaseDetail> detailList = new ArrayList<>();
-            for (GoodsCart item : param.getGoodsList()){
+            for (GoodsCart item : param.getGoodsList()) {
                 PurchaseDetail detail = new PurchaseDetail();
                 detail.setGoodsId(item.getGoodsId());
                 Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", item.getGoodsId()));
                 detail.setAmount(item.getAmount());
                 detail.setOrderNo(order.getOrderNo());
-                detail.setUnitPrice((goods.getIsDiscount()==1) ? goods.getDiscountPrice() : goods.getPrice());
+                detail.setUnitPrice((goods.getIsDiscount() == 1) ? goods.getDiscountPrice() : goods.getPrice());
                 detail.setPrice(detail.getUnitPrice().multiply(BigDecimal.valueOf(detail.getAmount().doubleValue())));
+                detailList.add(detail);
             }
-            if(!detailList.isEmpty()){
+            if (!detailList.isEmpty()) {
                 purchaseDetailService.saveBatch(detailList);
-            }else{
+            } else {
                 this.remove(new QueryWrapper<PurchaseOrder>().eq("id", order.getId()));
                 return new ResponseDto(Constant.FAIL_CODE, null, "没有采购商品");
             }
@@ -99,12 +100,12 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         try {
             PurchaseOrder order = this.getOne(new QueryWrapper<PurchaseOrder>().eq("order_no", orderNo));
-            OrderRespDto dto= new OrderRespDto();
+            OrderRespDto dto = new OrderRespDto();
             BeanUtils.copyProperties(order, dto);
-
+            BigDecimal totalPrice = BigDecimal.ZERO;
             List<GoodsCartInfo> goodsList = new ArrayList<>();
             List<PurchaseDetail> detailList = purchaseDetailService.list(new QueryWrapper<PurchaseDetail>().eq("order_no", orderNo));
-            for(PurchaseDetail item : detailList){
+            for (PurchaseDetail item : detailList) {
                 GoodsCartInfo info = new GoodsCartInfo();
                 Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", item.getGoodsId()));
                 info.setId(item.getGoodsId());
@@ -112,14 +113,16 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
                 info.setAmount(item.getAmount());
                 info.setUnitPrice(item.getUnitPrice());
                 info.setTotalPrice(item.getPrice());
+                totalPrice = totalPrice.add(item.getUnitPrice().multiply(BigDecimal.valueOf(info.getAmount().doubleValue())));
                 List<GoodsImg> imgList = goodsImgService.list(
                         new QueryWrapper<GoodsImg>()
                                 .eq("goods_id", item.getId()).orderByAsc("create_time"));
-                if(!imgList.isEmpty()){
+                if (!imgList.isEmpty()) {
                     info.setCoverImg(imgList.get(0).getImageUrl());
                 }
                 goodsList.add(info);
             }
+            dto.setTotalPrice(totalPrice);
             dto.setGoodsList(goodsList);
             response.setData(dto);
         } catch (BeansException e) {
@@ -140,12 +143,12 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     @Override
     public OrderRespDto queryOrderInfo(String orderNo) {
         PurchaseOrder order = this.getOne(new QueryWrapper<PurchaseOrder>().eq("order_no", orderNo));
-        OrderRespDto dto= new OrderRespDto();
+        OrderRespDto dto = new OrderRespDto();
         BeanUtils.copyProperties(order, dto);
 
         List<GoodsCartInfo> goodsList = new ArrayList<>();
         List<PurchaseDetail> detailList = purchaseDetailService.list(new QueryWrapper<PurchaseDetail>().eq("order_no", orderNo));
-        for(PurchaseDetail item : detailList){
+        for (PurchaseDetail item : detailList) {
             GoodsCartInfo info = new GoodsCartInfo();
             Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", item.getGoodsId()));
             info.setId(item.getGoodsId());
@@ -156,7 +159,7 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             List<GoodsImg> imgList = goodsImgService.list(
                     new QueryWrapper<GoodsImg>()
                             .eq("goods_id", item.getId()).orderByAsc("create_time"));
-            if(!imgList.isEmpty()){
+            if (!imgList.isEmpty()) {
                 info.setCoverImg(imgList.get(0).getImageUrl());
             }
             goodsList.add(info);
@@ -165,10 +168,10 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
         return dto;
     }
 
-    private String createOrderNo(){
+    private String createOrderNo() {
         String orderNo = "";
-        String prefix = DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN);
-        String suffix = new Random(9999).toString();
+        String prefix = DateUtils.format(new Date(), "yyyyMMddHHmmss");
+        String suffix = (int) ((Math.random() * 9 + 1) * 1000000) + "";
         orderNo = prefix + suffix;
         return orderNo;
     }
