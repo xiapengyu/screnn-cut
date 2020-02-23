@@ -11,6 +11,8 @@ public class PurchaseDetailVo extends PurchaseDetail{
 	
 	private Goods goods;
 	
-	private GoodsType gType;
+	private GoodsType gosType;
+	
+	private double totalPrice;
 
 }

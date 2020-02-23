@@ -19,7 +19,7 @@
 	    	<result column="discount_price" property="discountPrice"/>
 	    	<result column="type" property="type"/>
     	</association>
-    	<association property="gType" javaType="com.yunjian.core.entity.GoodsType" >
+    	<association property="gosType" javaType="com.yunjian.core.entity.GoodsType" >
     		<id column="id" property="id"/>
 	    	<result column="type_name" property="typeName"/>
     	</association>
@@ -27,7 +27,7 @@
 
 
 	<select id="queryPurchaseDetailList" parameterType="java.lang.String" resultMap="DetailResultMap">
-		select d.*,g.id,g.name,g.price,g.discount_price,g.type ,t.id,t.type_name
+		select d.*,g.id,g.name,g.price,g.discount_price, g.type ,t.id, t.type_name
 		from tb_purchase_detail d
 		left join tb_goods g on g.id=d.goods_id
 		left join tb_goods_type t on t.id = d.goods_type

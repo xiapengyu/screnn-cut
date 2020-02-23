@@ -60,16 +60,8 @@ public class SysPurchaseOrderController {
      */
     @PostMapping("/detail")
     public R queryDetail(@RequestBody Map<String, Object> params){
-    	R r = R.ok();
     	String orderNo = (String) params.get("orderNo");
-    	QueryWrapper<PurchaseOrder> queryWrapper = new QueryWrapper<PurchaseOrder>();
-    	queryWrapper.eq("order_no", orderNo);
-    	List<PurchaseOrder> orderList = purchaseOrderService.list(queryWrapper);
-    	if(orderList!=null && orderList.size() > 0) {
-    		List<PurchaseDetailVo> detailList = purchaseDetailService.queryPurchaseDetailInfo(orderList.get(0).getOrderNo());
-    		r.put("order", orderList.get(0));
-    		r.put("detailList", detailList);
-    	}
+    	R r = purchaseDetailService.queryPurchaseDetailInfo(orderNo);
         return r;
     }
 
