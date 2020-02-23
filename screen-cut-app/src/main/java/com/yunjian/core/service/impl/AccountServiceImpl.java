@@ -64,7 +64,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 	public ResponseDto register(AccountDto param) {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
-			if (deviceServiceImpl.getOne(new QueryWrapper<Device>().eq("serial_no", param.getSerialNo())) == null){
+			Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>().eq("serial_no", param.getSerialNo()));
+			if (device == null){
 				return new ResponseDto(Constant.FAIL_CODE, null, "序列码不存在");
 			}else if (this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())) != null) {
 				return new ResponseDto(Constant.FAIL_CODE, null, "该邮箱已经注册");
@@ -88,8 +89,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				account.setDeviceName("");
 				account.setPhoneModelId(null);
 				account.setPhoneModelName("");
-				account.setUseAmount(0);
-				account.setUnuseAmount(0);
+				if(device.getType() == 1){
+					account.setUseAmount(0);
+					account.setUnuseAmount(0);
+				}else{
+					account.setUseAmount(0);
+					account.setUnuseAmount(device.getRemainTimes());
+				}
 				account.setUserName("");
 				account.setStatus(1);
 				this.save(account);

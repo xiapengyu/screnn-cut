@@ -1,15 +1,5 @@
 package com.yunjian.core.api;
 
-import io.swagger.annotations.Api;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.core.dto.AccountDto;
@@ -17,8 +7,12 @@ import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IEmailCodeService;
-
+import io.swagger.annotations.Api;
 import jodd.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @Api("用户账号与登录相关接口")
 @RestController
