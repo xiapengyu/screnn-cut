@@ -1,12 +1,14 @@
 package com.yunjian.core.api;
 
 import com.alibaba.druid.util.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.*;
-import com.yunjian.core.dto.*;
-import com.yunjian.core.entity.Account;
-import com.yunjian.core.entity.GoodsCart;
-import com.yunjian.core.service.*;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.dto.GoodsDetailDto;
+import com.yunjian.core.dto.GoodsReqDto;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.service.IGoodsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/app/goods")
+@RequestMapping("/api/goods")
 public class GoodsController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

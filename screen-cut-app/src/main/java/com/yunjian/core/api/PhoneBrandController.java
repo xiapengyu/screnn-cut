@@ -28,7 +28,7 @@ import java.util.Map;
  * @since 2020-02-19
  */
 @RestController
-@RequestMapping("/app/phoneBrand")
+@RequestMapping("/api/phoneBrand")
 public class PhoneBrandController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

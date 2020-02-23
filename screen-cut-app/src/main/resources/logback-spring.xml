@@ -12,7 +12,7 @@
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!--日志文件输出的文件名 -->
-			<fileNamePattern>/opt/quick-application/logs/quick-application-%d{yyyy-MM-dd}-%i.log
+			<fileNamePattern>/project/webapps/logs/screen-%d{yyyy-MM-dd}-%i.log
 			</fileNamePattern>
 			<!--文件最多保留的天数 -->
 			<maxHistory>3</maxHistory>
@@ -30,7 +30,7 @@
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
 			<!--日志文件输出的文件名 -->
-			<fileNamePattern>/opt/quick-application/logs/error/quick-application-%d{yyyy-MM-dd}-%i.log
+			<fileNamePattern>/project/webapps/logs/error/screen-%d{yyyy-MM-dd}-%i.log
 			</fileNamePattern>
 			<!--文件最多保留的天数 -->
 			<maxHistory>3</maxHistory>
