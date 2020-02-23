@@ -1,5 +1,6 @@
 package com.yunjian.core.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -48,6 +49,9 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailMapper,
     			vo.setTotalPrice(totalPrice);
     			allTotalPrice += totalPrice;
     		}
+    		
+    		BigDecimal bg = new BigDecimal(allTotalPrice);
+    		allTotalPrice = bg.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();
     		
     		r.put("order", orderList.get(0));
     		r.put("detailList", detailList);
