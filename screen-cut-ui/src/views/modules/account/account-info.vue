@@ -2,9 +2,6 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.userName" placeholder="用户名" clearable></el-input>
-      </el-form-item>
-      <el-form-item>
         <el-input v-model="dataForm.email" placeholder="邮箱" clearable></el-input>
       </el-form-item>
       <el-form-item>
@@ -26,28 +23,10 @@
         label="ID">
       </el-table-column>
       <el-table-column
-        prop="phoneModelName"
-        header-align="center"
-        align="center"
-        label="手机机型">
-      </el-table-column>
-      <el-table-column
-        prop="userName"
-        header-align="center"
-        align="center"
-        label="用户名">
-      </el-table-column>
-      <el-table-column
         prop="email"
         header-align="center"
         align="center"
         label="邮箱">
-      </el-table-column>
-      <el-table-column
-        prop="deviceName"
-        header-align="center"
-        align="center"
-        label="设备名称">
       </el-table-column>
       <el-table-column
         prop="serialNo"
