@@ -17,7 +17,7 @@
       <table style="width: 100%;">
         <tr>
           <td><h3>采购单明细： </h3></td>
-          <td><h4>总价(￥)： {{ allTotalPrice }}</h4></td>
+          <td align="right"><h4>总价(￥)： {{ allTotalPrice }}</h4></td>
         </tr>
       </table>
     </div>

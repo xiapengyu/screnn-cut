@@ -65,17 +65,13 @@ public class SysPurchaseOrderController {
         return r;
     }
 
-//    /**
-//     * 查询采购单详情
-//     */
-//    @PostMapping("/queryOrderDetail")
-//    public ResponseDto queryOrderDetail(@RequestBody Map<String, Object> params){
-//        logger.info("查询采购单详情{}", JsonUtil.toJsonString(params));
-//        String orderNo = StringUtil.obj2String(params.get("orderNo"));
-//        if(StringUtils.isEmpty(orderNo)){
-//            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_ERROR_MSG);
-//        }
-//        return purchaseOrderService.queryOrderDetail(orderNo);
-//    }
+    /**
+     * 确认（拒绝）采购单
+     */
+    @PostMapping("/confirm")
+    public R confirm(@RequestBody Map<String, Object> params){
+    	R r = purchaseOrderService.updateStatus(params);
+        return r;
+    }
 
 }

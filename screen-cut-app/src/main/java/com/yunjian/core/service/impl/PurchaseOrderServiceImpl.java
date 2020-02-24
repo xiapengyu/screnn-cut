@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import com.yunjian.core.entity.*;
 import com.yunjian.core.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -17,12 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.DateUtils;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.Query;
+import com.yunjian.common.utils.R;
 import com.yunjian.core.dto.GoodsCartInfo;
 import com.yunjian.core.dto.OrderReqDto;
 import com.yunjian.core.dto.OrderRespDto;
@@ -55,6 +57,30 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     private IGoodsCartService goodsCartService;
     @Autowired
     private IGoodsTypeService goodsTypeService;
+    
+    @Override
+	public R updateStatus(Map<String, Object> params) {
+		int id = (int) params.get("id");
+		int status = (int)params.get("status");
+		String comment = (String)params.get("comment");
+		PurchaseOrder order = new PurchaseOrder();
+		order.setId(id);
+		order.setStatus(status);
+		order.setComment(comment);
+		UpdateWrapper<PurchaseOrder> updateWrapper = new UpdateWrapper<>(); 
+		updateWrapper.eq("id", id);
+		updateWrapper.set("status", status);
+		boolean b = update(order, updateWrapper);
+		
+		R r = R.ok();
+		if(b) {
+			r.put("success", "success");
+		}else {
+			r.put("success", "error");
+		}
+		
+		return r;
+	}
 
     @Override
     public ResponseDto submitCart(OrderReqDto param) {
@@ -121,7 +147,16 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     
     @Override
     public PageUtils queryOrderByPage4Sys(Map<String, Object> params) {
+    	String orderNo = (String) params.get("orderNo");
+    	String company = (String) params.get("company");
+    	
         QueryWrapper<PurchaseOrder> queryWrapper = new QueryWrapper<PurchaseOrder>();
+        if(StringUtils.isNotEmpty(orderNo.trim())) {
+        	queryWrapper.eq("order_no", orderNo);
+        }
+        if(StringUtils.isNotEmpty(company.trim())) {
+        	queryWrapper.like("company", company);
+        }
         IPage<PurchaseOrder> page = this.page(new Query<PurchaseOrder>().getPage(params), queryWrapper);
         return new PageUtils(page);
     }
@@ -211,4 +246,5 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
         orderNo = prefix + suffix;
         return orderNo;
     }
+   
 }

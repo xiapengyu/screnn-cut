@@ -31,4 +31,6 @@ public interface IPurchaseOrderService extends IService<PurchaseOrder> {
     PageUtils queryAccountOrderList(Map<String, Object> params);
 
     OrderRespDto queryOrderInfo(String orderNo);
+
+	R updateStatus(Map<String, Object> params);
 }
