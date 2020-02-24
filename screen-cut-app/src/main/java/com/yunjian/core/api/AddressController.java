@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
@@ -116,6 +117,26 @@ public class AddressController {
 		Address defaultAddress = addressServiceImpl
 				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
 		response.setData(defaultAddress);
+		return response;
+	}
+
+	/**
+	 *查询用户地址详情
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value="/getAddressDetail", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDto getAddressDetail(@RequestBody Map<String, Object> param) {
+		logger.info("查询用户地址详情{}", JsonUtil.toJsonString(param));
+		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+		String addressId = StringUtil.obj2String(param.get("id"));
+		if(StringUtils.isEmpty(addressId)){
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_ERROR_MSG);
+		}
+		Address address = addressServiceImpl
+				.getOne(new QueryWrapper<Address>().eq("id", Integer.parseInt(addressId)));
+		response.setData(address);
 		return response;
 	}
 

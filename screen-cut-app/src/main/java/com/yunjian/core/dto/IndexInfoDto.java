@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class IndexInfoDto {
 
-    private List<Ad> adList = new ArrayList<>();
+    private List<String> adList = new ArrayList<>();
 
     private Integer accountType;
 

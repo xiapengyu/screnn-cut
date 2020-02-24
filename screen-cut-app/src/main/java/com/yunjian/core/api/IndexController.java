@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/setting")
+@RequestMapping("/api/index")
 public class IndexController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,9 +45,13 @@ public class IndexController {
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         IndexInfoDto dto = new IndexInfoDto();
         //广告列表
-        List<Ad> adList = adService.list(new QueryWrapper<Ad>().eq("position_type", 1)
-                .orderByDesc("create_time"));
-        dto.setAdList(adList);
+        List<Ad> adList = adService.list(new QueryWrapper<Ad>().eq("status", 1)
+                .orderByAsc("sort_num"));
+        List<String> adImageList = new ArrayList<>();
+        adList.forEach(item -> {
+            adImageList.add(item.getAdImage());
+        });
+        dto.setAdList(adImageList);
         //切割次数信息
         Account account = SecurityContext.getUserPrincipal();
         Device device = deviceService.getOne(new QueryWrapper<Device>().eq("serial_no", account.getSerialNo()));

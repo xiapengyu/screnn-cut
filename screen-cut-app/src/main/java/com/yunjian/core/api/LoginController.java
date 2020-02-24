@@ -1,10 +1,13 @@
 package com.yunjian.core.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.MD5Util;
 import com.yunjian.core.dto.AccountDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Account;
+import com.yunjian.core.entity.EmailCode;
 import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IEmailCodeService;
 import io.swagger.annotations.Api;
@@ -13,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @Api("用户账号与登录相关接口")
 @RestController
@@ -83,7 +88,35 @@ public class LoginController {
 	public ResponseDto logout() {
 		return accountServiceImpl.logout();
 	}
-	
+
+	/**
+	 * 重置密码前校验验证码
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value="/checkVerifyCode", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDto checkVerifyCode(@RequestBody AccountDto param) {
+		logger.info("重置密码前校验验证码{}", JsonUtil.toJsonString(param));
+		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getCode())) {
+			return new ResponseDto(Constant.FAIL_CODE, null, "邮箱或验证码不能为空");
+		}
+		try {
+			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())
+					.eq("email", param.getEmail()).eq("delete_flag", 1).gt("expire_time", new Date()));
+			if (emalCode != null) {
+				// 删除验证码
+				emailCodeServiceImpl.remove(new QueryWrapper<EmailCode>().eq("id", emalCode.getId()));
+				return new ResponseDto(Constant.SUCCESS_CODE, null, "验证码校验通过");
+			} else {
+				return new ResponseDto(Constant.FAIL_CODE, null, "验证码错误");
+			}
+		} catch (Exception e) {
+			logger.error("验证码校验发生异常", e);
+			return new ResponseDto(Constant.FAIL_CODE, null, "验证码校验发生异常");
+		}
+	}
+
 	/**
 	 * 重置密码
 	 * @param param
@@ -94,11 +127,11 @@ public class LoginController {
 	public ResponseDto resetPassword(@RequestBody AccountDto param) {
 		logger.info("重置密码{}", JsonUtil.toJsonString(param));
 		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword())) {
-			return new ResponseDto(Constant.FAIL_CODE, null, "邮箱或密码不能为空");
-		}else if(StringUtil.isEmpty(param.getCode())) {
-			return new ResponseDto(Constant.FAIL_CODE, null, "验证码不能为空");
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "邮箱或密码不能为空");
+		}else if(StringUtil.isEmpty(param.getConfirmPassword())) {
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "确认密码不能为空");
 		}else if(!param.getPassword().equals(param.getConfirmPassword())) {
-			return new ResponseDto(Constant.FAIL_CODE, null, "两次输入的密码不一致");
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "两次输入的密码不一致");
 		}
 		return accountServiceImpl.resetPassword(param);
 	}
