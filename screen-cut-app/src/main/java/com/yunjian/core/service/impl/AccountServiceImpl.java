@@ -71,8 +71,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				return new ResponseDto(Constant.FAIL_CODE, null, "该邮箱已经注册");
 			} else if (this.getOne(new QueryWrapper<Account>().eq("serial_no", param.getSerialNo())) != null) {
 				return new ResponseDto(Constant.FAIL_CODE, null, "序列码已经被注册");
-			} else if(!param.getPassword().equals(param.getConfirmPassword())) {
-				return new ResponseDto(Constant.FAIL_CODE, null, "输入密码不一致");
 			}
 			
 			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())

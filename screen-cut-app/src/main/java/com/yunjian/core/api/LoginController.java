@@ -62,9 +62,15 @@ public class LoginController {
 	public ResponseDto register(@RequestBody AccountDto param) {
 		logger.info("用户注册{}", JsonUtil.toJsonString(param));
 		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword()) 
-				|| StringUtil.isEmpty(param.getCode()) || StringUtil.isEmpty(param.getConfirmPassword()) 
-				|| StringUtil.isEmpty(param.getSerialNo())) {
+				|| StringUtil.isEmpty(param.getSerialNo()) || StringUtil.isEmpty(param.getCode())) {
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_CHECK_MSG);
+		}
+		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword())){
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "邮箱或密码不能为空");
+		}else if(StringUtil.isEmpty(param.getSerialNo())){
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "机器序列号不能为空");
+		}else if(StringUtil.isEmpty(param.getCode())){
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码不能为空");
 		}
 		return accountServiceImpl.register(param);
 	}
@@ -133,10 +139,6 @@ public class LoginController {
 		logger.info("重置密码{}", JsonUtil.toJsonString(param));
 		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword())) {
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "邮箱或密码不能为空");
-		}else if(StringUtil.isEmpty(param.getConfirmPassword())) {
-			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "确认密码不能为空");
-		}else if(!param.getPassword().equals(param.getConfirmPassword())) {
-			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "两次输入的密码不一致");
 		}else if(StringUtil.isEmpty(param.getCode())){
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码不能为空");
 		}

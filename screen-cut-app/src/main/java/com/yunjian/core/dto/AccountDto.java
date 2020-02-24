@@ -8,8 +8,6 @@ public class AccountDto extends Account {
 	
 	private String code;
 	
-	private String confirmPassword;
-
 	public String getCode() {
 		return code;
 	}
@@ -18,12 +16,4 @@ public class AccountDto extends Account {
 		this.code = code;
 	}
 
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-	
 }
