@@ -33,7 +33,7 @@
               and order_no = #{order.orderNo}
             </if>
 		 	<if test="order.company != null and order.company != '' ">
-              and company = #{order.company}
+              and company like CONCAT('%',#{order.company},'%')
             </if>
 		</where>
 		

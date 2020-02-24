@@ -6,14 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-<<<<<<< HEAD
 import javax.annotation.Resource;
 
-=======
-import com.yunjian.core.entity.*;
-import com.yunjian.core.service.*;
->>>>>>> 1b9d56adcc948a99ab51c4662d680b48056d58ba
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,17 +30,23 @@ import com.yunjian.core.dto.OrderReqDto;
 import com.yunjian.core.dto.OrderRespDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
+import com.yunjian.core.entity.Account;
+import com.yunjian.core.entity.Address;
+import com.yunjian.core.entity.Goods;
+import com.yunjian.core.entity.GoodsCart;
+import com.yunjian.core.entity.GoodsImg;
+import com.yunjian.core.entity.GoodsType;
+import com.yunjian.core.entity.PurchaseDetail;
+import com.yunjian.core.entity.PurchaseOrder;
 import com.yunjian.core.mapper.PurchaseOrderMapper;
-<<<<<<< HEAD
-import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IAddressService;
+import com.yunjian.core.service.IGoodsCartService;
 import com.yunjian.core.service.IGoodsImgService;
 import com.yunjian.core.service.IGoodsService;
+import com.yunjian.core.service.IGoodsTypeService;
 import com.yunjian.core.service.IPurchaseDetailService;
 import com.yunjian.core.service.IPurchaseOrderService;
 import com.yunjian.core.vo.PurchaseOrderVo;
-=======
->>>>>>> 1b9d56adcc948a99ab51c4662d680b48056d58ba
 
 /**
  * <p>
