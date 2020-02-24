@@ -5,6 +5,9 @@
         <el-input v-model="dataForm.orderNo" placeholder="采购单号" clearable></el-input>
       </el-form-item>
       <el-form-item>
+        <el-input v-model="dataForm.company" placeholder="所属公司" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
         <el-button type="primary" @click="addHandle()">新增</el-button>
@@ -81,6 +84,11 @@
           header-align="center"
           align="center"
           label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 1" size="small">未确认</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small" type="success">已确认</el-tag>
+          <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">已拒绝</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         prop="createTime"
@@ -95,11 +103,10 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-<!--          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo, 0)">详情</el-button>-->
           <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo)">详情</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">确认</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">拒绝</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">修改</el-button>
+          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)">确认</el-button>
+          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)">拒绝</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -117,6 +124,25 @@
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <query-detail v-if="queryDetailVisible" ref="queryDetail" @refreshDataList="getDataList"></query-detail>
     <addGoods v-if="addVisible" ref="addGoods" @refreshDataList="getDataList"></addGoods>
+
+
+    <el-dialog
+      :title="dataForm.status==2 ? '确认' : '拒绝'"
+      :visible.sync="confirmDialogVisible"
+      width="50%">
+
+      <el-form :model="dataForm" ref="dataForm" :rules="dataRules" @keyup.enter.native="confirmSubmit()" label-width="100px">
+        <el-input v-if="false" prop="id" v-model="dataForm.id"></el-input>
+        <el-form-item label="回复" prop="comment">
+          <el-input type="textarea" v-model="dataForm.comment" placeholder="回复内容" :rows="5"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="confirmDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSubmit()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -128,7 +154,11 @@
     data () {
       return {
         dataForm: {
-          orderNo: ''
+          id: '',
+          status: '',
+          comment: '',
+          orderNo: '',
+          company: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -138,7 +168,8 @@
         dataListSelections: [],
         addOrUpdateVisible: false,
         queryDetailVisible: false,
-        addVisible: false
+        addVisible: false,
+        confirmDialogVisible: false
       }
     },
     components: {
@@ -158,7 +189,8 @@
           data: this.$http.adornData({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'orderNo': this.dataForm.orderNo
+            'orderNo': this.dataForm.orderNo,
+            'company': this.dataForm.company
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -191,6 +223,42 @@
         this.queryDetailVisible = true
         this.$nextTick(() => {
           this.$refs.queryDetail.init(val)
+        })
+      },
+      // 打开确认/拒绝窗口
+      showConfirmWin (val, status) {
+        this.dataForm.id = val
+        this.dataForm.status = status
+        this.confirmDialogVisible = true
+      },
+      // 表单提交
+      confirmSubmit () {
+        this.$refs['dataForm'].validate((valid) => {
+          if (valid) {
+            this.$http({
+              url: this.$http.adornUrl('/sys/purchaseOrder/confirm'),
+              method: 'post',
+              data: this.$http.adornData({
+                'id': this.dataForm.id,
+                'status': this.dataForm.status,
+                'comment': this.dataForm.comment
+              })
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 300,
+                  onClose: () => {
+                    this.visible = false
+                    this.$emit('refreshDataList')
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          }
         })
       },
       // 查看 / 修改
@@ -237,7 +305,8 @@
         }).catch(() => {})
       },
       clearQueryData () {
-        this.dataForm.name = ''
+        this.dataForm.orderNo = ''
+        this.dataForm.company = ''
         this.getDataList()
       }
     }
