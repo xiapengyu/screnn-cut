@@ -1,21 +1,33 @@
 package com.yunjian.core.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.core.dto.*;
-import com.yunjian.core.entity.*;
-import com.yunjian.core.mapper.GoodsCartMapper;
-import com.yunjian.core.service.*;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.core.dto.GoodsCartDto;
+import com.yunjian.core.dto.GoodsCartInfo;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.dto.SecurityContext;
+import com.yunjian.core.entity.Account;
+import com.yunjian.core.entity.Address;
+import com.yunjian.core.entity.Goods;
+import com.yunjian.core.entity.GoodsCart;
+import com.yunjian.core.entity.GoodsImg;
+import com.yunjian.core.entity.GoodsType;
+import com.yunjian.core.mapper.GoodsCartMapper;
+import com.yunjian.core.service.IAddressService;
+import com.yunjian.core.service.IGoodsCartService;
+import com.yunjian.core.service.IGoodsImgService;
+import com.yunjian.core.service.IGoodsService;
+import com.yunjian.core.service.IGoodsTypeService;
 
 /**
  * <p>
@@ -39,8 +51,11 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
     @Autowired
     private IGoodsImgService goodsImgService;
 
+    @Autowired
+    private IGoodsTypeService goodsTypeService;
+
     @Override
-    public ResponseDto addGoodsToCart(String id) {
+    public ResponseDto addGoodsToCart(String id, String goodsType) {
         try {
             Account account = SecurityContext.getUserPrincipal();
             Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", Integer.parseInt(id)));
@@ -51,7 +66,7 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
             BigDecimal unitPrice = (goods.getIsDiscount()) == 1 ? goods.getDiscountPrice() : goods.getPrice();
             //判断购物车中是否已经存在
             GoodsCart goodsCart = this.getOne(new QueryWrapper<GoodsCart>().eq("account_id", account.getId())
-                    .eq("goods_id", goods.getId()));
+                    .eq("goods_id", goods.getId()).eq("goods_type", Integer.parseInt(goodsType)));
             if(goodsCart != null){
                 goodsCart.setAmount(goodsCart.getAmount() + 1);
                 BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(goodsCart.getAmount().doubleValue()));
@@ -62,6 +77,7 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
                 goodsCart.setAccountId(account.getId());
                 goodsCart.setAmount(1);
                 goodsCart.setTotalPrice(unitPrice);
+                goodsCart.setGoodsType(Integer.parseInt(goodsType));
             }
             this.saveOrUpdate(goodsCart);
 
@@ -96,6 +112,11 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
                 info.setUnitPrice((goods.getIsDiscount() == 1) ? goods.getDiscountPrice() : goods.getPrice());
                 BigDecimal totalPrice = info.getUnitPrice().multiply(BigDecimal.valueOf(info.getAmount().doubleValue()));
                 info.setTotalPrice(totalPrice);
+                info.setGoodsType(goodsCart.getGoodsType());
+                GoodsType type = goodsTypeService.getOne(new QueryWrapper<GoodsType>().eq("id", goodsCart.getGoodsType()));
+                if(type != null){
+                    info.setGoodsTypeName(type.getTypeName());
+                }
                 List<GoodsImg> imgList = goodsImgService.list(
                         new QueryWrapper<GoodsImg>()
                                 .eq("goods_id", goods.getId()).orderByAsc("create_time"));

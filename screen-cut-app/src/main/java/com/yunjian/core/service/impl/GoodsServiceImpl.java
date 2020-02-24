@@ -1,15 +1,12 @@
 package com.yunjian.core.service.impl;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import com.yunjian.common.utils.*;
-import com.yunjian.core.dto.GoodsDetailDto;
-import com.yunjian.core.dto.GoodsDto;
-import com.yunjian.core.dto.GoodsReqDto;
-import com.yunjian.core.dto.ResponseDto;
-import com.yunjian.core.entity.GoodsType;
-import com.yunjian.core.service.IGoodsTypeService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +17,21 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.Query;
+import com.yunjian.common.utils.R;
+import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.dto.GoodsDetailDto;
+import com.yunjian.core.dto.GoodsDto;
+import com.yunjian.core.dto.GoodsReqDto;
 import com.yunjian.core.entity.Goods;
 import com.yunjian.core.entity.GoodsImg;
+import com.yunjian.core.entity.GoodsType;
 import com.yunjian.core.mapper.GoodsMapper;
 import com.yunjian.core.service.IGoodsImgService;
 import com.yunjian.core.service.IGoodsService;
+import com.yunjian.core.service.IGoodsTypeService;
 
 /**
  * <p>
@@ -154,6 +161,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 		return R.ok();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public PageUtils queryGoodsByPage(GoodsReqDto params) {
 		QueryWrapper<Goods> query = new QueryWrapper<Goods>();

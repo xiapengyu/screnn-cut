@@ -64,7 +64,7 @@ public class SysAccountController {
 			        .orderByDesc("create_time"));
 			Account temp = new Account();
 			temp.setId(0);
-			temp.setUserName("全部");
+			temp.setEmail("全部");
 			list.add(0, temp);
 			return R.ok().put("accountList", list);
 		} catch (Exception e) {

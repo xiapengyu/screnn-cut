@@ -1,16 +1,33 @@
 package com.yunjian.core.dto;
 
-import com.yunjian.core.entity.Goods;
-import com.yunjian.core.entity.GoodsType;
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+import com.yunjian.core.entity.Goods;
+import com.yunjian.core.entity.GoodsType;
+
 public class GoodsDetailDto extends Goods {
 
-    private List<GoodsType> typeList = new ArrayList<>();
+	private static final long serialVersionUID = 1L;
+
+	private List<GoodsType> typeList = new ArrayList<>();
 
     private List<String> imageList = new ArrayList<>();
+
+	public List<GoodsType> getTypeList() {
+		return typeList;
+	}
+
+	public void setTypeList(List<GoodsType> typeList) {
+		this.typeList = typeList;
+	}
+
+	public List<String> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<String> imageList) {
+		this.imageList = imageList;
+	}
+    
 }

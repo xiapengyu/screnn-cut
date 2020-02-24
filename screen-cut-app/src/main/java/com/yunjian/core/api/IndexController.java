@@ -1,16 +1,8 @@
 package com.yunjian.core.api;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.core.dto.IndexInfoDto;
-import com.yunjian.core.dto.ResponseDto;
-import com.yunjian.core.dto.SecurityContext;
-import com.yunjian.core.entity.Account;
-import com.yunjian.core.entity.Ad;
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.entity.Setting;
-import com.yunjian.core.service.IAdService;
-import com.yunjian.core.service.IDeviceService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +11,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.core.dto.IndexInfoDto;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.dto.SecurityContext;
+import com.yunjian.core.entity.Account;
+import com.yunjian.core.entity.Ad;
+import com.yunjian.core.entity.Device;
+import com.yunjian.core.service.IAdService;
+import com.yunjian.core.service.IDeviceService;
 
 @RestController
 @RequestMapping("/api/index")

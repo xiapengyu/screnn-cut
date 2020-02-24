@@ -48,5 +48,6 @@ public class GoodsCart implements Serializable {
      */
     private Integer accountId;
 
+    private Integer goodsType;
 
 }

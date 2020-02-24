@@ -1,6 +1,16 @@
 package com.yunjian.core.api;
 
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
@@ -12,15 +22,6 @@ import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.GoodsCart;
 import com.yunjian.core.service.IGoodsCartService;
 import com.yunjian.core.service.IPurchaseOrderService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 /**
  * <p>
@@ -47,11 +48,12 @@ public class GoodsCartController {
     @PostMapping("/addGoodsToCart")
     public ResponseDto addGoodsToCart(@RequestBody Map<String, Object> params){
         logger.info("商品加入购物车{}", JsonUtil.toJsonString(params));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         if(params.get("id") == null){
-            return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "未选择商品");
+        }else if(params.get("typeId") == null){
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "未选择种类");
         }
-        return goodsCartService.addGoodsToCart(StringUtil.obj2String(params.get("id")));
+        return goodsCartService.addGoodsToCart(StringUtil.obj2String(params.get("id")), StringUtil.obj2String(params.get("typeId")));
     }
 
     /**
@@ -60,7 +62,6 @@ public class GoodsCartController {
     @PostMapping("/viewGoodsCartDetail")
     public ResponseDto viewGoodsCartDetail(){
         logger.info("查看购物车详情");
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         return goodsCartService.viewGoodsCartDetail();
     }
 
@@ -70,7 +71,6 @@ public class GoodsCartController {
     @PostMapping("/removeGoodsFromCart")
     public ResponseDto removeGoodsFromCart(@RequestBody Map<String, Object> params){
         logger.info("从购物车移除商品{}", JsonUtil.toJsonString(params));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         if(params.get("id") == null){
             return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
         }
@@ -83,7 +83,6 @@ public class GoodsCartController {
     @PostMapping("/modifyGoodsCartAmount")
     public ResponseDto modifyGoodsCartAmount(@RequestBody Map<String, Object> params){
         logger.info("修改购物车商品数量{}", JsonUtil.toJsonString(params));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         if(params.get("id") == null || params.get("amount") == null){
             return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
         }else if(Integer.parseInt(StringUtil.obj2String(params.get("amount"))) < 0){
@@ -116,12 +115,8 @@ public class GoodsCartController {
     @PostMapping("/submitCart")
     public ResponseDto submitCart(@RequestBody OrderReqDto param){
         logger.info("提交采购清单{}", JsonUtil.toJsonString(param));
-        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         if(param.getAddressId() == null){
             return new ResponseDto(Constant.FAIL_CODE, null, "没有收货地址信息");
-        }
-        if(param.getGoodsList().isEmpty()){
-            return new ResponseDto(Constant.FAIL_CODE, null, "没有采购的商品信息");
         }
         return purchaseOrderService.submitCart(param);
     }

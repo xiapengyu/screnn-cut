@@ -1,8 +1,8 @@
 package com.yunjian.core.dto;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
+
+import lombok.Data;
 
 @Data
 public class GoodsCartInfo {
@@ -18,5 +18,9 @@ public class GoodsCartInfo {
     private Integer amount = 0;
 
     private String coverImg = "";
+
+    private Integer goodsType;
+
+    private String goodsTypeName = "";
 
 }

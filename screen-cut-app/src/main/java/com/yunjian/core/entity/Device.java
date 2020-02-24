@@ -1,7 +1,6 @@
 package com.yunjian.core.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -78,5 +77,7 @@ public class Device implements Serializable {
 	private Date updateTime;
 
 	private Integer deleteFlag;
+
+	private String deviceName;
 
 }
