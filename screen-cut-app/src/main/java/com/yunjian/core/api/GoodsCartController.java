@@ -49,9 +49,11 @@ public class GoodsCartController {
         logger.info("商品加入购物车{}", JsonUtil.toJsonString(params));
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         if(params.get("id") == null){
-            return new ResponseDto(Constant.FAIL_CODE, null, "未选择商品");
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "未选择商品");
+        }else if(params.get("typeId") == null){
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "未选择种类");
         }
-        return goodsCartService.addGoodsToCart(StringUtil.obj2String(params.get("id")));
+        return goodsCartService.addGoodsToCart(StringUtil.obj2String(params.get("id")), StringUtil.obj2String(params.get("typeId")));
     }
 
     /**
@@ -119,9 +121,6 @@ public class GoodsCartController {
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         if(param.getAddressId() == null){
             return new ResponseDto(Constant.FAIL_CODE, null, "没有收货地址信息");
-        }
-        if(param.getGoodsList().isEmpty()){
-            return new ResponseDto(Constant.FAIL_CODE, null, "没有采购的商品信息");
         }
         return purchaseOrderService.submitCart(param);
     }

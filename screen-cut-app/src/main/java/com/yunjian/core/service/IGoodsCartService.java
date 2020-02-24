@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGoodsCartService extends IService<GoodsCart> {
 
-    ResponseDto addGoodsToCart(String id);
+    ResponseDto addGoodsToCart(String id, String goodsType);
 
     ResponseDto viewGoodsCartDetail();
 

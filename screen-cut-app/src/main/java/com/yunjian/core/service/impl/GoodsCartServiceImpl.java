@@ -39,8 +39,11 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
     @Autowired
     private IGoodsImgService goodsImgService;
 
+    @Autowired
+    private IGoodsTypeService goodsTypeService;
+
     @Override
-    public ResponseDto addGoodsToCart(String id) {
+    public ResponseDto addGoodsToCart(String id, String goodsType) {
         try {
             Account account = SecurityContext.getUserPrincipal();
             Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", Integer.parseInt(id)));
@@ -51,7 +54,7 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
             BigDecimal unitPrice = (goods.getIsDiscount()) == 1 ? goods.getDiscountPrice() : goods.getPrice();
             //判断购物车中是否已经存在
             GoodsCart goodsCart = this.getOne(new QueryWrapper<GoodsCart>().eq("account_id", account.getId())
-                    .eq("goods_id", goods.getId()));
+                    .eq("goods_id", goods.getId()).eq("goods_type", Integer.parseInt(goodsType)));
             if(goodsCart != null){
                 goodsCart.setAmount(goodsCart.getAmount() + 1);
                 BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(goodsCart.getAmount().doubleValue()));
@@ -62,6 +65,7 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
                 goodsCart.setAccountId(account.getId());
                 goodsCart.setAmount(1);
                 goodsCart.setTotalPrice(unitPrice);
+                goodsCart.setGoodsType(Integer.parseInt(goodsType));
             }
             this.saveOrUpdate(goodsCart);
 
@@ -96,6 +100,11 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
                 info.setUnitPrice((goods.getIsDiscount() == 1) ? goods.getDiscountPrice() : goods.getPrice());
                 BigDecimal totalPrice = info.getUnitPrice().multiply(BigDecimal.valueOf(info.getAmount().doubleValue()));
                 info.setTotalPrice(totalPrice);
+                info.setGoodsType(goodsCart.getGoodsType());
+                GoodsType type = goodsTypeService.getOne(new QueryWrapper<GoodsType>().eq("id", goodsCart.getGoodsType()));
+                if(type != null){
+                    info.setGoodsTypeName(type.getTypeName());
+                }
                 List<GoodsImg> imgList = goodsImgService.list(
                         new QueryWrapper<GoodsImg>()
                                 .eq("goods_id", goods.getId()).orderByAsc("create_time"));

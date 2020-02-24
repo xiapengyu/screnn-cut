@@ -9,8 +9,6 @@ import java.util.List;
 @Data
 public class OrderReqDto {
 
-    private List<GoodsCart> goodsList = new ArrayList<>();
-
     private String comment = "";
 
     private Integer addressId;

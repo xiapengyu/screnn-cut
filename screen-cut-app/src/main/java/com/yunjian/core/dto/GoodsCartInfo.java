@@ -1,5 +1,6 @@
 package com.yunjian.core.dto;
 
+import com.yunjian.core.entity.GoodsType;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,5 +19,9 @@ public class GoodsCartInfo {
     private Integer amount = 0;
 
     private String coverImg = "";
+
+    private Integer goodsType;
+
+    private String goodsTypeName = "";
 
 }

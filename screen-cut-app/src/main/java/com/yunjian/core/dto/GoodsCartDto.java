@@ -1,6 +1,7 @@
 package com.yunjian.core.dto;
 
 import com.yunjian.core.entity.Address;
+import com.yunjian.core.entity.GoodsType;
 import lombok.Data;
 
 import java.math.BigDecimal;

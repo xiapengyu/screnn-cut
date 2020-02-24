@@ -79,4 +79,6 @@ public class Device implements Serializable {
 
 	private Integer deleteFlag;
 
+	private String deviceName;
+
 }

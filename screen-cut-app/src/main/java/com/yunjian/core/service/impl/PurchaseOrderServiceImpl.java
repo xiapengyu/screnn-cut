@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.yunjian.core.entity.*;
+import com.yunjian.core.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -26,20 +28,7 @@ import com.yunjian.core.dto.OrderReqDto;
 import com.yunjian.core.dto.OrderRespDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
-import com.yunjian.core.entity.Account;
-import com.yunjian.core.entity.Address;
-import com.yunjian.core.entity.Goods;
-import com.yunjian.core.entity.GoodsCart;
-import com.yunjian.core.entity.GoodsImg;
-import com.yunjian.core.entity.PurchaseDetail;
-import com.yunjian.core.entity.PurchaseOrder;
 import com.yunjian.core.mapper.PurchaseOrderMapper;
-import com.yunjian.core.service.IAccountService;
-import com.yunjian.core.service.IAddressService;
-import com.yunjian.core.service.IGoodsImgService;
-import com.yunjian.core.service.IGoodsService;
-import com.yunjian.core.service.IPurchaseDetailService;
-import com.yunjian.core.service.IPurchaseOrderService;
 
 /**
  * <p>
@@ -62,6 +51,10 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     private IGoodsService goodsService;
     @Autowired
     private IGoodsImgService goodsImgService;
+    @Autowired
+    private IGoodsCartService goodsCartService;
+    @Autowired
+    private IGoodsTypeService goodsTypeService;
 
     @Override
     public ResponseDto submitCart(OrderReqDto param) {
@@ -75,6 +68,7 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             Address address = addressService.getOne(new QueryWrapper<Address>().eq("id", param.getAddressId()));
             order.setUserName(address.getUserName());
             order.setPhone(address.getPhone());
+            order.setEmail(account.getEmail());
             order.setAddress(address.getAddress());
             order.setStatus(1);
             order.setCreateTime(new Date());
@@ -83,7 +77,12 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             this.saveOrUpdate(order);
 
             List<PurchaseDetail> detailList = new ArrayList<>();
-            for (GoodsCart item : param.getGoodsList()) {
+
+            List<GoodsCart> goodsList = goodsCartService.list(new QueryWrapper<GoodsCart>().eq("account_id", account.getId()));
+            if(goodsList.isEmpty()){
+                return new ResponseDto(Constant.FAIL_CODE, null, "购物车中没有商品");
+            }
+            for (GoodsCart item : goodsList) {
                 PurchaseDetail detail = new PurchaseDetail();
                 detail.setGoodsId(item.getGoodsId());
                 Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", item.getGoodsId()));
@@ -91,10 +90,13 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
                 detail.setOrderNo(order.getOrderNo());
                 detail.setUnitPrice((goods.getIsDiscount() == 1) ? goods.getDiscountPrice() : goods.getPrice());
                 detail.setPrice(detail.getUnitPrice().multiply(BigDecimal.valueOf(detail.getAmount().doubleValue())));
+                detail.setGoodsType(item.getGoodsType());
                 detailList.add(detail);
             }
             if (!detailList.isEmpty()) {
                 purchaseDetailService.saveBatch(detailList);
+                //提交成功之后清空购物车
+                goodsCartService.remove(new QueryWrapper<GoodsCart>().eq("account_id", account.getId()));
             } else {
                 this.remove(new QueryWrapper<PurchaseOrder>().eq("id", order.getId()));
                 return new ResponseDto(Constant.FAIL_CODE, null, "没有采购商品");
@@ -143,6 +145,11 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
                 info.setUnitPrice(item.getUnitPrice());
                 info.setTotalPrice(item.getPrice());
                 totalPrice = totalPrice.add(item.getUnitPrice().multiply(BigDecimal.valueOf(info.getAmount().doubleValue())));
+                info.setGoodsType(item.getGoodsType());
+                GoodsType type = goodsTypeService.getOne(new QueryWrapper<GoodsType>().eq("id", item.getGoodsType()));
+                if(type != null){
+                    info.setGoodsTypeName(type.getTypeName());
+                }
                 List<GoodsImg> imgList = goodsImgService.list(
                         new QueryWrapper<GoodsImg>()
                                 .eq("goods_id", item.getId()).orderByAsc("create_time"));
