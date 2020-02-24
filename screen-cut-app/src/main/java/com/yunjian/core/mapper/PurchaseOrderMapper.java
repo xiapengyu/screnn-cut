@@ -1,8 +1,12 @@
 package com.yunjian.core.mapper;
 
-import com.yunjian.core.entity.PurchaseOrder;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yunjian.core.entity.PurchaseOrder;
+import com.yunjian.core.vo.PurchaseOrderVo;
 
 /**
  * <p>
@@ -14,5 +18,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder> {
+	
+	IPage<PurchaseOrderVo> selectPageVo(Page<PurchaseOrderVo> page, PurchaseOrder order);
 
 }

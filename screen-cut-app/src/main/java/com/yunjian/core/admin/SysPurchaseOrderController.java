@@ -1,6 +1,5 @@
 package com.yunjian.core.admin;
 
-
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
@@ -37,41 +36,50 @@ import java.util.Map;
 @RequestMapping("/sys/purchaseOrder")
 public class SysPurchaseOrderController {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private IPurchaseOrderService purchaseOrderService;
-    @Autowired
-    private IPurchaseDetailService purchaseDetailService;
+	@Autowired
+	private IPurchaseOrderService purchaseOrderService;
+	@Autowired
+	private IPurchaseDetailService purchaseDetailService;
 
-    /**
-     * 分页查询采购单列表
-     */
-    @PostMapping("/list")
-    public R queryOrderByPage(@RequestBody Map<String, Object> params){
-    	 logger.info("分页查询采购单列表{}", JsonUtil.toJsonString(params));
-         PageUtils page = purchaseOrderService.queryOrderByPage4Sys(params);
-         return R.ok().put("page", page);
-    }
-    
-    
-    /**
-     * 查看采购单详情
-     */
-    @PostMapping("/detail")
-    public R queryDetail(@RequestBody Map<String, Object> params){
-    	String orderNo = (String) params.get("orderNo");
-    	R r = purchaseDetailService.queryPurchaseDetailInfo(orderNo);
-        return r;
-    }
+	/**
+	 * 分页查询采购单列表
+	 */
+	@PostMapping("/list")
+	public R queryOrderByPage(@RequestBody Map<String, Object> params) {
+		logger.info("分页查询采购单列表{}", JsonUtil.toJsonString(params));
+		PageUtils page = purchaseOrderService.queryOrderByPage4Sys(params);
+		return R.ok().put("page", page);
+	}
 
-    /**
-     * 确认（拒绝）采购单
-     */
-    @PostMapping("/confirm")
-    public R confirm(@RequestBody Map<String, Object> params){
-    	R r = purchaseOrderService.updateStatus(params);
-        return r;
-    }
+	/**
+	 * 分页查询采购单列表
+	 */
+	@PostMapping("/delete")
+	public R delete(@RequestBody Map<String, Object> params) {
+		int id = (int) params.get("id");
+		purchaseOrderService.removeById(id);
+		return R.ok();
+	}
+
+	/**
+	 * 查看采购单详情
+	 */
+	@PostMapping("/detail")
+	public R queryDetail(@RequestBody Map<String, Object> params) {
+		String orderNo = (String) params.get("orderNo");
+		R r = purchaseDetailService.queryPurchaseDetailInfo(orderNo);
+		return r;
+	}
+
+	/**
+	 * 确认（拒绝）采购单
+	 */
+	@PostMapping("/confirm")
+	public R confirm(@RequestBody Map<String, Object> params) {
+		R r = purchaseOrderService.updateStatus(params);
+		return r;
+	}
 
 }

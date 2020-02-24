@@ -7,8 +7,8 @@
     <div>
       <table style="width: 100%;">
         <tr><td style="width: 50%;">采购单号: {{ order.orderNo }}</td><td>所属公司: {{ order.company }}</td></tr>
-        <tr><td>客户姓名: {{ order.userName }}</td><td>客户邮箱: {{ order.email }}</td></tr>
-        <tr><td>联系方式: {{ order.phone }}</td><td>地址: {{ order.address }}</td></tr>
+        <tr><td>收货人姓名: {{ order.userName }}</td><td>客户邮箱: {{ order.email }}</td></tr>
+        <tr><td>收货人联系方式: {{ order.phone }}</td><td>配送地址: {{ order.address }}</td></tr>
         <tr><td colspan="2">回复说明: {{ order.comment }}</td></tr>
       </table>
     </div>

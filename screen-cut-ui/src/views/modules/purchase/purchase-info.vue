@@ -25,7 +25,7 @@
         align="center"
         label="采购单号">
       </el-table-column>
-      <el-table-column
+      <!--<el-table-column
         prop="company"
         header-align="center"
         align="center"
@@ -35,10 +35,10 @@
         prop="userName"
         header-align="center"
         align="center"
-        label="客户姓名">
-      </el-table-column>
+        label="客户名称">
+      </el-table-column>-->
       <el-table-column
-        prop="email"
+        prop="userEmail"
         header-align="center"
         align="center"
         label="客户邮箱">
@@ -47,9 +47,9 @@
         prop="phone"
         header-align="center"
         align="center"
-        label="其他联系方式">
+        label="电话">
       </el-table-column>
-      <el-table-column
+      <!--<el-table-column
         prop="discountPrice"
         header-align="center"
         align="center"
@@ -73,7 +73,7 @@
         align="center"
         label="次数">
       </el-table-column>
-<!--      <el-table-column
+      <el-table-column
         prop="comment"
         header-align="center"
         align="center"
@@ -100,13 +100,13 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="200"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo)">详情</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)">确认</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)">拒绝</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <!--<el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>-->
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -283,7 +283,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/goods/delete'),
+            url: this.$http.adornUrl('/sys/purchaseOrder/delete'),
             method: 'post',
             data: this.$http.adornData({
               'id': id

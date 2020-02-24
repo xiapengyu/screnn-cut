@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yunjian.core.mapper.PurchaseOrderMapper">
+	<!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yunjian.core.entity.PurchaseOrder">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="account_id" property="accountId" />
+        <result column="company" property="company" />
+        <result column="user_name" property="userName" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="address" property="address" />
+        <result column="status" property="status" />
+        <result column="comment" property="comment" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+    
+    <resultMap id="ExtResultMap" extends="BaseResultMap" type="com.yunjian.core.vo.PurchaseOrderVo">
+    	<association property="account" javaType="com.yunjian.core.entity.Account" >
+    		<id column="id" property="id"/>
+	    	<result column="email" property="email"/>
+	    	<result column="serial_no" property="serialNo"/>
+    	</association>
+    </resultMap>
+    
+    <select id="selectPageVo" parameterType="com.yunjian.core.entity.PurchaseOrder" resultType="com.yunjian.core.vo.PurchaseOrderVo">
+    	select o.order_no,o.status, o.`comment`,o.create_time,a.email as userEmail
+    	from tb_purchase_order o
+		left join tb_account a on a.id = o.account_id
+		<where>
+		 	<if test="order.orderNo != null and order.orderNo != '' ">
+              and order_no = #{order.orderNo}
+            </if>
+		 	<if test="order.company != null and order.company != '' ">
+              and company = #{order.company}
+            </if>
+		</where>
+		
+    </select>
 
 </mapper>

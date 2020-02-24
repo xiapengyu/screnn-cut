@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.DateUtils;
@@ -43,6 +46,7 @@ import com.yunjian.core.service.IGoodsImgService;
 import com.yunjian.core.service.IGoodsService;
 import com.yunjian.core.service.IPurchaseDetailService;
 import com.yunjian.core.service.IPurchaseOrderService;
+import com.yunjian.core.vo.PurchaseOrderVo;
 
 /**
  * <p>
@@ -65,6 +69,9 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     private IGoodsService goodsService;
     @Autowired
     private IGoodsImgService goodsImgService;
+    
+    @Resource
+    private PurchaseOrderMapper purchaseOrderMapper;
     
     @Override
 	public R updateStatus(Map<String, Object> params) {
@@ -149,15 +156,13 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     	String orderNo = (String) params.get("orderNo");
     	String company = (String) params.get("company");
     	
-        QueryWrapper<PurchaseOrder> queryWrapper = new QueryWrapper<PurchaseOrder>();
-        if(StringUtils.isNotEmpty(orderNo.trim())) {
-        	queryWrapper.eq("order_no", orderNo);
-        }
-        if(StringUtils.isNotEmpty(company.trim())) {
-        	queryWrapper.like("company", company);
-        }
-        IPage<PurchaseOrder> page = this.page(new Query<PurchaseOrder>().getPage(params), queryWrapper);
-        return new PageUtils(page);
+    	Page<PurchaseOrderVo> page = new Page<>();
+    	
+    	PurchaseOrder order = new PurchaseOrder();
+    	order.setOrderNo(orderNo);
+    	order.setCompany(company);
+        IPage<PurchaseOrderVo> pageResult = purchaseOrderMapper.selectPageVo(page,order);
+        return new PageUtils(pageResult);
     }
 
     @Override
