@@ -1,6 +1,13 @@
 package com.yunjian.core.service.impl;
 
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
@@ -8,13 +15,6 @@ import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.Setting;
 import com.yunjian.core.mapper.SettingMapper;
 import com.yunjian.core.service.ISettingService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -49,7 +49,8 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
                 this.saveOrUpdate(setting);
             }
         } catch (Exception e) {
-            return new ResponseDto(Constant.FAIL_CODE, null, Constant.FAIL_MESSAGE);
+        	logger.error("保存参数设置失败", e);
+            return new ResponseDto(Constant.FAIL_CODE, null, "保存参数设置失败");
         }
         return response;
     }

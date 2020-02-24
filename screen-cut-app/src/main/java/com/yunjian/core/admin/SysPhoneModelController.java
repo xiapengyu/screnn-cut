@@ -63,19 +63,18 @@ public class SysPhoneModelController {
         if(!StringUtils.isEmpty(id)){
             PhoneModel model = phoneModelService.getOne(new QueryWrapper<PhoneModel>().eq("id", id));
             List<PhoneBrand> brandList = phoneBrandService.list();
-            return R.ok().put("model", model);
+            return R.ok().put("model", model).put("brandList", brandList);
         }else{
             return R.error("参数错误");
         }
     }
 
     /**
-     * 查询手机品牌列表
+     * 查询全部手机品牌列表
      */
     @PostMapping("/queryTotalBrand")
     public R queryTotalBrand(@RequestBody Map<String, Object> params){
-        logger.info("查询手机品牌列表{}", JsonUtil.toJsonString(params));
-        String id = StringUtil.obj2String(params.get("id"));
+        logger.info("查询全部手机品牌列表");
         List<PhoneBrand> brandList = phoneBrandService.list();
         return R.ok().put("brandList", brandList);
     }

@@ -3,10 +3,9 @@ package com.yunjian.core.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.service.IDeviceService;
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,11 @@ import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.Query;
 import com.yunjian.common.utils.R;
 import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.mapper.DistributorMapper;
+import com.yunjian.core.service.IDeviceService;
 import com.yunjian.core.service.IDistributorService;
-
-import javax.annotation.Resource;
 
 /**
  * <p>

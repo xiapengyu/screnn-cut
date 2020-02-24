@@ -121,7 +121,8 @@ public class SysDistributorController {
     /**
      * 导入并保存经销商信息
      */
-    @PostMapping("/uploadDistributorFile")
+    @SuppressWarnings("unchecked")
+	@PostMapping("/uploadDistributorFile")
     public R importDistributor(@RequestParam("file") MultipartFile file) {
     	File uploadFile = FileUtil.multipartFileToFile(file);
     	JSONArray array = ExcelUtil.readExcel(uploadFile);
@@ -130,7 +131,7 @@ public class SysDistributorController {
     	List<Distributor> resultList = new ArrayList<>();
         try {
             if(array.size() > 0){
-                array.forEach(item -> {
+            	for(Object item : array) {
                     logger.info("解析对象{}", item.toString());
                     Map<String, Object> map = JsonUtil.toMap(item.toString());
                     Distributor distributor = new Distributor();
@@ -145,7 +146,7 @@ public class SysDistributorController {
                     distributor.setUpdateTime(new Date());
                     distributor.setDeleteFlag(1);
                     resultList.add(distributor);
-                });
+            	}
                 return distributorService.saveBatchRecord(resultList);
             }else{
                 return R.error("经销商内容为空");

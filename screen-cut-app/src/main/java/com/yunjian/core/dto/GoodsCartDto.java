@@ -1,12 +1,11 @@
 package com.yunjian.core.dto;
 
-import com.yunjian.core.entity.Address;
-import com.yunjian.core.entity.GoodsType;
-import lombok.Data;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.yunjian.core.entity.Address;
+
+import lombok.Data;
 
 @Data
 public class GoodsCartDto {

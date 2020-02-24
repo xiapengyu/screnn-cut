@@ -1,9 +1,8 @@
 package com.yunjian.core.dto;
 
-import com.yunjian.core.entity.GoodsType;
-import lombok.Data;
-
 import java.math.BigDecimal;
+
+import lombok.Data;
 
 @Data
 public class GoodsCartInfo {
