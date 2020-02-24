@@ -137,6 +137,8 @@ public class LoginController {
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "确认密码不能为空");
 		}else if(!param.getPassword().equals(param.getConfirmPassword())) {
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "两次输入的密码不一致");
+		}else if(StringUtil.isEmpty(param.getCode())){
+			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码不能为空");
 		}
 		return accountServiceImpl.resetPassword(param);
 	}

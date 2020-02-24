@@ -80,7 +80,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 			if(emalCode != null) {
 				Account account = new Account();
 				account.setEmail(param.getEmail());
-				account.setPassword(MD5Util.getMD5String(param.getPassword()));
+				account.setPassword(MD5Util.getMD5String(param.getPassword().trim()));
 				account.setAvatar("");
 				account.setSerialNo(param.getSerialNo());
 				account.setCreateTime(new Date());
@@ -173,22 +173,30 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
 	@Override
 	public ResponseDto resetPassword(AccountDto param) {
-		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
-			Account account = this.getOne(
-					new QueryWrapper<Account>().eq("email", param.getEmail()));
-			if (account == null) {
-				return new ResponseDto(Constant.FAIL_CODE, null, "未查到相关用户");
+			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())
+					.eq("email", param.getEmail()).eq("delete_flag", 1).gt("expire_time", new Date()));
+			if (emalCode != null) {
+				Account account = this.getOne(
+						new QueryWrapper<Account>().eq("email", param.getEmail()));
+				if (account == null) {
+					return new ResponseDto(Constant.FAIL_CODE, null, "未查到相关用户");
+				} else {
+					// 更新用户信息
+					account.setPassword(MD5Util.getMD5String(param.getPassword().trim()));
+					this.saveOrUpdate(account);
+				}
+
+				// 删除验证码
+				emailCodeServiceImpl.remove(new QueryWrapper<EmailCode>().eq("id", emalCode.getId()));
+				return new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 			} else {
-				// 更新用户信息
-				account.setPassword(MD5Util.getMD5String(param.getPassword()));
-				this.saveOrUpdate(account);
+				return new ResponseDto(Constant.FAIL_CODE, null, "验证码错误");
 			}
 		} catch (Exception e) {
 			logger.error("重置密码失败", e);
 			return new ResponseDto(Constant.FAIL_CODE, null, "重置密码失败");
 		}
-		return response;
 	}
 
 	@Override
