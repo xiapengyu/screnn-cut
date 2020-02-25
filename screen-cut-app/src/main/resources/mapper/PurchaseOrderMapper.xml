@@ -27,7 +27,7 @@
               and a.email =#{map.email}
             </if>
 		</where>
-		
+		and o.account_type=1
     </select>
 
 </mapper>
