@@ -7,7 +7,7 @@ public class AccountDto extends Account {
 	private static final long serialVersionUID = 1L;
 	
 	private String code;
-	
+
 	public String getCode() {
 		return code;
 	}

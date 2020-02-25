@@ -15,7 +15,7 @@
           multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">文件大小不能超过50M</div>
+          <div class="el-upload__tip" slot="tip">文件大小不能超过5M</div>
         </el-upload>
       </el-form-item>
       <el-form-item label="" prop="">
@@ -38,11 +38,33 @@
       <el-form-item label="排序码" prop="sortNum" :class="{ 'is-required': true }">
         <el-input-number v-model="dataForm.sortNum" controls-position="right" :min="0" label="排序码"></el-input-number>
       </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status">
+      <el-form-item label="机型状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">
           <el-radio :label="0">禁用</el-radio>
           <el-radio :label="1">正常</el-radio>
         </el-radio-group>
+      </el-form-item>
+      <el-form-item label="PLT类型" size="mini" prop="type">
+        <el-radio-group v-model="dataForm.type">
+          <el-radio :label="1">全面</el-radio>
+          <el-radio :label="2">带壳</el-radio>
+          <el-radio :label="3">背贴</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="PLT文件" prop="pltUrl" :class="{ 'is-required': true }">
+        <el-upload
+          class="upload-demo"
+          drag
+          :action= this.uploadPltUrl
+          :on-success="handleUploadPltSuccess"
+          :before-upload="beforeUploadPlt"
+          :on-remove="removePltFile"
+          :file-list= this.fileList
+          :limit="1">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">文件大小不能超过50M</div>
+        </el-upload>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -58,9 +80,11 @@
       return {
         visible: false,
         uploadUrl: '',
+        uploadPltUrl: '',
         dialogVisible: false,
         dialogImageUrl: '',
         brandList: [],
+        fileList: [],
         dataForm: {
           id: 0,
           phoneImage: '',
@@ -70,11 +94,17 @@
           sortNum: 1,
           status: 1,
           width: '',
-          height: ''
+          height: '',
+          type: '',
+          pltUrl: '',
+          originName: ''
         },
         dataRule: {
           phoneImage: [
             { required: true, message: '手机图片不能为空', trigger: 'blur' }
+          ],
+          pltUrl: [
+            { required: true, message: 'PLT文件不能为空', trigger: 'blur' }
           ],
           brandId: [
             { required: true, message: '手机品牌不能为空', trigger: 'blur' }
@@ -99,6 +129,8 @@
         this.dataForm.id = id || 0
         this.visible = true
         this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadImage'
+        this.uploadPltUrl = window.SITE_CONFIG.baseUrl + '/sys/phone/uploadPltFile'
+        this.fileList = []
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }
@@ -130,7 +162,11 @@
               this.dataForm.sortNum = data.model.sortNum
               this.dataForm.width = data.model.width
               this.dataForm.height = data.model.height
+              this.dataForm.type = data.model.type
+              this.dataForm.pltUrl = data.model.pltUrl
+              this.dataForm.originName = data.model.originName
               this.brandList = data.brandList
+              this.fileList.push(data.plt)
             } else {
               this.$message.error(data.msg)
             }
@@ -152,7 +188,10 @@
                 'width': this.dataForm.width,
                 'height': this.dataForm.height,
                 'sortNum': this.dataForm.sortNum,
-                'status': this.dataForm.status
+                'status': this.dataForm.status,
+                'type': this.dataForm.type,
+                'pltUrl': this.dataForm.pltUrl,
+                'originName': this.dataForm.originName
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
@@ -187,6 +226,29 @@
           this.$message.error('上传图片大小不能超过5M')
         }
         return test1 && isLt5M
+      },
+      handleUploadPltSuccess: function (response) {
+        console.log(this.fileList)
+        this.dataForm.pltUrl = response.plt.url
+        this.dataForm.originName = response.plt.name
+        this.fileList.push(response.plt)
+        console.log(this.fileList)
+      },
+      beforeUploadPlt: function (file) {
+        const isLt50M = file.size / 1024 / 1024 <= 50
+        if (!isLt50M) {
+          this.$message.error('上传文件大小不能超过50M')
+        }
+        const isTest = (this.dataForm.pltUrl === '')
+        if (!isTest) {
+          this.$message.error('请删除已上传的PLT文件后重新上传')
+        }
+        return isTest && isLt50M
+      },
+      removePltFile: function (file) {
+        console.log('remove file')
+        this.dataForm.pltUrl = ''
+        this.fileList.pop(file)
       }
     }
   }

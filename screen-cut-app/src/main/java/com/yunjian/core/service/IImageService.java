@@ -14,4 +14,6 @@ public interface IImageService{
 
     ResponseDto uploadImage(byte[] bytes, String s, String extName);
 
+    ResponseDto uploadFile(byte[] bytes, String s, String extName);
+
 }

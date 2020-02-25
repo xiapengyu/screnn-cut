@@ -56,6 +56,7 @@ public class ShiroConfig {
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/sys/image/uploadImage", "anon");
         filterMap.put("/sys/distributor/uploadDistributorFile", "anon");
+        filterMap.put("/sys/phone/uploadPltFile", "anon");
         filterMap.put("/sys/device/uploadDeviceFile", "anon");
         filterMap.put("/captcha.jpg", "anon");
 
