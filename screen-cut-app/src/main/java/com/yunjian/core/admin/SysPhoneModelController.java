@@ -3,22 +3,23 @@ package com.yunjian.core.admin;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
+import com.yunjian.common.utils.*;
+import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.PhoneBrand;
 import com.yunjian.core.entity.PhoneModel;
+import com.yunjian.core.service.IImageService;
 import com.yunjian.core.service.IPhoneBrandService;
 import com.yunjian.core.service.IPhoneModelService;
+import org.apache.ibatis.annotations.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,12 @@ public class SysPhoneModelController {
     @Autowired
     private IPhoneBrandService phoneBrandService;
 
+    @Value("${tomcat.file.server}")
+    private String fileUploadServer = "";
+
+    @Autowired
+    private IImageService imageService;
+
     /**
      * 分页查询手机机型列表
      */
@@ -63,7 +70,12 @@ public class SysPhoneModelController {
         if(!StringUtils.isEmpty(id)){
             PhoneModel model = phoneModelService.getOne(new QueryWrapper<PhoneModel>().eq("id", id));
             List<PhoneBrand> brandList = phoneBrandService.list();
-            return R.ok().put("model", model).put("brandList", brandList);
+
+            Map<String, Object> plt = new HashMap<>();
+            plt.put("uid", UUIDUtil.getUUID());
+            plt.put("url", model.getPltUrl());
+            plt.put("name", model.getOriginName());
+            return R.ok().put("model", model).put("brandList", brandList).put("plt", plt);
         }else{
             return R.error("参数错误");
         }
@@ -106,6 +118,30 @@ public class SysPhoneModelController {
     public R savePhoneModelInfo(@RequestBody Map<String, Object> params){
         logger.info("保存手机机型信息{}", JsonUtil.toJsonString(params));
         return phoneModelService.savePhoneModelInfo(params);
+    }
+
+    /**
+     * 导入plt文件信息
+     */
+    @PostMapping("/uploadPltFile")
+    public R uploadPltFile(@RequestParam("file") MultipartFile file){
+        try {
+            String originName = file.getOriginalFilename();
+            String extName = "";
+            logger.info("上传plt文件信息[{}]", originName);
+            if (originName.lastIndexOf(".") >= 0){
+                extName = originName.substring(file.getOriginalFilename().lastIndexOf("."));
+            }
+            ResponseDto response = imageService.uploadFile(file.getBytes(), fileUploadServer + "plt/", extName);
+            Map<String, Object> plt = new HashMap<>();
+            plt.put("uid", UUIDUtil.getUUID());
+            plt.put("url", response.getData());
+            plt.put("name", originName);
+            return R.ok().put("plt", plt);
+        } catch (IOException e) {
+            logger.info("导入plt文件失败", e);
+            return R.error("导入plt文件失败");
+        }
     }
 
 }

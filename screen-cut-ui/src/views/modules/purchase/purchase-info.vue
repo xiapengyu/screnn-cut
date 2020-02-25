@@ -5,7 +5,7 @@
         <el-input v-model="dataForm.orderNo" placeholder="采购单号" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.company" placeholder="所属公司" clearable></el-input>
+        <el-input v-model="dataForm.email" placeholder="点子邮箱" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -72,13 +72,13 @@
         header-align="center"
         align="center"
         label="次数">
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
         prop="comment"
         header-align="center"
         align="center"
         label="回复说明">
-      </el-table-column>-->
+      </el-table-column>
       <el-table-column
           prop="status"
           header-align="center"
@@ -158,7 +158,7 @@
           status: '',
           comment: '',
           orderNo: '',
-          company: ''
+          email: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -190,7 +190,7 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'orderNo': this.dataForm.orderNo,
-            'company': this.dataForm.company
+            'email': this.dataForm.email
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -251,7 +251,7 @@
                   duration: 300,
                   onClose: () => {
                     this.visible = false
-                    this.$emit('refreshDataList')
+                    this.getDataList()
                   }
                 })
               } else {

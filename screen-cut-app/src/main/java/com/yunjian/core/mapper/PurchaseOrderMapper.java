@@ -1,5 +1,7 @@
 package com.yunjian.core.mapper;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -19,6 +21,6 @@ import com.yunjian.core.vo.PurchaseOrderVo;
 @Mapper
 public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder> {
 	
-	IPage<PurchaseOrderVo> selectPageVo(Page<PurchaseOrderVo> page, PurchaseOrder order);
+	IPage<PurchaseOrderVo> selectPageVo(Page<PurchaseOrderVo> page, Map<String,Object> map);
 
 }

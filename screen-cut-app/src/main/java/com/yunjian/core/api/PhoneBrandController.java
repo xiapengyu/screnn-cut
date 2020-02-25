@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,11 +46,32 @@ public class PhoneBrandController {
      */
     @RequestMapping(value="/queryBrandList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDto queryBrandList(){
+    public ResponseDto queryBrandList(@RequestBody Map<String, Object> param){
         logger.info("查询品牌列表");
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-        List<PhoneBrand> list = phoneBrandService.list(new QueryWrapper<PhoneBrand>().eq("delete_flag", 1));
-        response.setData(list);
+
+        String type = StringUtil.obj2String(param.get("type"));
+        if(StringUtils.isEmpty(type)){
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "参数错误");
+        }
+
+        List<PhoneModel> modelList = phoneModelService.list(new QueryWrapper<PhoneModel>().eq("type", Integer.parseInt(type)));
+        List<Integer> brandIdList = new ArrayList<>();
+        modelList.forEach(item -> {
+            if(!brandIdList.contains(item.getBrandId())){
+                brandIdList.add(item.getBrandId());
+            }
+        });
+        logger.info("有数据的品牌");
+        if(brandIdList.isEmpty()){
+            List<PhoneBrand> list = new ArrayList<>();
+            response.setData(list);
+        }else{
+            List<PhoneBrand> list = phoneBrandService.list(new QueryWrapper<PhoneBrand>()
+                    .in("id", brandIdList)
+                    .eq("delete_flag", 1));
+            response.setData(list);
+        }
         return response;
     }
 
@@ -59,7 +81,7 @@ public class PhoneBrandController {
      */
     @RequestMapping(value="/queryBrandListByPage", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDto queryBrandList(@RequestBody Map<String, Object> param){
+    public ResponseDto queryBrandListByPage(@RequestBody Map<String, Object> param){
         logger.info("分页查询品牌列表{}", param);
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         try {
@@ -82,10 +104,17 @@ public class PhoneBrandController {
         logger.info("根据品牌查询机型{}", param);
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         String brandId = StringUtil.obj2String(param.get("id"));
+        String type = StringUtil.obj2String(param.get("type"));
         if(StringUtils.isEmpty(brandId)){
-            return new ResponseDto(Constant.FAIL_CODE, null, "参数错误");
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "参数错误");
         }
-        List<PhoneModel> list = phoneModelService.list(new QueryWrapper<PhoneModel>().eq("brand_id", Integer.parseInt(brandId)));
+        if(StringUtils.isEmpty(type)){
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "参数错误");
+        }
+        List<PhoneModel> list = phoneModelService.list(new QueryWrapper<PhoneModel>()
+                .eq("brand_id", Integer.parseInt(brandId))
+                .eq("type", Integer.parseInt(type))
+                .orderByAsc("sort_num"));
         response.setData(list);
         return response;
     }

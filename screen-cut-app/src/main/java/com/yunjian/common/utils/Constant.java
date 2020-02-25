@@ -164,7 +164,7 @@ public class Constant {
 	/**
 	 * 当前页码
 	 */
-	public static final String PAGE = "page";
+	public static final String PAGE = "currPage";
 	/**
 	 * 每页显示记录数
 	 */

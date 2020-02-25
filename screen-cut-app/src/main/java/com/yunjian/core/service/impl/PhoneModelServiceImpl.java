@@ -72,6 +72,9 @@ public class PhoneModelServiceImpl extends ServiceImpl<PhoneModelMapper, PhoneMo
             model.setPhoneModel(StringUtil.obj2String(params.get("phoneModel")));
             model.setWidth(Integer.parseInt(StringUtil.obj2String(params.get("width"))));
             model.setHeight(Integer.parseInt(StringUtil.obj2String(params.get("height"))));
+            model.setPltUrl(StringUtil.obj2String(params.get("pltUrl")));
+            model.setOriginName(StringUtil.obj2String(params.get("originName")));
+            model.setType(Integer.parseInt(StringUtil.obj2String(params.get("type"))));
             model.setSortNum(Integer.parseInt(StringUtil.obj2String(params.get("sortNum"))));
             model.setStatus(Integer.parseInt(StringUtil.obj2String(params.get("status"))));
             model.setUpdateTime(new Date());

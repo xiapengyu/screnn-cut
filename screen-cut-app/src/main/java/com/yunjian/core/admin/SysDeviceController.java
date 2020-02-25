@@ -2,11 +2,15 @@ package com.yunjian.core.admin;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.service.IImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.ExcelUtil;
-import com.yunjian.common.utils.FileUtil;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.service.IDeviceService;
@@ -55,6 +53,12 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${template.device.url}")
     private String deviceTemplate = "";
+
+    @Value("${tomcat.file.server}")
+    private String fileUploadServer = "";
+
+    @Autowired
+    private IImageService imageService;
 	
 	/**
      * 分页查询设备列表
