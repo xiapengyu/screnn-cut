@@ -31,23 +31,20 @@ public class PurchaseOrder implements Serializable {
      * 采购单编号
      */
     private String orderNo;
-
-    /**
-     * 备注
-     */
-    private String comment;
+    
 
     /**
      * 用户id
      */
     private Integer accountId;
     
-    private String company;
+    private Integer accountType;
 
-    /**
-     * 状态，预留字段
-     */
+    private Integer address_id;
+    
     private Integer status;
+    
+    private String comment;
 
     private Date createTime;
 
@@ -55,12 +52,6 @@ public class PurchaseOrder implements Serializable {
 
     private Integer deleteFlag;
 
-    private String userName;
 
-    private String phone;
-    
-    private String email;
-
-    private String address;
     
 }

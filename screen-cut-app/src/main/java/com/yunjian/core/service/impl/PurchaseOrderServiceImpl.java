@@ -3,6 +3,7 @@ package com.yunjian.core.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -111,10 +112,6 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             order.setComment(param.getComment());
             order.setAccountId(account.getId());
             Address address = addressService.getOne(new QueryWrapper<Address>().eq("id", param.getAddressId()));
-            order.setUserName(address.getUserName());
-            order.setPhone(address.getPhone());
-            order.setEmail(account.getEmail());
-            order.setAddress(address.getAddress());
             order.setStatus(1);
             order.setCreateTime(new Date());
             order.setUpdateTime(new Date());
@@ -167,14 +164,14 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     @Override
     public PageUtils queryOrderByPage4Sys(Map<String, Object> params) {
     	String orderNo = (String) params.get("orderNo");
-    	String company = (String) params.get("company");
+    	String email = (String) params.get("email");
     	
     	Page<PurchaseOrderVo> page = new Page<>();
     	
-    	PurchaseOrder order = new PurchaseOrder();
-    	order.setOrderNo(orderNo);
-    	order.setCompany(company);
-        IPage<PurchaseOrderVo> pageResult = purchaseOrderMapper.selectPageVo(page,order);
+    	Map<String,Object> map = new HashMap<>();
+    	map.put("orderNo", orderNo);
+    	map.put("email", email);
+        IPage<PurchaseOrderVo> pageResult = purchaseOrderMapper.selectPageVo(page,map);
         return new PageUtils(pageResult);
     }
 

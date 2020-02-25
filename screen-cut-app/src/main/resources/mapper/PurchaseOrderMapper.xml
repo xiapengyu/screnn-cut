@@ -6,34 +6,25 @@
         <id column="id" property="id" />
         <result column="order_no" property="orderNo" />
         <result column="account_id" property="accountId" />
-        <result column="company" property="company" />
-        <result column="user_name" property="userName" />
-        <result column="phone" property="phone" />
-        <result column="email" property="email" />
-        <result column="address" property="address" />
+        <result column="account_type" property="accountType" />
+        <result column="address_id" property="address" />
         <result column="status" property="status" />
         <result column="comment" property="comment" />
         <result column="create_time" property="createTime" />
     </resultMap>
     
-    <resultMap id="ExtResultMap" extends="BaseResultMap" type="com.yunjian.core.vo.PurchaseOrderVo">
-    	<association property="account" javaType="com.yunjian.core.entity.Account" >
-    		<id column="id" property="id"/>
-	    	<result column="email" property="email"/>
-	    	<result column="serial_no" property="serialNo"/>
-    	</association>
-    </resultMap>
-    
-    <select id="selectPageVo" parameterType="com.yunjian.core.entity.PurchaseOrder" resultType="com.yunjian.core.vo.PurchaseOrderVo">
-    	select o.order_no,o.status, o.`comment`,o.create_time,a.email as userEmail
+    <select id="selectPageVo" parameterType="java.util.HashMap" resultType="com.yunjian.core.vo.PurchaseOrderVo">
+    	select o.order_no,o.status, o.`comment`,o.create_time,a.email as userEmail,
+    	ad.user_name as userName,ad.phone,ad.address 
     	from tb_purchase_order o
-		left join tb_account a on a.id = o.account_id
+		left join tb_account a on a.id = o.account_id 
+		left join tb_address ad on ad.id = o.address_id 
 		<where>
-		 	<if test="order.orderNo != null and order.orderNo != '' ">
-              and order_no = #{order.orderNo}
+		 	<if test="map.orderNo != null and map.orderNo != '' ">
+              and o.order_no = #{map.orderNo}
             </if>
-		 	<if test="order.company != null and order.company != '' ">
-              and company like CONCAT('%',#{order.company},'%')
+		 	<if test="map.email != null and map.email != '' ">
+              and a.email =#{map.email}
             </if>
 		</where>
 		
