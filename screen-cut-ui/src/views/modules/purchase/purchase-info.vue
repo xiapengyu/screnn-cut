@@ -251,7 +251,7 @@
                   duration: 300,
                   onClose: () => {
                     this.visible = false
-                    this.$emit('refreshDataList')
+                    this.getDataList()
                   }
                 })
               } else {
