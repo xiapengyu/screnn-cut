@@ -50,7 +50,7 @@ public class EmailCodeServiceImpl extends ServiceImpl<EmailCodeMapper, EmailCode
 			this.save(record);
 			//发送邮件
 			logger.info("发送邮件:收件人[{}],验证码[{}]", param.getEmail(), code);
-			MailUtils.sendMail(param.getEmail(), code);
+			//MailUtils.sendMail(param.getEmail(), code);
 		} catch (Exception e) {
 			logger.error("发送邮件报错", e);
 			return new ResponseDto(Constant.FAIL_CODE, null, "发送邮件报错失败");
