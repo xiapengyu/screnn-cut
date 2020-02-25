@@ -51,6 +51,10 @@ public class PhoneBrandController {
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 
         String type = StringUtil.obj2String(param.get("type"));
+        if(StringUtils.isEmpty(type)){
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "参数错误");
+        }
+
         List<PhoneModel> modelList = phoneModelService.list(new QueryWrapper<PhoneModel>().eq("type", Integer.parseInt(type)));
         List<Integer> brandIdList = new ArrayList<>();
         modelList.forEach(item -> {
