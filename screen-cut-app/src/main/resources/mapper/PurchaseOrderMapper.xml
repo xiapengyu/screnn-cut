@@ -14,7 +14,7 @@
     </resultMap>
     
     <select id="selectPageVo" parameterType="java.util.HashMap" resultType="com.yunjian.core.vo.PurchaseOrderVo">
-    	select o.order_no,o.status, o.`comment`,o.create_time,a.email as userEmail,
+    	select o.id,o.order_no,o.status, o.`comment`,o.create_time,a.email as userEmail,
     	ad.user_name as userName,ad.phone,ad.address 
     	from tb_purchase_order o
 		left join tb_account a on a.id = o.account_id 
