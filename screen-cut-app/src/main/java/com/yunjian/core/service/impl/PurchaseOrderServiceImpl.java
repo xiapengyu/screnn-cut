@@ -165,13 +165,22 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     public PageUtils queryOrderByPage4Sys(Map<String, Object> params) {
     	String orderNo = (String) params.get("orderNo");
     	String email = (String) params.get("email");
+    	int accountType = (int) params.get("accountType");
     	
     	Page<PurchaseOrderVo> page = new Page<>();
     	
     	Map<String,Object> map = new HashMap<>();
     	map.put("orderNo", orderNo);
     	map.put("email", email);
-        IPage<PurchaseOrderVo> pageResult = purchaseOrderMapper.selectPageVo(page,map);
+    	map.put("accountType", accountType);
+    	
+    	IPage<PurchaseOrderVo> pageResult = null;
+    	if(accountType==1) { //app用户
+    		pageResult = purchaseOrderMapper.selectPageVoOfAppuser(page,map);
+    	}else { //经销商
+    		pageResult = purchaseOrderMapper.selectPageVoOfDealer(page,map);
+    	}
+    	
         return new PageUtils(pageResult);
     }
 

@@ -61,8 +61,7 @@ public class SysPurchaseOrderController {
 	 */
 	@PostMapping("/detail")
 	public R queryDetail(@RequestBody Map<String, Object> params) {
-		String orderNo = (String) params.get("orderNo");
-		R r = purchaseDetailService.queryPurchaseDetailInfo(orderNo);
+		R r = purchaseDetailService.queryPurchaseDetailInfo(params);
 		return r;
 	}
 
