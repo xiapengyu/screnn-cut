@@ -1,11 +1,11 @@
 <template>
-  <el-dialog 
-    :title="dataForm.op===0 ? '查看' : '修改'"
+  <el-dialog
+    :title="dataForm.op===0 ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-input v-if="false" v-model="dataForm.id"></el-input>
-      <el-form-item label="名称" prop="name" :class="{ 'is-required': true }" >
+      <el-form-item label="地址" prop="name" :class="{ 'is-required': true }" >
         <el-input v-model="dataForm.name" placeholder="名称" :disabled="this.dataForm.op === 0"></el-input>
       </el-form-item>
       <el-form-item label="描述" prop="comment" :class="{ 'is-required': true }">
