@@ -1,6 +1,18 @@
 package com.yunjian.core.api;
 
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
@@ -9,13 +21,6 @@ import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.Setting;
 import com.yunjian.core.service.ISettingService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * <p>
@@ -62,6 +67,50 @@ public class SettingController {
             return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_ERROR_MSG);
         }
         return settingService.saveSetting(param);
+    }
+    
+    /**
+     *设置参数设置为使用中
+     * @return
+     */
+    @RequestMapping(value="/setDefaultSetting", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto setDefaultSetting(@RequestBody Setting param) {
+        logger.info("设置参数设置为使用中{}", JsonUtil.toJsonString(param));
+        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+        if(param.getId()== null){
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_ERROR_MSG);
+        }
+        Account account = SecurityContext.getUserPrincipal();
+        List<Setting> list = settingService.list(new QueryWrapper<Setting>().eq("account_id", account.getId()));
+        Setting defaultSetting = list.get(0);
+        defaultSetting.setIsUse(0);
+        settingService.saveOrUpdate(defaultSetting);
+        
+        Setting setting = settingService.getOne(new QueryWrapper<Setting>().eq("id", param.getId()));
+        setting.setIsUse(1);
+        settingService.saveOrUpdate(setting);
+        return response;
+    }
+    
+    /**
+     *查询正在使用中的参数设置
+     * @return
+     */
+    @RequestMapping(value="/getDefaultSetting", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDto getDefaultSetting() {
+        logger.info("查询默认使用的参数设置");
+        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+        Account account = SecurityContext.getUserPrincipal();
+        List<Setting> list = settingService.list(new QueryWrapper<Setting>().eq("account_id", account.getId()).eq("is_use", 1));
+        if(list.isEmpty()) {
+        	response.setData(null);
+        }else {
+        	Setting defaultSetting = list.get(0);
+            response.setData(defaultSetting);
+        }
+        return response;
     }
 
     /**

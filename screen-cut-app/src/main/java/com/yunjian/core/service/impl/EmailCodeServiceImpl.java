@@ -2,7 +2,6 @@ package com.yunjian.core.service.impl;
 
 import java.util.Date;
 
-import com.yunjian.common.utils.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
