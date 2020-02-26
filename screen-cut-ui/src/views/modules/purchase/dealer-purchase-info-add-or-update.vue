@@ -10,17 +10,17 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-form-item label="采购单号">
-              <el-input v-model="dataForm.orderNo" ></el-input>
+            <el-form-item label="采购单号" >
+              <el-input v-model="dataForm.orderNo" prop=""></el-input>
             </el-form-item>
             <el-form-item label="经销商名称">
-              <el-input v-model="dataForm.dealerName" ></el-input>
+              <el-input v-model="dataForm.dealerName" prop=""></el-input>
             </el-form-item>
             <el-form-item label="其他联系方式">
-              <el-input v-model="dataForm.otherContact" ></el-input>
+              <el-input v-model="dataForm.otherContact" prop=""></el-input>
             </el-form-item>
             <el-form-item label="刀片数">
-              <el-input v-model="dataForm.bladeNo" ></el-input>
+              <el-input v-model="dataForm.bladeNo" prop=""></el-input>
             </el-form-item>
             <el-form-item label="刀片说明">
               <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3"></el-input>
@@ -41,8 +41,12 @@
             <el-form-item label="经销商Email">
               <el-input v-model="dataForm.dealerEmail" ></el-input>
             </el-form-item>
-            <el-form-item label="订单状态">
-              <el-input v-model="dataForm.status" ></el-input>
+            <el-form-item label="订单状态" v-if="dataForm.id!=0">
+              <el-select v-model="dataForm.status">
+                <el-option label="未确认" value="1"></el-option>
+                <el-option label="已确认" value="2"></el-option>
+                <el-option label="已拒绝" value="3"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="膜数">
               <el-input v-model="dataForm.filmNo" ></el-input>
@@ -53,8 +57,8 @@
             <el-form-item label="次数">
               <el-input v-model="dataForm.useTimes" ></el-input>
             </el-form-item>
-            <el-form-item v-if="!dataForm.id" label="创建时间">
-              <el-input v-model="dataForm.createTime"></el-input>
+            <el-form-item v-if="dataForm.id!=0" label="创建时间">
+              <el-input :disabled="true" v-model="dataForm.createTime"></el-input>
             </el-form-item>
             <el-form-item label="回复">
               <el-input type="textarea" :rows="3" v-model="dataForm.comment"></el-input>
@@ -107,32 +111,26 @@
             if (data && data.code === 0) {
               this.dataForm.id = data.order.id
               this.dataForm.orderNo = data.order.orderNo
-              this.dataForm.company = data.orderNo.company
-              this.dataForm.dealerName = data.orderNo.dealerName
-              this.dataForm.dealerEmail = data.orderNo.dealerEmail
-              this.dataForm.otherContact = data.orderNo.otherContact
-              this.dataForm.bladeNo = data.orderNo.bladeNo
-              this.dataForm.bladeExplain = data.orderNo.bladeExplain
-              this.dataForm.filmNo = data.orderNo.filmNo
-              this.dataForm.filmExplain = data.orderNo.filmExplain
-              this.dataForm.deviceNo = data.orderNo.deviceNo
-              this.dataForm.deviceExplain = data.orderNo.deviceExplain
-              this.dataForm.useTimes = data.orderNo.useTimes
-              this.comment = data.order.comment
-              this.createTime = data.order.createTime
-              this.dataForm.status = data.orderNo.status
+              this.dataForm.company = data.order.company
+              this.dataForm.dealerName = data.order.dealerName
+              this.dataForm.dealerEmail = data.order.dealerEmail
+              this.dataForm.otherContact = data.order.otherContact
+              this.dataForm.bladeNo = data.order.bladeNo
+              this.dataForm.bladeExplain = data.order.bladeExplain
+              this.dataForm.filmNo = data.order.filmNo
+              this.dataForm.filmExplain = data.order.filmExplain
+              this.dataForm.deviceNo = data.order.deviceNo
+              this.dataForm.deviceExplain = data.order.deviceExplain
+              this.dataForm.useTimes = data.order.useTimes
+              this.dataForm.comment = data.order.comment
+              this.dataForm.createTime = data.order.createTime
+              this.dataForm.status = data.order.status + ''
             } else {
               this.$message.error(data.msg)
             }
           })
-        }
-      },
-      change (item) {
-        console.log(this.typeIdList)
-      },
-      radioChange (isDiscount) {
-        if (isDiscount === 0) {
-          this.dataForm.discountPrice = 0
+        } else {
+          this.$refs['dataForm'].resetFields()
         }
       },
       saveOrderInfo () {
@@ -142,23 +140,29 @@
               url: this.$http.adornUrl(`/sys/dealerPurchase/save`),
               method: 'post',
               data: this.$http.adornData({
-                'id': this.dataForm.id,
-                'name': this.dataForm.name,
+                'id': this.dataForm.id || undefined,
+                'orderNo': this.dataForm.orderNo,
+                'company': this.dataForm.company,
+                'dealerName': this.dataForm.dealerName,
+                'dealerEmail': this.dataForm.dealerEmail,
+                'otherContact': this.dataForm.otherContact,
+                'bladeNo': this.dataForm.bladeNo,
+                'bladeExplain': this.dataForm.bladeExplain,
+                'filmNo': this.dataForm.filmNo,
+                'filmExplain': this.dataForm.filmExplain,
+                'deviceNo': this.dataForm.deviceNo,
+                'deviceExplain': this.dataForm.deviceExplain,
+                'useTimes': this.dataForm.useTimes,
                 'comment': this.dataForm.comment,
-                'price': this.dataForm.price,
-                'isDiscount': this.dataForm.isDiscount,
-                'discountPrice': this.dataForm.discountPrice,
-                'stock': this.dataForm.stock,
-                'status': this.dataForm.status,
-                'typeIdList': this.typeIdList,
-                'goodsImageList': this.goodsImageList
+                'createTime': this.dataForm.createTime,
+                'status': this.dataForm.status
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',
-                  duration: 300,
+                  duration: 3000,
                   onClose: () => {
                     this.visible = false
                     this.$emit('refreshDataList')

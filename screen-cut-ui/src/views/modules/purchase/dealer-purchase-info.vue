@@ -54,18 +54,36 @@
         header-align="center"
         align="center"
         label="刀片数">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
+            <div slot="content">{{ scope.row.bladeExplain }}</div>
+            <span>{{ scope.row.bladeNo }}</span>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column
         prop="filmNo"
         header-align="center"
         align="center"
         label="膜数">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
+            <div slot="content">{{ scope.row.filmExplain }}</div>
+            <span>{{ scope.row.filmNo }}</span>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column
         prop="deviceNo"
         header-align="center"
         align="center"
         label="机器数">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
+            <div slot="content">{{ scope.row.deviceExplain }}</div>
+            <span>{{ scope.row.deviceNo }}</span>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column
         prop="useTimes"
@@ -237,7 +255,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl('/sys/purchaseOrder/confirm'),
+              url: this.$http.adornUrl('/sys/dealerPurchase/confirm'),
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id,
@@ -264,7 +282,6 @@
       },
       // 新增 / 修改
       addOrUpdateHandle (id) {
-        console.log(id)
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
@@ -301,7 +318,7 @@
       },
       clearQueryData () {
         this.dataForm.orderNo = ''
-        this.dataForm.company = ''
+        this.dataForm.email = ''
         this.getDataList()
       }
     }

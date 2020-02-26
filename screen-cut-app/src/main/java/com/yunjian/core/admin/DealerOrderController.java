@@ -3,7 +3,6 @@ package com.yunjian.core.admin;
 
 import java.util.Map;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yunjian.common.annotation.SysLog;
-import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.DealerOrder;
-import com.yunjian.core.entity.SysDictDataEntity;
 import com.yunjian.core.service.IDealerOrderService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +61,19 @@ public class DealerOrderController {
 	public R info(@PathVariable("id") Long id){
 		DealerOrder order = dealerOrderService.getById(id);
 		return R.ok().put("order", order);
+	}
+	
+	/**
+	 * 确认或者拒绝订单订单信息
+	 */
+	@GetMapping("/confirm")
+	public R confirm(@RequestBody Map<String, Object> params){
+		DealerOrder order = new DealerOrder();
+		order.setId((Long)params.get("id"));
+		order.setStatus((Integer)params.get("status"));
+		order.setComment((String)params.get("comment"));
+		dealerOrderService.updateById(order);
+		return R.ok();
 	}
 
 }
