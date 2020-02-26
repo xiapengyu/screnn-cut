@@ -50,14 +50,14 @@
 	</appender>
 	<!--设置日志打印级别 -->
 	<logger name=" com.yunjian" additivity="false">
-		<level value="INFO" />
+		<level value="DEBUG" />
 		<appender-ref ref="APPENDER" />
 		<appender-ref ref="ERRORAPPENDER" />
 		<appender-ref ref="Console" />
 	</logger>
 	<!--设置框架日志打印级别 -->
 	<root>
-		<level value="INFO" />
+		<level value="DEBUG" />
 		<appender-ref ref="APPENDER" />
 		<appender-ref ref="ERRORAPPENDER" />
 		<appender-ref ref="Console" />

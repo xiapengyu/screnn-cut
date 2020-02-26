@@ -144,7 +144,6 @@
 </template>
 
 <script>
-  import AddOrUpdate from './purchase-info-add-or-update'
   import QueryDetail from './purchase-info-query-detail'
 
   export default {
@@ -170,8 +169,7 @@
       }
     },
     components: {
-      QueryDetail,
-      AddOrUpdate
+      QueryDetail
     },
     activated () {
       this.getDataList()
@@ -220,7 +218,7 @@
       queryDetailHandle (val) {
         this.queryDetailVisible = true
         this.$nextTick(() => {
-          this.$refs.queryDetail.init(val, 1)
+          this.$refs.queryDetail.init(val, 1) // 1：app用户，2经销商
         })
       },
       // 打开确认/拒绝窗口
@@ -264,13 +262,6 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id, op)
-        })
-      },
-      // 新增
-      addHandle () {
-        this.addVisible = true
-        this.$nextTick(() => {
-          this.$refs.addGoods.init()
         })
       },
       // 删除

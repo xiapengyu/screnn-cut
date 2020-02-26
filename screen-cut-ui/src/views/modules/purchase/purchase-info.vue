@@ -103,7 +103,7 @@
         width="200"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo)">详情</el-button>
+          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.id)">详情</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)">确认</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)">拒绝</el-button>
           <!--<el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>-->
