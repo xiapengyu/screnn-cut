@@ -5,7 +5,7 @@
         <el-input v-model="dataForm.orderNo" placeholder="采购单号" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.email" placeholder="点子邮箱" clearable></el-input>
+        <el-input v-model="dataForm.email" placeholder="电子邮箱" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -190,7 +190,8 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'orderNo': this.dataForm.orderNo,
-            'email': this.dataForm.email
+            'email': this.dataForm.email,
+            'accountType': 2
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -222,7 +223,7 @@
       queryDetailHandle (val) {
         this.queryDetailVisible = true
         this.$nextTick(() => {
-          this.$refs.queryDetail.init(val)
+          this.$refs.queryDetail.init(val, 2) // 1：app用户，2经销商
         })
       },
       // 打开确认/拒绝窗口
