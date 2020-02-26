@@ -47,7 +47,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 		String detail = param.getAddress();
 		try {
 			Address address = null;
-			if (param.getId() != null) {
+			if (param.getId() != null && param.getId() > 0) {
 				address = this.getOne(new QueryWrapper<Address>().eq("id", param.getId()));
 				address.setUpdateTime(new Date());
 			} else {

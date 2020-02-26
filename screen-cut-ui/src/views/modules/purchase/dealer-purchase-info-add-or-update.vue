@@ -1,66 +1,71 @@
 <template>
   <el-dialog
-    :title="dataForm.op===0 ? '新增' : '修改'"
+    :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
-    :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+    :visible.sync="visible"
+    append-to-body>
+    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px" size="mini">
       <el-input v-if="false" v-model="dataForm.id"></el-input>
-      <el-form-item label="地址" prop="name" :class="{ 'is-required': true }" >
-        <el-input v-model="dataForm.name" placeholder="名称" :disabled="this.dataForm.op === 0"></el-input>
-      </el-form-item>
-      <el-form-item label="描述" prop="comment" :class="{ 'is-required': true }">
-        <el-input v-model="dataForm.comment" placeholder="描述" :disabled="this.dataForm.op === 0"></el-input>
-      </el-form-item>
-      <el-form-item label="价格" prop="price" :class="{ 'is-required': true }">
-          <el-input v-model="dataForm.price" placeholder="0.00" :disabled="this.dataForm.op === 0">
-            <template slot="append">元</template>
-          </el-input>
-      </el-form-item>
-      <el-form-item label="是否打折" size="mini" prop="isDiscount" :class="{ 'is-required': true }">
-        <el-radio-group v-model="dataForm.isDiscount" @change="radioChange(this.dataForm.isDiscount)" :disabled="this.dataForm.op === 0">
-          <el-radio :label="0">否</el-radio>
-          <el-radio :label="1">是</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="折扣价" prop="discountPrice" v-if="dataForm.isDiscount === 1">
-          <el-input v-model="dataForm.discountPrice" placeholder="0.00" :disabled="this.dataForm.op === 0">
-            <template slot="append">元</template>
-          </el-input>
-      </el-form-item>
-      <el-form-item label="商品类型" :class="{ 'is-required': true }">
-        <el-checkbox-group v-model="typeIdList" :disabled="this.dataForm.op === 0">
-          <el-checkbox v-for="item in this.typeList" @change="change(item)" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="图片" :class="{ 'is-required': true }">
-          <el-upload
-            list-type="picture-card"
-            :action=this.uploadUrl
-            :on-preview="handlePictureCardPreview"
-            :on-remove="handleRemove"
-            :on-success="handleAvatarSuccess"
-            :file-list=this.imageDtoList
-            :before-upload="beforeAvatarUpload"
-            :disabled="this.dataForm.op === 0">
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="">
-          </el-dialog>
-        </el-form-item>
-      <el-form-item label="库存" prop="stock" :class="{ 'is-required': true }">
-          <el-input-number v-model="dataForm.stock" controls-position="right" :min="0" label="库存" :disabled="this.dataForm.op === 0"></el-input-number>
-      </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status" :class="{ 'is-required': true }">
-        <el-radio-group v-model="dataForm.status" :disabled="this.dataForm.op === 0">
-          <el-radio :label="0">下架</el-radio>
-          <el-radio :label="1">上架</el-radio>
-        </el-radio-group>
-      </el-form-item>
+
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <el-form-item label="采购单号">
+              <el-input v-model="dataForm.orderNo" ></el-input>
+            </el-form-item>
+            <el-form-item label="经销商名称">
+              <el-input v-model="dataForm.dealerName" ></el-input>
+            </el-form-item>
+            <el-form-item label="其他联系方式">
+              <el-input v-model="dataForm.otherContact" ></el-input>
+            </el-form-item>
+            <el-form-item label="刀片数">
+              <el-input v-model="dataForm.bladeNo" ></el-input>
+            </el-form-item>
+            <el-form-item label="刀片说明">
+              <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3"></el-input>
+            </el-form-item>
+            <el-form-item label="机器数">
+              <el-input v-model="dataForm.deviceNo" ></el-input>
+            </el-form-item>
+            <el-form-item label="机器说明">
+              <el-input type="textarea" v-model="dataForm.deviceExplain" :rows="3"></el-input>
+            </el-form-item>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <el-form-item label="公司">
+              <el-input v-model="dataForm.company" ></el-input>
+            </el-form-item>
+            <el-form-item label="经销商Email">
+              <el-input v-model="dataForm.dealerEmail" ></el-input>
+            </el-form-item>
+            <el-form-item label="订单状态">
+              <el-input v-model="dataForm.status" ></el-input>
+            </el-form-item>
+            <el-form-item label="膜数">
+              <el-input v-model="dataForm.filmNo" ></el-input>
+            </el-form-item>
+            <el-form-item label="膜说明">
+              <el-input type="textarea" v-model="dataForm.filmExplain" :rows="3"></el-input>
+            </el-form-item>
+            <el-form-item label="次数">
+              <el-input v-model="dataForm.useTimes" ></el-input>
+            </el-form-item>
+            <el-form-item v-if="!dataForm.id" label="创建时间">
+              <el-input v-model="dataForm.createTime"></el-input>
+            </el-form-item>
+            <el-form-item label="回复">
+              <el-input type="textarea" :rows="3" v-model="dataForm.comment"></el-input>
+            </el-form-item>
+          </div>
+        </el-col>
+      </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">关闭</el-button>
-      <el-button v-if="this.dataForm.op === 1" @click="saveGoodsInfo()">保存</el-button>
+      <el-button @click="saveOrderInfo()" type="primary">保存</el-button>
     </span>
   </el-dialog>
 </template>
@@ -69,74 +74,58 @@
   export default {
     data () {
       return {
-        visible: true,
-        saleStatusList: [],
-        uploadUrl: '',
-        goodsImageList: [],
-        imageDtoList: [],
-        dialogImageUrl: '',
-        dialogVisible: false,
-        typeList: [],
-        typeIdList: [],
+        visible: false,
         dataForm: {
-          id: '',
-          op: '',
-          name: '',
+          orderNo: '',
+          company: '',
+          dealerName: '',
+          dealerEmail: '',
+          otherContact: '',
+          bladeNo: '',
+          bladeExplain: '',
+          filmNo: '',
+          filmExplain: '',
+          deviceNo: '',
+          deviceExplain: '',
+          useTimes: '',
           comment: '',
-          price: 0,
-          isDiscount: 0,
-          discountPrice: 0,
-          stock: 0,
-          status: 1
-        },
-        dataRule: {
-          name: [
-            { required: true, message: '名称不能为空', trigger: 'blur' }
-          ],
-          comment: [
-            { required: true, message: '描述不能为空', trigger: 'blur' }
-          ],
-          price: [
-            { required: true, message: '价格不能为空', trigger: 'blur' }
-          ]
+          createTime: '',
+          status: ''
         }
       }
     },
     methods: {
-      init (id, op) {
-        this.dataForm.id = id
-        this.dataForm.op = op
-        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadImage'
-        this.dataForm.isDiscount = 0
-        this.typeIdList = []
-        if (this.$refs['dataForm'] !== undefined) {
-          this.$refs['dataForm'].resetFields()
-        }
-        this.$http({
-          url: this.$http.adornUrl(`/sys/goods/info`),
-          method: 'post',
-          data: this.$http.adornData({
-            'id': this.dataForm.id
+      init (id) {
+        this.visible = true
+        this.dataForm.id = id || 0
+        if (this.dataForm.id) {
+          this.$http({
+            url: this.$http.adornUrl(`/sys/dealerPurchase/info/${this.dataForm.id}`),
+            method: 'get',
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.dataForm.id = data.order.id
+              this.dataForm.orderNo = data.order.orderNo
+              this.dataForm.company = data.orderNo.company
+              this.dataForm.dealerName = data.orderNo.dealerName
+              this.dataForm.dealerEmail = data.orderNo.dealerEmail
+              this.dataForm.otherContact = data.orderNo.otherContact
+              this.dataForm.bladeNo = data.orderNo.bladeNo
+              this.dataForm.bladeExplain = data.orderNo.bladeExplain
+              this.dataForm.filmNo = data.orderNo.filmNo
+              this.dataForm.filmExplain = data.orderNo.filmExplain
+              this.dataForm.deviceNo = data.orderNo.deviceNo
+              this.dataForm.deviceExplain = data.orderNo.deviceExplain
+              this.dataForm.useTimes = data.orderNo.useTimes
+              this.comment = data.order.comment
+              this.createTime = data.order.createTime
+              this.dataForm.status = data.orderNo.status
+            } else {
+              this.$message.error(data.msg)
+            }
           })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.visible = true
-            this.dataForm.id = data.goods.id
-            this.dataForm.name = data.goods.name
-            this.dataForm.comment = data.goods.comment
-            this.dataForm.price = data.goods.price
-            this.dataForm.isDiscount = data.goods.isDiscount
-            this.dataForm.discountPrice = data.goods.discountPrice
-            this.dataForm.stock = data.goods.stock
-            this.dataForm.status = data.goods.status
-            this.goodsImageList = data.goodsImageList
-            this.typeList = data.typeList
-            this.typeIdList = data.typeIdList
-            this.imageDtoList = data.imageDtoList
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
+        }
       },
       change (item) {
         console.log(this.typeIdList)
@@ -146,11 +135,11 @@
           this.dataForm.discountPrice = 0
         }
       },
-      saveGoodsInfo () {
+      saveOrderInfo () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/goods/saveGoods`),
+              url: this.$http.adornUrl(`/sys/dealerPurchase/save`),
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id,

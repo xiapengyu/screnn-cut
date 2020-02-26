@@ -70,4 +70,6 @@ public class PhoneModel implements Serializable {
 
     private Integer type;
 
+    private String md5;
+
 }

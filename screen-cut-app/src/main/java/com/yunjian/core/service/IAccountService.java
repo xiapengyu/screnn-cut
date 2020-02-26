@@ -34,4 +34,6 @@ public interface IAccountService extends IService<Account> {
 
 	ResponseDto modifyAccountInfo(Account param);
 
+    ResponseDto modifyPassword(Account param);
+
 }

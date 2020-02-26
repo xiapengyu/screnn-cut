@@ -255,4 +255,19 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 		return response;
 	}
 
+	@Override
+	public ResponseDto modifyPassword(Account param) {
+		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+		try {
+			Account account = this.getOne(new QueryWrapper<Account>().eq("id", param.getId()));
+			account.setPassword(MD5Util.getMD5String(param.getPassword().trim()));
+			account.setUpdateTime(new Date());
+			this.saveOrUpdate(account);
+		} catch (Exception e) {
+			logger.error("修改用户密码失败", e);
+			return new ResponseDto(Constant.FAIL_CODE, null, Constant.FAIL_MESSAGE);
+		}
+		return response;
+	}
+
 }

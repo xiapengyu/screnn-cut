@@ -33,7 +33,7 @@ public class ImageServiceImpl implements IImageService {
             String destFilePath = serverUrl + UUIDUtil.getUUID().replaceAll("-", "") + extName;
             WebResource resource = client.resource(destFilePath);
             String str = resource.put(String.class, bytes);
-            logger.info("图片上传成功>>>[{}]", str);
+            logger.info("图片上传成功>>>[{}]", destFilePath);
             response.setData(destFilePath);
         } catch (Exception e) {
             logger.error("上传文件失败", e);

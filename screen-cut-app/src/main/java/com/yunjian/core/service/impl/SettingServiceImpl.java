@@ -34,7 +34,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         try {
             Account account = SecurityContext.getUserPrincipal();
-            if(param.getId() == null){
+            if(param.getId() == null || param.getId() <= 0){
                 param.setCreateTime(new Date());
                 param.setUpdateTime(new Date());
                 param.setAccountId(account.getId());
