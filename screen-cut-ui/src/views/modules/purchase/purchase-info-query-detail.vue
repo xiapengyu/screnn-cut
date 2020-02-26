@@ -6,9 +6,21 @@
 
     <div>
       <table style="width: 100%;">
-        <tr><td style="width: 50%;">采购单号: {{ order.orderNo }}</td><td>所属公司: {{ order.company }}</td></tr>
-        <tr><td>收货人姓名: {{ order.userName }}</td><td>客户邮箱: {{ order.email }}</td></tr>
-        <tr><td>收货人联系方式: {{ order.phone }}</td><td>配送地址: {{ order.address }}</td></tr>
+        <tr>
+          <td style="width: 50%;">采购单号: {{ order.orderNo }}</td>
+          <td>收货人姓名: {{ order.userName }}</td></tr>
+        <tr>
+          <td>客户邮箱: {{ order.userEmail }}</td>
+          <td>收货人联系方式: {{ order.phone }}</td>
+        </tr>
+        <tr>
+          <td>配送单状态:
+            <el-tag v-if="order.status === 1" size="small">未确认</el-tag>
+            <el-tag v-else-if="order.status === 2" size="small" type="success">已确认</el-tag>
+            <el-tag v-else-if="order.status === 3" size="small" type="danger">已拒绝</el-tag>
+          </td>
+          <td>配送地址: {{ order.address }}</td>
+        </tr>
         <tr><td colspan="2">回复说明: {{ order.comment }}</td></tr>
       </table>
     </div>
@@ -72,7 +84,7 @@
       }
     },
     methods: {
-      init (orderNo) {
+      init (id, accountType) {
         this.visible = true
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
@@ -81,7 +93,8 @@
           url: this.$http.adornUrl(`/sys/purchaseOrder/detail`),
           method: 'post',
           data: this.$http.adornData({
-            'orderNo': orderNo
+            'id': id,
+            'accountType': accountType
           })
         }).then(({data}) => {
           this.allTotalPrice = data.allTotalPrice

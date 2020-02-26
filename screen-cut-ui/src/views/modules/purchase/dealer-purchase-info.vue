@@ -5,12 +5,12 @@
         <el-input v-model="dataForm.orderNo" placeholder="采购单号" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.email" placeholder="点子邮箱" clearable></el-input>
+        <el-input v-model="dataForm.email" placeholder="电子邮箱" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
-        <el-button type="primary" @click="addHandle()">新增</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -25,50 +25,68 @@
         align="center"
         label="采购单号">
       </el-table-column>
-      <!--<el-table-column
+      <el-table-column
         prop="company"
         header-align="center"
         align="center"
         label="所属公司">
       </el-table-column>
       <el-table-column
-        prop="userName"
+        prop="dealerName"
         header-align="center"
         align="center"
-        label="客户名称">
-      </el-table-column>-->
-      <el-table-column
-        prop="userEmail"
-        header-align="center"
-        align="center"
-        label="客户邮箱">
+        label="经销商名称">
       </el-table-column>
       <el-table-column
-        prop="phone"
+        prop="dealerEmail"
         header-align="center"
         align="center"
-        label="电话">
+        label="经销商邮箱">
       </el-table-column>
-      <!--<el-table-column
-        prop="discountPrice"
+      <el-table-column
+        prop="otherContact"
+        header-align="center"
+        align="center"
+        label="其他练习方式">
+      </el-table-column>
+      <<el-table-column
+        prop="bladeNo"
         header-align="center"
         align="center"
         label="刀片数">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
+            <div slot="content">{{ scope.row.bladeExplain }}</div>
+            <span>{{ scope.row.bladeNo }}</span>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="saleAmount"
+        prop="filmNo"
         header-align="center"
         align="center"
         label="膜数">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
+            <div slot="content">{{ scope.row.filmExplain }}</div>
+            <span>{{ scope.row.filmNo }}</span>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="stock"
+        prop="deviceNo"
         header-align="center"
         align="center"
         label="机器数">
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
+            <div slot="content">{{ scope.row.deviceExplain }}</div>
+            <span>{{ scope.row.deviceNo }}</span>
+          </el-tooltip>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="status"
+        prop="useTimes"
         header-align="center"
         align="center"
         label="次数">
@@ -103,10 +121,10 @@
         width="200"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.orderNo)">详情</el-button>
+          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.id)">详情</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)">确认</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)">拒绝</el-button>
-          <!--<el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>-->
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -123,7 +141,7 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <query-detail v-if="queryDetailVisible" ref="queryDetail" @refreshDataList="getDataList"></query-detail>
-    <addGoods v-if="addVisible" ref="addGoods" @refreshDataList="getDataList"></addGoods>
+    <add-or-update v-if="addVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
 
 
     <el-dialog
@@ -131,7 +149,7 @@
       :visible.sync="confirmDialogVisible"
       width="50%">
 
-      <el-form :model="dataForm" ref="dataForm" :rules="dataRules" @keyup.enter.native="confirmSubmit()" label-width="100px">
+      <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="confirmSubmit()" label-width="100px">
         <el-input v-if="false" prop="id" v-model="dataForm.id"></el-input>
         <el-form-item label="回复" prop="comment">
           <el-input type="textarea" v-model="dataForm.comment" placeholder="回复内容" :rows="5"></el-input>
@@ -147,7 +165,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './purchase-info-add-or-update'
+  import AddOrUpdate from './dealer-purchase-info-add-or-update'
   import QueryDetail from './purchase-info-query-detail'
 
   export default {
@@ -184,13 +202,14 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/purchaseOrder/list'),
+          url: this.$http.adornUrl('/sys/dealerPurchase/list'),
           method: 'POST',
           data: this.$http.adornData({
             'page': this.pageIndex,
             'limit': this.pageSize,
             'orderNo': this.dataForm.orderNo,
-            'email': this.dataForm.email
+            'email': this.dataForm.email,
+            'accountType': 2
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -222,7 +241,7 @@
       queryDetailHandle (val) {
         this.queryDetailVisible = true
         this.$nextTick(() => {
-          this.$refs.queryDetail.init(val)
+          this.$refs.queryDetail.init(val, 2) // 1：app用户，2经销商
         })
       },
       // 打开确认/拒绝窗口
@@ -236,7 +255,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl('/sys/purchaseOrder/confirm'),
+              url: this.$http.adornUrl('/sys/dealerPurchase/confirm'),
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id,
@@ -261,18 +280,11 @@
           }
         })
       },
-      // 查看 / 修改
-      addOrUpdateHandle (id, op) {
+      // 新增 / 修改
+      addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id, op)
-        })
-      },
-      // 新增
-      addHandle () {
-        this.addVisible = true
-        this.$nextTick(() => {
-          this.$refs.addGoods.init()
+          this.$refs.addOrUpdate.init(id)
         })
       },
       // 删除
@@ -306,7 +318,7 @@
       },
       clearQueryData () {
         this.dataForm.orderNo = ''
-        this.dataForm.company = ''
+        this.dataForm.email = ''
         this.getDataList()
       }
     }

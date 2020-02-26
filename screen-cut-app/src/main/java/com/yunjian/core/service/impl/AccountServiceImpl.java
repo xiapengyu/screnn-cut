@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.service.IDeviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +30,12 @@ import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.AccountCache;
+import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.EmailCode;
 import com.yunjian.core.mapper.AccountMapper;
 import com.yunjian.core.service.IAccountCacheService;
 import com.yunjian.core.service.IAccountService;
+import com.yunjian.core.service.IDeviceService;
 import com.yunjian.core.service.IEmailCodeService;
 
 /**
@@ -260,12 +260,13 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
 			Account account = SecurityContext.getUserPrincipal();
-			account.setPassword(MD5Util.getMD5String(param.getPassword().trim()));
-			account.setUpdateTime(new Date());
-			this.saveOrUpdate(account);
+			Account a = this.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
+			a.setPassword(MD5Util.getMD5String(param.getPassword().trim()));
+			a.setUpdateTime(new Date());
+			this.saveOrUpdate(a);
 		} catch (Exception e) {
-			 logger.error("修改用户密码失败", e);
-			 return new ResponseDto(Constant.FAIL_CODE, null, Constant.FAIL_MESSAGE);
+			logger.error("修改用户密码失败", e);
+			return new ResponseDto(Constant.FAIL_CODE, null, Constant.FAIL_MESSAGE);
 		}
 		return response;
 	}

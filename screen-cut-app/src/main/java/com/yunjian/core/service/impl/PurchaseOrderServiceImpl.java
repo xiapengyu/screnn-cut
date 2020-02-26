@@ -32,7 +32,6 @@ import com.yunjian.core.dto.OrderRespDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
-import com.yunjian.core.entity.Address;
 import com.yunjian.core.entity.Goods;
 import com.yunjian.core.entity.GoodsCart;
 import com.yunjian.core.entity.GoodsImg;
@@ -40,7 +39,6 @@ import com.yunjian.core.entity.GoodsType;
 import com.yunjian.core.entity.PurchaseDetail;
 import com.yunjian.core.entity.PurchaseOrder;
 import com.yunjian.core.mapper.PurchaseOrderMapper;
-import com.yunjian.core.service.IAddressService;
 import com.yunjian.core.service.IGoodsCartService;
 import com.yunjian.core.service.IGoodsImgService;
 import com.yunjian.core.service.IGoodsService;
@@ -64,8 +62,6 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
 
     @Autowired
     private IPurchaseDetailService purchaseDetailService;
-    @Autowired
-    private IAddressService addressService;
     @Autowired
     private IGoodsService goodsService;
     @Autowired
@@ -111,7 +107,8 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             order.setOrderNo(createOrderNo());
             order.setComment(param.getComment());
             order.setAccountId(account.getId());
-            Address address = addressService.getOne(new QueryWrapper<Address>().eq("id", param.getAddressId()));
+            //Address address = addressService.getOne(new QueryWrapper<Address>().eq("id", param.getAddressId()));
+            order.setAddress_id(param.getAddressId());
             order.setStatus(1);
             order.setCreateTime(new Date());
             order.setUpdateTime(new Date());
@@ -165,13 +162,22 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
     public PageUtils queryOrderByPage4Sys(Map<String, Object> params) {
     	String orderNo = (String) params.get("orderNo");
     	String email = (String) params.get("email");
+    	int accountType = (int) params.get("accountType");
     	
     	Page<PurchaseOrderVo> page = new Page<>();
     	
     	Map<String,Object> map = new HashMap<>();
     	map.put("orderNo", orderNo);
     	map.put("email", email);
-        IPage<PurchaseOrderVo> pageResult = purchaseOrderMapper.selectPageVo(page,map);
+    	map.put("accountType", accountType);
+    	
+    	IPage<PurchaseOrderVo> pageResult = null;
+    	if(accountType==1) { //app用户
+    		pageResult = purchaseOrderMapper.selectPageVoOfAppuser(page,map);
+    	}else { //经销商
+    		pageResult = purchaseOrderMapper.selectPageVoOfDealer(page,map);
+    	}
+    	
         return new PageUtils(pageResult);
     }
 

@@ -1,16 +1,15 @@
 package com.yunjian.core.service.impl;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.yunjian.common.utils.*;
-import com.yunjian.core.dto.ResponseDto;
-import com.yunjian.core.service.IImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.UUIDUtil;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.service.IImageService;
 
 /**
  * <p>
@@ -32,8 +31,8 @@ public class ImageServiceImpl implements IImageService {
             Client client = Client.create();
             String destFilePath = serverUrl + UUIDUtil.getUUID().replaceAll("-", "") + extName;
             WebResource resource = client.resource(destFilePath);
-            String str = resource.put(String.class, bytes);
-            logger.info("图片上传成功>>>[{}]", str);
+            resource.put(String.class, bytes);
+            logger.info("图片上传成功>>>[{}]", destFilePath);
             response.setData(destFilePath);
         } catch (Exception e) {
             logger.error("上传文件失败", e);

@@ -1,5 +1,7 @@
 package com.yunjian.core.service;
 
+import java.util.Map;
+
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.PurchaseDetail;
@@ -14,6 +16,6 @@ import com.yunjian.core.entity.PurchaseDetail;
  */
 public interface IPurchaseDetailService extends IService<PurchaseDetail> {
 
-	R queryPurchaseDetailInfo(String orderNo);
+	R queryPurchaseDetailInfo(Map<String, Object> params);
 
 }

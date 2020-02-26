@@ -2,21 +2,22 @@ package com.yunjian.core.service.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.PurchaseDetail;
-import com.yunjian.core.entity.PurchaseOrder;
 import com.yunjian.core.mapper.PurchaseDetailMapper;
+import com.yunjian.core.mapper.PurchaseOrderMapper;
 import com.yunjian.core.service.IPurchaseDetailService;
 import com.yunjian.core.service.IPurchaseOrderService;
 import com.yunjian.core.vo.PurchaseDetailVo;
+import com.yunjian.core.vo.PurchaseOrderVo;
 
 /**
  * <p>
@@ -35,28 +36,34 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailMapper,
 	@Autowired
     private IPurchaseOrderService purchaseOrderService;
 	
+	@Resource
+    private PurchaseOrderMapper purchaseOrderMapper;
+	
 	@Override
-	public R queryPurchaseDetailInfo(String orderNo) {
-		QueryWrapper<PurchaseOrder> queryWrapper = new QueryWrapper<PurchaseOrder>();
-    	queryWrapper.eq("order_no", orderNo);
-    	List<PurchaseOrder> orderList = purchaseOrderService.list(queryWrapper);
-    	R r = R.ok();
-    	if(orderList!=null && orderList.size() > 0) {
-    		List<PurchaseDetailVo> detailList = purchaseDetailMapper.queryPurchaseDetailList(orderNo);
-    		double allTotalPrice = 0;
-    		for(PurchaseDetailVo vo : detailList) {
-    			double totalPrice = vo.getAmount() * vo.getGoods().getDiscountPrice().doubleValue();
-    			vo.setTotalPrice(totalPrice);
-    			allTotalPrice += totalPrice;
-    		}
-    		
-    		BigDecimal bg = new BigDecimal(allTotalPrice);
-    		allTotalPrice = bg.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();
-    		
-    		r.put("order", orderList.get(0));
-    		r.put("detailList", detailList);
-    		r.put("allTotalPrice", allTotalPrice);
+	public R queryPurchaseDetailInfo(Map<String, Object> params) {		
+		int accountType = (int) params.get("accountType");
+		PurchaseOrderVo orderVo = null;
+    	if(accountType==1) {
+    		orderVo = purchaseOrderMapper.queryPurchaseOrderOfAppuser(params);
+    	}else {
+    		orderVo = purchaseOrderMapper.queryPurchaseOrderOfDealer(params);
     	}
+    	
+    	R r = R.ok();
+    	List<PurchaseDetailVo> detailList = purchaseDetailMapper.queryPurchaseDetailList(orderVo.getOrderNo());
+    	double allTotalPrice = 0;
+    	for(PurchaseDetailVo vo : detailList) {
+    		double totalPrice = vo.getAmount() * vo.getGoods().getDiscountPrice().doubleValue();
+    		vo.setTotalPrice(totalPrice);
+    		allTotalPrice += totalPrice;
+    	}
+    	
+    	BigDecimal bg = new BigDecimal(allTotalPrice);
+    	allTotalPrice = bg.setScale(2, BigDecimal.ROUND_CEILING).doubleValue();
+    	
+    	r.put("order", orderVo);
+    	r.put("detailList", detailList);
+    	r.put("allTotalPrice", allTotalPrice);
 		return r;
 	}
 

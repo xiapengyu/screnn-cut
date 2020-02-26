@@ -51,6 +51,9 @@
           <el-radio :label="3">背贴</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="PLT文件MD5" size="mini" prop="md5" :class="{ 'is-required': true }">
+        <el-input v-model="dataForm.md5" placeholder="PLT文件MD5"></el-input>
+      </el-form-item>
       <el-form-item label="PLT文件" prop="pltUrl" :class="{ 'is-required': true }">
         <el-upload
           class="upload-demo"
@@ -97,7 +100,8 @@
           height: '',
           type: '',
           pltUrl: '',
-          originName: ''
+          originName: '',
+          md5: ''
         },
         dataRule: {
           phoneImage: [
@@ -120,6 +124,9 @@
           ],
           height: [
             { required: true, message: '屏幕高度不能为空', trigger: 'blur' }
+          ],
+          md5: [
+            { required: true, message: 'PLT文件md5值不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -165,6 +172,7 @@
               this.dataForm.type = data.model.type
               this.dataForm.pltUrl = data.model.pltUrl
               this.dataForm.originName = data.model.originName
+              this.dataForm.md5 = data.model.md5
               this.brandList = data.brandList
               this.fileList.push(data.plt)
             } else {
@@ -191,7 +199,8 @@
                 'status': this.dataForm.status,
                 'type': this.dataForm.type,
                 'pltUrl': this.dataForm.pltUrl,
-                'originName': this.dataForm.originName
+                'originName': this.dataForm.originName,
+                'md5': this.dataForm.md5
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

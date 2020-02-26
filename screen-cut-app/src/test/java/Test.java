@@ -1,11 +1,13 @@
+import com.yunjian.common.utils.DateUtils;
 import com.yunjian.core.dto.AccountDto;
+
+import java.util.Date;
 
 public class Test {
     public static void main(String[] args){
-        System.out.println((int)((Math.random()*9+1)*1000000));
-
-        AccountDto dto = new AccountDto();
-        dto.setId(1);
-        System.out.println(dto.getId());
+        String redeemNo = "";
+        redeemNo = DateUtils.format(new Date(), "yyyyMMddHHmmss")
+                + "I" + String.format("%0" + 5 + "d", 1);
+        System.out.println(redeemNo);
     }
 }

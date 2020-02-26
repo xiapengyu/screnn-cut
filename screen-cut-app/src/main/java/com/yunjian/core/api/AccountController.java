@@ -36,7 +36,6 @@ public class AccountController {
 		logger.info("修改用户信息{}", JsonUtil.toJsonString(param));
 		return accountServiceImpl.modifyAccountInfo(param);
 	}
-	
 	/**
 	 *修改用户密码
 	 * @param param

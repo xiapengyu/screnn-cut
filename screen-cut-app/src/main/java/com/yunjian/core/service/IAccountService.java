@@ -1,14 +1,13 @@
 package com.yunjian.core.service;
 
+import java.util.Map;
+
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.dto.AccountDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Account;
-
-import java.util.Map;
-
-import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -36,5 +35,4 @@ public interface IAccountService extends IService<Account> {
 
 	ResponseDto modifyPassword(Account param);
 	
-
 }

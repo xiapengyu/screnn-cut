@@ -38,7 +38,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
             //第一个参数配置默认使用
             List<Setting> list = this.list(new QueryWrapper<Setting>().eq("account_id", account.getId()));
             int isUse = list.isEmpty() ? 1 : 0;
-            if(param.getId() == null){
+            if(param.getId() == null || param.getId() <= 0){
                 param.setCreateTime(new Date());
                 param.setUpdateTime(new Date());
                 param.setAccountId(account.getId());
