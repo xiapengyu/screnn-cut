@@ -4,8 +4,11 @@ package com.yunjian.core.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
 import com.yunjian.core.dto.OrderRespDto;
+import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IPurchaseOrderService;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.service.IAccountService;
 
@@ -59,13 +58,13 @@ public class SysAccountController {
     public R queryTotalAccount(){
         logger.info("所有用户列表");
         try {
-			List<Account> list = accountService.list(new QueryWrapper<Account>()
-			        .eq("delete_flag", 1)
-			        .orderByDesc("create_time"));
-			Account temp = new Account();
-			temp.setId(0);
-			temp.setEmail("全部");
-			list.add(0, temp);
+            QueryWrapper<Account> query = new QueryWrapper<Account>();
+            query.eq("delete_flag", 1).orderByDesc("create_time");
+            SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+            if (loginUser.getUserId() != Constant.SUPER_ADMIN) {
+                query.eq("dealer_id", loginUser.getUserId().intValue());
+            }
+			List<Account> list = accountService.list(query);
 			return R.ok().put("accountList", list);
 		} catch (Exception e) {
 			logger.error("查询用户列表失败", e);

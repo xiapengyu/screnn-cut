@@ -40,17 +40,12 @@ public class Device implements Serializable {
 	/**
 	 * 经销商id
 	 */
-	private Integer distributorId;
+	private Long creatorId;
 
 	/**
 	 * 经销商名称
 	 */
-	private String distributorName;
-
-	/**
-	 * 经销商标识
-	 */
-	private String identifier;
+	private String creatorName;
 
 	/**
 	 * 状态 1正常 0禁用

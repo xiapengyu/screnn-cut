@@ -9,8 +9,10 @@ import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.RedeemCode;
 import com.yunjian.core.entity.RedeemRecord;
+import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.mapper.RedeemCodeMapper;
 import com.yunjian.core.service.*;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,10 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
         if(!StringUtils.isEmpty(status)){
             queryWrapper.like("status", status);
         }
+        SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        if(loginUser.getUserId() != Constant.SUPER_ADMIN){
+            queryWrapper.eq("creator_id", loginUser.getUserId().intValue());
+        }
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
         IPage<RedeemCode> page = this.page(new Query<RedeemCode>().getPage(params), queryWrapper);
         return new PageUtils(page);
@@ -69,6 +75,7 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
     @Override
     public R saveRedeemCode(Map<String, Object> params) {
         try {
+            SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
             //一共新增兑换码的数量
             Integer count = Integer.parseInt(StringUtil.obj2String(params.get("count")));
             //每张兑换码的切割次数
@@ -88,6 +95,7 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
                 //生成二维码图片上传文件服务器返回二维码的服务器地址
                 String url = this.createQrcodeImage(code.getContent(), code.getRedeemNo());
                 code.setUrl(url);
+                code.setCreatorId(loginUser.getUserId());
                 code.setCreateTime(new Date());
                 code.setUpdateTime(new Date());
                 code.setDeleteFlag(1);

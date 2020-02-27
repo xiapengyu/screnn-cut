@@ -5,10 +5,10 @@
         <el-input v-model="dataForm.serialNo" placeholder="序列码" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.distributorName" placeholder="公司名称" clearable></el-input>
+        <el-input v-model="dataForm.creatorName" placeholder="经销商" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="dataForm.type" @change="chosePosition(dataForm.type)" placeholder="类型" style="width:100px;">
+        <el-select v-model="dataForm.type" @change="choseType(dataForm.type)" placeholder="类型" style="width:100px;">
           <el-option
             v-for="item in typeList"
             :key="item.id"
@@ -53,7 +53,7 @@
         label="序列码">
       </el-table-column>
       <el-table-column
-        prop="distributorName"
+        prop="creatorName"
         header-align="center"
         align="center"
         label="经销商">
@@ -123,7 +123,7 @@
       return {
         dataForm: {
           serialNo: '',
-          distributorName: '',
+          creatorName: '',
           type: '',
           status: ''
         },
@@ -158,7 +158,7 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'serialNo': this.dataForm.serialNo,
-            'distributorName': this.dataForm.distributorName,
+            'creatorName': this.dataForm.creatorName,
             'type': this.dataForm.type,
             'status': this.dataForm.status
           })
@@ -234,10 +234,16 @@
       },
       clearQueryData () {
         this.dataForm.serialNo = ''
-        this.dataForm.distributorName = ''
+        this.dataForm.creatorName = ''
         this.dataForm.type = ''
         this.dataForm.status = ''
         this.getDataList()
+      },
+      choseType (id) {
+        this.dataForm.type = id
+      },
+      choseStatus (id) {
+        this.dataForm.status = id
       }
     }
   }

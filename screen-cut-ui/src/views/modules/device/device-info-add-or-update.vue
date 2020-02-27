@@ -7,9 +7,9 @@
       <el-form-item label="序列码" prop="serialNo" :class="{ 'is-required': true }">
         <el-input v-model="dataForm.serialNo" placeholder="序列码" :disabled="this.dataForm.op===0"></el-input>
       </el-form-item>
-      <el-form-item label="经销商" prop="distributorId" :class="{ 'is-required': true }">
-          <el-select v-model="dataForm.distributorId" :disabled="this.dataForm.op===0">
-            <el-option v-for="item in distributorList" :key="item.id" :label="item.name" :value="item.id" />
+      <el-form-item label="经销商" prop="creatorId" :class="{ 'is-required': true }">
+          <el-select v-model="dataForm.creatorId" :disabled="this.dataForm.op===0">
+            <el-option v-for="item in userList" :key="item.id" :label="item.company" :value="item.id" />
           </el-select>
       </el-form-item>
       <el-form-item label="类型" prop="type" :class="{ 'is-required': true }">
@@ -42,7 +42,7 @@
       return {
         visible: false,
         dialogVisible: false,
-        distributorList: [],
+        userList: [],
         dataForm: {
           op: 0,
           id: 0,
@@ -91,7 +91,7 @@
               this.dataForm.type = data.device.type
               this.dataForm.remainTimes = data.device.remainTimes
               this.dataForm.status = data.device.status
-              this.distributorList = data.distributorList
+              this.userList = data.userList
             } else {
               this.$message.error(data.msg)
             }

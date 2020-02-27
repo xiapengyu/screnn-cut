@@ -4,6 +4,7 @@ package com.yunjian.core.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.SysUserEntity;
 
 import java.util.List;
@@ -57,4 +58,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 	 * @param newPassword  新密码
 	 */
 	boolean updatePassword(Long userId, String password, String newPassword);
+
+	R saveBatchRecord(List<SysUserEntity> resultList);
+
 }

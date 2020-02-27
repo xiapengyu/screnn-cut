@@ -117,8 +117,8 @@ public class SysRedeemCodeController {
                 return R.error("参数错误");
             }
         } catch (Exception e) {
-            logger.error("量启用兑换码发生异常", e);
-            return R.error("量启用兑换码发生异常");
+            logger.error("批量启用兑换码发生异常", e);
+            return R.error("批量启用兑换码发生异常");
         }
     }
 
@@ -128,7 +128,7 @@ public class SysRedeemCodeController {
     @SuppressWarnings("unchecked")
     @PostMapping("/batchDisable")
     public R batchDisable(@RequestBody Map<String, Object> params){
-        logger.info("批量启用兑换码{}", JsonUtil.toJsonString(params));
+        logger.info("批量禁用兑换码{}", JsonUtil.toJsonString(params));
         try {
             List<Integer> idList = (List<Integer>) params.get("idList");
             if(!idList.isEmpty()){

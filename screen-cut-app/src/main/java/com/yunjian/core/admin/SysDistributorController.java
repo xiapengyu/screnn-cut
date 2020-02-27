@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.core.entity.SysUserEntity;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,54 +110,6 @@ public class SysDistributorController {
     public R saveDistributorInfo(@RequestBody Map<String, Object> params){
         logger.info("保存经销商信息{}", JsonUtil.toJsonString(params));
         return distributorService.saveDistributorInfo(params);
-    }
-    
-    /**
-     * 下载经销商信息模板
-     */
-    @PostMapping("/downDistributorTemplate")
-    public R downTemplate() {
-    	logger.info("经销商模板文件地址：{}", distributorTemplate);
-    	return R.ok().put("distributorTemplate", distributorTemplate);
-    }
-    
-    /**
-     * 导入并保存经销商信息
-     */
-    @SuppressWarnings("unchecked")
-	@PostMapping("/uploadDistributorFile")
-    public R importDistributor(@RequestParam("file") MultipartFile file) {
-    	File uploadFile = FileUtil.multipartFileToFile(file);
-    	JSONArray array = ExcelUtil.readExcel(uploadFile);
-    	logger.info("解析数据{}", JsonUtil.toJsonString(array));
-        uploadFile.delete();
-    	List<Distributor> resultList = new ArrayList<>();
-        try {
-            if(array.size() > 0){
-            	for(Object item : array) {
-                    logger.info("解析对象{}", item.toString());
-                    Map<String, Object> map = JsonUtil.toMap(item.toString());
-                    Distributor distributor = new Distributor();
-                    distributor.setName(map.get("0").toString().trim());
-                    distributor.setAddress(map.get("1").toString().trim());
-                    distributor.setContact(map.get("2").toString().trim());
-                    distributor.setPhone(map.get("3").toString().trim());
-                    distributor.setEmail(map.get("4").toString().trim());
-                    distributor.setIdentifier(map.get("5").toString().trim());
-                    distributor.setStatus(1);
-                    distributor.setCreateTime(new Date());
-                    distributor.setUpdateTime(new Date());
-                    distributor.setDeleteFlag(1);
-                    resultList.add(distributor);
-            	}
-                return distributorService.saveBatchRecord(resultList);
-            }else{
-                return R.error("经销商内容为空");
-            }
-        } catch (Exception e) {
-            logger.error("导入经销商信息失败", e);
-            return R.error("导入经销商信息失败");
-        }
     }
 
 }

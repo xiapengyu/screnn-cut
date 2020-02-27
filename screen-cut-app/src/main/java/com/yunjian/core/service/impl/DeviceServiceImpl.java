@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.service.SysUserService;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +17,6 @@ import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.mapper.DeviceMapper;
@@ -37,12 +37,12 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private IDistributorService distributorService;
+	private SysUserService sysUserService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
 		String serialNo = StringUtil.obj2String(params.get("serialNo"));
-		String distributorName = StringUtil.obj2String(params.get("distributorName"));
+		String creatorName = StringUtil.obj2String(params.get("creatorName"));
 		String type = StringUtil.obj2String(params.get("type"));
 		String status = StringUtil.obj2String(params.get("status"));
 
@@ -51,14 +51,18 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 		if (!StringUtils.isEmpty(serialNo)) {
 			queryWrapper.like("serial_no", serialNo);
 		}
-		if (!StringUtils.isEmpty(distributorName)) {
-			queryWrapper.like("distributor_name", distributorName);
+		if (!StringUtils.isEmpty(creatorName)) {
+			queryWrapper.like("creator_name", creatorName);
 		}
 		if (!StringUtils.isEmpty(type)) {
 			queryWrapper.eq("type", type);
 		}
 		if (!StringUtils.isEmpty(status)) {
 			queryWrapper.eq("status", status);
+		}
+		SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+		if(loginUser.getUserId() != Constant.SUPER_ADMIN){
+			queryWrapper.eq("creator_id", loginUser.getUserId().intValue());
 		}
 		IPage<Device> page = this.page(new Query<Device>().getPage(params), queryWrapper);
 		return new PageUtils(page);
@@ -78,12 +82,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 				Device device = new Device();
 				device.setSerialNo(StringUtil.obj2String(params.get("serialNo")));
 				device.setType(Integer.parseInt(StringUtil.obj2String(params.get("type"))));
-				String distributorId = StringUtil.obj2String(params.get("distributorId"));
-				Distributor distributor = distributorService
-						.getOne(new QueryWrapper<Distributor>().eq("id", distributorId));
-				device.setDistributorId(Integer.parseInt(StringUtil.obj2String(params.get("distributorId"))));
-				device.setDistributorName(distributor.getName());
-				device.setIdentifier(distributor.getIdentifier());
+				String creatorId = StringUtil.obj2String(params.get("creatorId"));
+				SysUserEntity user = sysUserService.getOne(new QueryWrapper<SysUserEntity>().eq("user_id", Long.parseLong(creatorId)));
+				device.setCreatorId(user.getUserId());
+				device.setCreatorName(user.getCompany());
 				device.setStatus(1);
 				device.setBuyTime(null);
 				device.setEmail(StringUtil.obj2String(params.get("email")));
@@ -99,12 +101,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 				}
 				device.setSerialNo(StringUtil.obj2String(params.get("serialNo")));
 				device.setType(Integer.parseInt(StringUtil.obj2String(params.get("type"))));
-				String distributorId = StringUtil.obj2String(params.get("distributorId"));
-				Distributor distributor = distributorService
-						.getOne(new QueryWrapper<Distributor>().eq("id", distributorId));
-				device.setDistributorId(Integer.parseInt(StringUtil.obj2String(params.get("distributorId"))));
-				device.setDistributorName(distributor.getName());
-				device.setIdentifier(distributor.getIdentifier());
+				String creatorId = StringUtil.obj2String(params.get("creatorId"));
+				SysUserEntity user = sysUserService.getOne(new QueryWrapper<SysUserEntity>().eq("user_id", Long.parseLong(creatorId)));
+				device.setCreatorId(user.getUserId());
+				device.setCreatorName(user.getCompany());
 				device.setStatus(1);
 				device.setBuyTime(null);
 				device.setEmail(StringUtil.obj2String(params.get("email")));

@@ -7,9 +7,9 @@
       <el-form-item label="序列码" prop="serialNo" :class="{ 'is-required': true }">
         <el-input v-model="dataForm.serialNo" placeholder="序列码"></el-input>
       </el-form-item>
-      <el-form-item label="经销商" prop="distributorId" :class="{ 'is-required': true }">
-          <el-select v-model="dataForm.distributorId">
-            <el-option v-for="item in distributorList" :key="item.id" :label="item.name" :value="item.id" />
+      <el-form-item label="经销商" prop="creatorId" :class="{ 'is-required': true }">
+          <el-select v-model="dataForm.creatorId">
+            <el-option v-for="item in userList" :key="item.userId" :label="item.company" :value="item.userId" />
           </el-select>
       </el-form-item>
       <el-form-item label="类型" prop="type" :class="{ 'is-required': true }">
@@ -41,10 +41,10 @@
       return {
         visible: false,
         dialogVisible: false,
-        distributorList: [],
+        userList: [],
         dataForm: {
           serialNo: '',
-          distributorId: '',
+          creatorId: '',
           type: 1,
           status: 1,
           remainTimes: 0
@@ -53,7 +53,7 @@
           serialNo: [
             { required: true, message: '序列码不能为空', trigger: 'blur' }
           ],
-          distributorId: [
+          creatorId: [
             { required: true, message: '经销商不能为空', trigger: 'blur' }
           ],
           type: [
@@ -72,12 +72,12 @@
           this.$refs['dataForm'].resetFields()
         }
         this.$http({
-          url: this.$http.adornUrl(`/sys/distributor/queryTotalDistributor`),
+          url: this.$http.adornUrl(`/sys/device/queryTotalSysUser`),
           method: 'post',
           data: this.$http.adornData()
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.distributorList = data.distributorList
+            this.userList = data.userList
           } else {
             this.$message.error(data.msg)
           }
@@ -93,7 +93,7 @@
               data: this.$http.adornData({
                 'serialNo': this.dataForm.serialNo,
                 'status': this.dataForm.status,
-                'distributorId': this.dataForm.distributorId,
+                'creatorId': this.dataForm.creatorId,
                 'type': this.dataForm.type,
                 'remainTimes': this.dataForm.remainTimes
               })

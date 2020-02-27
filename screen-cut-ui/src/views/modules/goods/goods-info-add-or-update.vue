@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item label="商品类型" :class="{ 'is-required': true }">
         <el-checkbox-group v-model="typeIdList" :disabled="this.dataForm.op === 0">
-          <el-checkbox v-for="item in this.typeList" @change="change(item)" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
+          <el-checkbox v-for="item in this.typeList" @change="change(item)" :key="item.id" :label="item.id">{{item.typeName}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="图片" :class="{ 'is-required': true }">

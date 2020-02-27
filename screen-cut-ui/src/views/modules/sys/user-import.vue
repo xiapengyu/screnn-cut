@@ -3,18 +3,13 @@
     title="导入"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <el-form-item label="经销商" prop="creatorId" :class="{ 'is-required': true }">
-          <el-select v-model="dataForm.creatorId">
-            <el-option v-for="item in userList" :key="item.userId" :label="item.company" :value="item.userId" />
-          </el-select>
-      </el-form-item>
-      <el-form-item label="设备信息" prop="uploadFile" :class="{ 'is-required': true }">
+    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
+      <el-form-item label="经销商信息" prop="uploadFile" :class="{ 'is-required': true }">
         <el-upload
           class="upload-demo"
           drag
           :action= this.uploadUrl
-          :headers="{ 'token': this.dataForm.token, 'creatorId': this.dataForm.creatorId }"
+          :headers="{ token: this.dataForm.token }"
           :show-file-list="false"
           :on-success="handleUploadSuccess"
           :before-upload="beforeUpload">
@@ -36,17 +31,10 @@
       return {
         visible: false,
         uploadUrl: '',
-        userList: [],
         dataForm: {
           uploadFile: '',
           templateFileUrl: '',
-          token: '',
-          creatorId: ''
-        },
-        dataRule: {
-          creatorId: [
-            { required: true, message: '经销商不能为空', trigger: 'blur' }
-          ]
+          token: ''
         }
       }
     },
@@ -54,31 +42,19 @@
       init () {
         this.visible = true
         // 模板文件上传接口
-        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/device/uploadDeviceFile'
+        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/user/uploadUserInfoFile'
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }
         // 获取模板文件地址
         this.$http({
-          url: this.$http.adornUrl(`/sys/device/downDeviceTemplate`),
+          url: this.$http.adornUrl(`/sys/user/downUserInfoTemplate`),
           method: 'post',
           data: this.$http.adornData()
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataForm.templateFileUrl = data.deviceTemplate
+            this.dataForm.templateFileUrl = data.userTemplate
             this.dataForm.token = data.token
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-        // 获取经销商信息
-        this.$http({
-          url: this.$http.adornUrl(`/sys/device/queryTotalSysUser`),
-          method: 'post',
-          data: this.$http.adornData()
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.userList = data.userList
           } else {
             this.$message.error(data.msg)
           }

@@ -60,4 +60,6 @@ public class RedeemCode implements Serializable {
 
     private String redeemNo;
 
+    private Long creatorId;
+
 }

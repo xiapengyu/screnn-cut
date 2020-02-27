@@ -106,12 +106,13 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
             for(GoodsCart goodsCart : goodsCartList){
                 GoodsCartInfo info = new GoodsCartInfo();
                 Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", goodsCart.getGoodsId()));
-                info.setId(goods.getId());
+                info.setId(goodsCart.getId());
                 info.setName(goods.getName());
                 info.setAmount(goodsCart.getAmount());
                 info.setUnitPrice((goods.getIsDiscount() == 1) ? goods.getDiscountPrice() : goods.getPrice());
                 BigDecimal totalPrice = info.getUnitPrice().multiply(BigDecimal.valueOf(info.getAmount().doubleValue()));
                 info.setTotalPrice(totalPrice);
+                info.setGoodsId(goods.getId());
                 info.setGoodsType(goodsCart.getGoodsType());
                 GoodsType type = goodsTypeService.getOne(new QueryWrapper<GoodsType>().eq("id", goodsCart.getGoodsType()));
                 if(type != null){
@@ -136,7 +137,7 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         try {
             Account account = SecurityContext.getUserPrincipal();
-            QueryWrapper<GoodsCart> queryWrapper = new QueryWrapper<GoodsCart>().eq("account_id", account.getId()).eq("goods_id", id);
+            QueryWrapper<GoodsCart> queryWrapper = new QueryWrapper<GoodsCart>().eq("account_id", account.getId()).eq("id", id);
             GoodsCart goodsCart = this.getOne(queryWrapper);
             //更新销量
             Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", goodsCart.getGoodsId()));
@@ -158,13 +159,14 @@ public class GoodsCartServiceImpl extends ServiceImpl<GoodsCartMapper, GoodsCart
         try {
             Account account = SecurityContext.getUserPrincipal();
 
-            Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", id));
+            GoodsCart goodsCart = this.getOne(new QueryWrapper<GoodsCart>().eq("account_id", account.getId()).eq("id", id));
+            Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", goodsCart.getGoodsId()));
             if(goods == null){
                 return new ResponseDto(Constant.FAIL_CODE, null, "商品不存在");
             }
             //更新购物车中商品数量与总价
             BigDecimal unitPrice = (goods.getIsDiscount()) == 1 ? goods.getDiscountPrice() : goods.getPrice();
-            GoodsCart goodsCart = this.getOne(new QueryWrapper<GoodsCart>().eq("account_id", account.getId()).eq("goods_id", id));
+
             int oldAmount = goodsCart.getAmount();
             goodsCart.setAmount(amount);
             goodsCart.setTotalPrice(unitPrice.multiply(BigDecimal.valueOf(Long.parseLong(amount + ""))));

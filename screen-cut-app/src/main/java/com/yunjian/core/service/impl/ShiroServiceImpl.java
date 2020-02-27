@@ -27,7 +27,7 @@ public class ShiroServiceImpl implements ShiroService {
     private SysUserTokenDao sysUserTokenDao;
 
     @Override
-    public Set<String> getUserPermissions(long userId) {
+    public Set<String> getUserPermissions(Long userId) {
         List<String> permsList;
 
         //系统管理员，拥有最高权限
@@ -60,4 +60,5 @@ public class ShiroServiceImpl implements ShiroService {
     public SysUserEntity queryUser(Long userId) {
         return sysUserDao.selectById(userId);
     }
+
 }

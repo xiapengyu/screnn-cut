@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.SysUserEntity;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +19,6 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.dto.GoodsDetailDto;
 import com.yunjian.core.dto.GoodsDto;
 import com.yunjian.core.dto.GoodsReqDto;
@@ -59,6 +56,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 		queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
 		if (StringUtils.isNotBlank(name)) {
 			queryWrapper.like("name", name);
+		}
+
+		SysUserEntity loginUser = HttpContextUtils.getLoginUser();
+		if(loginUser.getUserId() != Constant.SUPER_ADMIN){
+			queryWrapper.eq("creator_id", loginUser.getUserId());
 		}
 
 		IPage<Goods> page = this.page(new Query<Goods>().getPage(params), queryWrapper);
@@ -137,6 +139,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 			goods.setCreateTime(new Date());
 			goods.setUpdateTime(new Date());
 			goods.setDeleteFlag(1);
+			SysUserEntity loginUser = HttpContextUtils.getLoginUser();
+			goods.setCreatorId(loginUser.getUserId());
 			if(this.saveOrUpdate(goods)) {
 				List<GoodsImg> imgList = new ArrayList<GoodsImg>();
 				List<String> goodsImageList = (List<String>) params.get("goodsImageList");

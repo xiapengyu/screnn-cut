@@ -1,37 +1,30 @@
 package com.yunjian.core.admin;
 
 
+import com.alibaba.druid.util.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.Device;
+import com.yunjian.core.entity.Distributor;
+import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.service.IDeviceService;
+import com.yunjian.core.service.SysUserService;
+import net.sf.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.druid.util.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.ExcelUtil;
-import com.yunjian.common.utils.FileUtil;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.entity.Distributor;
-import com.yunjian.core.service.IDeviceService;
-import com.yunjian.core.service.IDistributorService;
-
-import net.sf.json.JSONArray;
 
 /**
  * <p>
@@ -43,15 +36,14 @@ import net.sf.json.JSONArray;
  */
 @RestController
 @RequestMapping("/sys/device")
-public class SysDeviceController {
-	
-private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	private IDeviceService deviceService;
-	
-	@Autowired
-	private IDistributorService distributorService;
+public class SysDeviceController extends AbstractController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private IDeviceService deviceService;
+    @Autowired
+    private SysUserService sysUserService;
 
     @Value("${template.device.url}")
     private String deviceTemplate = "";
@@ -59,51 +51,57 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Value("${tomcat.file.server}")
     private String fileUploadServer = "";
 
-	/**
+    /**
      * 分页查询设备列表
      */
     @PostMapping("/list")
-    public R list(@RequestBody Map<String, Object> params){
+    public R list(@RequestBody Map<String, Object> params) {
         logger.info("分页查询设备列表{}", JsonUtil.toJsonString(params));
         PageUtils page = deviceService.queryPage(params);
         return R.ok().put("page", page);
     }
-    
+
     /**
      * 删除设备
      */
     @PostMapping("/delete")
-    public R delete(@RequestBody Map<String, Object> params){
+    public R delete(@RequestBody Map<String, Object> params) {
         logger.info("删除设备{}", JsonUtil.toJsonString(params));
         String id = StringUtil.obj2String(params.get("id"));
-        if(!StringUtils.isEmpty(id)){
-        	return deviceService.deleteDevice(id);
-        }else{
+        if (!StringUtils.isEmpty(id)) {
+            return deviceService.deleteDevice(id);
+        } else {
             return R.error("参数错误");
         }
     }
-    
+
     /**
      * 查询设备详情
      */
     @PostMapping("/info")
-    public R queryInfo(@RequestBody Map<String, Object> params){
+    public R queryInfo(@RequestBody Map<String, Object> params) {
         logger.info("查询设备详情{}", JsonUtil.toJsonString(params));
         String id = StringUtil.obj2String(params.get("id"));
-        if(!StringUtils.isEmpty(id)){
-        	Device device = deviceService.getOne(new QueryWrapper<Device>().eq("id", id));
-        	 List<Distributor> distributorList = distributorService.list(new QueryWrapper<Distributor>().eq("delete_flag", 1));
-            return R.ok().put("device", device).put("distributorList", distributorList);
-        }else{
+        SysUserEntity loginUser = getUser();
+        if (!StringUtils.isEmpty(id)) {
+            Device device = deviceService.getOne(new QueryWrapper<Device>().eq("id", id));
+            QueryWrapper query = new QueryWrapper<SysUserEntity>();
+            if(loginUser.getUserId() != Constant.SUPER_ADMIN){
+                query.eq("creator_id", loginUser.getUserId());
+            }
+            query.orderByDesc("create_time");
+            List<SysUserEntity> userList = sysUserService.list(query);
+            return R.ok().put("device", device).put("userList", userList);
+        } else {
             return R.error("参数错误");
         }
     }
-    
+
     /**
      * 保存设备信息
      */
     @PostMapping("/saveDeviceInfo")
-    public R saveDeviceInfo(@RequestBody Map<String, Object> params){
+    public R saveDeviceInfo(@RequestBody Map<String, Object> params) {
         logger.info("保存设备信息{}", JsonUtil.toJsonString(params));
         return deviceService.saveDeviceInfo(params);
     }
@@ -114,45 +112,63 @@ private Logger logger = LoggerFactory.getLogger(this.getClass());
     @PostMapping("/downDeviceTemplate")
     public R downDeviceTemplate() {
         logger.info("设备信息模板文件地址：{}", deviceTemplate);
-        return R.ok().put("deviceTemplate", deviceTemplate);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String token = request.getHeader("token");
+        return R.ok().put("deviceTemplate", deviceTemplate).put("token", token);
+    }
+
+    /**
+     * 查询有权限的经销商列表
+     */
+    @PostMapping("/queryTotalSysUser")
+    public R queryTotalSysUser() {
+        logger.info("查询有权限的经销商列表");
+        SysUserEntity loginUser = getUser();
+        QueryWrapper query = new QueryWrapper<SysUserEntity>();
+        if(loginUser.getUserId() != Constant.SUPER_ADMIN){
+            query.eq("user_id", loginUser.getUserId());
+        }
+        query.orderByDesc("create_time");
+        List<SysUserEntity> userList = sysUserService.list(query);
+        return R.ok().put("userList", userList);
     }
 
     /**
      * 导入并保存设备信息
      */
     @SuppressWarnings("unchecked")
-	@PostMapping("/uploadDeviceFile")
+    @PostMapping("/uploadDeviceFile")
     public R importDevice(@RequestParam("file") MultipartFile file) {
         File uploadFile = FileUtil.multipartFileToFile(file);
         JSONArray array = ExcelUtil.readExcel(uploadFile);
         logger.info("解析数据{}", JsonUtil.toJsonString(array));
         uploadFile.delete();
         List<Device> resultList = new ArrayList<>();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String creatorId = request.getHeader("creatorId");
+        SysUserEntity user = sysUserService.getOne(new QueryWrapper<SysUserEntity>()
+                .eq("user_id", Long.parseLong(creatorId)));
         try {
-            if(array.size() > 0){
-            	for(Object item : array) {
+            if (array.size() > 0) {
+                for (Object item : array) {
                     logger.info("解析对象{}", item.toString());
                     Map<String, Object> map = JsonUtil.toMap(item.toString());
                     Device device = new Device();
                     device.setSerialNo(map.get("0").toString().trim());
-                    device.setType((int)Double.parseDouble(map.get("1").toString().trim()));
+                    device.setType((int) Double.parseDouble(map.get("1").toString().trim()));
                     device.setEmail(map.get("2").toString().trim());
-                    device.setRemainTimes((int)Double.parseDouble(map.get("3").toString().trim()));
-                    device.setIdentifier(map.get("4").toString().trim());
+                    device.setRemainTimes((int) Double.parseDouble(map.get("3").toString().trim()));
                     device.setBuyTime(new Date());
                     device.setStatus(1);
                     device.setCreateTime(new Date());
                     device.setUpdateTime(new Date());
                     device.setDeleteFlag(1);
-                    Distributor distributor = distributorService.getOne(new QueryWrapper<Distributor>().eq("identifier", map.get("4").toString().trim()));
-                    if(distributor != null){
-                        device.setDistributorId(distributor.getId());
-                        device.setDistributorName(distributor.getName());
-                        resultList.add(device);
-                    }
-            	}
+                    device.setCreatorId(user.getUserId());
+                    device.setCreatorName(user.getCompany());
+                    resultList.add(device);
+                }
                 return deviceService.saveBatchRecord(resultList);
-            }else{
+            } else {
                 return R.error("经销商内容为空");
             }
         } catch (Exception e) {

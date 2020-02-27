@@ -51,4 +51,6 @@ public class PushMsg implements Serializable {
 	 */
 	private Integer deleteFlag;
 
+	public Long creatorId;
+
 }

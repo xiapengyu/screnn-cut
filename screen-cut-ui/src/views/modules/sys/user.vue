@@ -8,6 +8,7 @@
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button type="primary" @click="importDistributorHandle()">导入经销商</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -46,6 +47,18 @@
         header-align="center"
         align="center"
         label="手机号">
+      </el-table-column>
+      <el-table-column
+        prop="company"
+        header-align="center"
+        align="center"
+        label="公司">
+      </el-table-column>
+      <el-table-column
+        prop="contact"
+        header-align="center"
+        align="center"
+        label="联系人">
       </el-table-column>
       <el-table-column
         prop="status"
@@ -87,11 +100,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <import-user v-if="importUser" ref="importUser" @refreshDataList="getDataList"></import-user>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './user-add-or-update'
+  import ImportUser from './user-import'
   export default {
     data () {
       return {
@@ -104,11 +119,13 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        importUser: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      ImportUser
     },
     activated () {
       this.getDataList()
@@ -156,6 +173,12 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      importDistributorHandle () {
+        this.importUser = true
+        this.$nextTick(() => {
+          this.$refs.importUser.init()
         })
       },
       // 删除

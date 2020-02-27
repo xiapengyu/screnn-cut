@@ -38,7 +38,7 @@
       </el-form-item>
       <el-form-item label="商品类型" :class="{ 'is-required': true }">
         <el-checkbox-group v-model="typeIdList">
-          <el-checkbox v-for="item in this.typeList" @change="change(item)" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
+          <el-checkbox v-for="item in this.typeList" @change="change(item)" :key="item.id" :label="item.id">{{item.typeName}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="图片" :class="{ 'is-required': true }">
@@ -113,6 +113,8 @@
         this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadImage'
         this.dataForm.isDiscount = 0
         this.typeIdList = []
+        this.goodsImageList = []
+        this.dialogImageUrl = ''
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }

@@ -19,6 +19,8 @@ public class GoodsCartInfo {
 
     private String coverImg = "";
 
+    private Integer goodsId;
+
     private Integer goodsType;
 
     private String goodsTypeName = "";

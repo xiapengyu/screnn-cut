@@ -19,6 +19,12 @@
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
       </el-form-item>
+      <el-form-item label="公司" prop="company">
+        <el-input v-model="dataForm.company" placeholder="公司"></el-input>
+      </el-form-item>
+      <el-form-item label="联系人" prop="contact">
+        <el-input v-model="dataForm.contact" placeholder="联系人"></el-input>
+      </el-form-item>
       <el-form-item label="角色" size="mini" prop="roleIdList">
         <el-checkbox-group v-model="dataForm.roleIdList">
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
@@ -83,6 +89,8 @@
           salt: '',
           email: '',
           mobile: '',
+          company: '',
+          contact: '',
           roleIdList: [],
           status: 1
         },
@@ -103,6 +111,12 @@
           mobile: [
             { required: true, message: '手机号不能为空', trigger: 'blur' },
             { validator: validateMobile, trigger: 'blur' }
+          ],
+          company: [
+            { required: true, message: '公司不能为空', trigger: 'blur' }
+          ],
+          contact: [
+            { required: true, message: '联系人不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -135,6 +149,8 @@
                 this.dataForm.mobile = data.user.mobile
                 this.dataForm.roleIdList = data.user.roleIdList
                 this.dataForm.status = data.user.status
+                this.dataForm.company = data.user.company
+                this.dataForm.contact = data.user.contact
               }
             })
           }
@@ -155,14 +171,16 @@
                 'email': this.dataForm.email,
                 'mobile': this.dataForm.mobile,
                 'status': this.dataForm.status,
-                'roleIdList': this.dataForm.roleIdList
+                'roleIdList': this.dataForm.roleIdList,
+                'company': this.dataForm.company,
+                'contact': this.dataForm.contact
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',
-                  duration: 1500,
+                  duration: 500,
                   onClose: () => {
                     this.visible = false
                     this.$emit('refreshDataList')

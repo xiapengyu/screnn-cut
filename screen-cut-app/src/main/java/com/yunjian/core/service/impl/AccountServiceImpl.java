@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +19,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.MD5Util;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
-import com.yunjian.common.utils.UUIDUtil;
 import com.yunjian.core.dto.AccountDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
-import com.yunjian.core.entity.Account;
-import com.yunjian.core.entity.AccountCache;
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.entity.EmailCode;
 import com.yunjian.core.mapper.AccountMapper;
 import com.yunjian.core.service.IAccountCacheService;
 import com.yunjian.core.service.IAccountService;
@@ -86,6 +76,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				account.setDeleteFlag(1);
 				account.setPhoneModelId(null);
 				account.setPhoneModelName("");
+				account.setUserName("");
+				account.setPhone("");
+				account.setDealerId(device.getCreatorId().intValue());
 				if(device.getType() == 1){
 					account.setUseAmount(0);
 					account.setUnuseAmount(0);
@@ -199,18 +192,17 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
-		String userName = StringUtil.obj2String(params.get("useNamer"));
 		String email = StringUtil.obj2String(params.get("email"));
 		
 		QueryWrapper<Account> queryWrapper = new QueryWrapper<Account>();
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
-        if(!StringUtils.isEmpty(userName)){
-            queryWrapper.like("user_name", userName);
-        }
         if(!StringUtils.isEmpty(email)){
             queryWrapper.like("email", email);
         }
-
+		SysUserEntity loginUser = HttpContextUtils.getLoginUser();
+        if(loginUser.getUserId() != Constant.SUPER_ADMIN){
+			queryWrapper.eq("dealer_id", loginUser.getUserId().intValue());
+		}
         IPage<Account> page = this.page(new Query<Account>().getPage(params), queryWrapper);
         return new PageUtils(page);
 	}

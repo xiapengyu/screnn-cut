@@ -12,7 +12,7 @@
       </el-form-item>
       <el-form-item label="推送对象" prop="selectAccount" :class="{ 'is-required': true }">
           <el-select v-model="dataForm.selectAccount" value-key="id" @change="handleClick(dataForm.selectAccount)">
-            <el-option v-for="item in dataForm.accountList" :key="item.id" :label="item.userName" :value="item"></el-option>
+            <el-option v-for="item in dataForm.accountList" :key="item.id" :label="item.email" :value="item"></el-option>
           </el-select>
       </el-form-item>
       <el-form-item label="已选中对象" prop="content" v-show="this.tags.length > 0">
@@ -124,7 +124,7 @@
           this.tags = []
           this.selectAll = 1
         } else {
-          this.tags.push({id: account.id, name: account.userName})
+          this.tags.push({id: account.id, name: account.email})
           this.selectAll = 0
         }
       },

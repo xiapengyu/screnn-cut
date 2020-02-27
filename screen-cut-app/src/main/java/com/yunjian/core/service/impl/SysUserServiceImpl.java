@@ -9,8 +9,11 @@ import com.yunjian.common.exception.RRException;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.Query;
+import com.yunjian.common.utils.R;
 import com.yunjian.core.dao.SysUserDao;
+import com.yunjian.core.entity.Distributor;
 import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.entity.SysUserRoleEntity;
 import com.yunjian.core.service.SysRoleService;
 import com.yunjian.core.service.SysUserRoleService;
 import com.yunjian.core.service.SysUserService;
@@ -18,6 +21,8 @@ import com.yunjian.core.service.SysUserService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +40,9 @@ import java.util.Map;
  */
 @Service("sysUserService")
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
+
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
 	@Autowired
@@ -115,7 +123,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 		return this.update(userEntity,
 				new QueryWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
 	}
-	
+
+	@Override
+	public R saveBatchRecord(List<SysUserEntity> resultList) {
+		for(SysUserEntity item : resultList){
+			SysUserEntity user = this.getOne(new QueryWrapper<SysUserEntity>().eq("username", item.getUsername()));
+			if (user == null){
+				//保存用户
+				this.saveOrUpdate(item);
+				//设置角色为经销商
+				SysUserRoleEntity userRole = new SysUserRoleEntity();
+				userRole.setRoleId(2L);
+				userRole.setUserId(item.getUserId());
+				sysUserRoleService.save(userRole);
+			}else{
+				logger.info("用户名不能重复{}", item);
+				continue;
+			}
+		}
+		return R.ok();
+	}
+
 	/**
 	 * 检查角色是否越权
 	 */

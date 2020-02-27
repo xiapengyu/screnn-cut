@@ -79,4 +79,6 @@ public class Goods implements Serializable {
 
 	private Integer deleteFlag;
 
+	private Long creatorId;
+
 }

@@ -23,65 +23,71 @@ import lombok.experimental.Accessors;
 @TableName("tb_account")
 public class Account implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Integer id;
+    private Integer id;
 
-	/**
-	 * 邮箱
-	 */
-	private String email;
+    /**
+     * 邮箱
+     */
+    private String email;
 
-	/**
-	 * 密码
-	 */
-	private String password;
+    /**
+     * 密码
+     */
+    private String password;
 
-	/**
-	 * 用户头像
-	 */
-	private String avatar;
+    /**
+     * 用户头像
+     */
+    private String avatar;
 
-	/**
-	 * 机器序列码
-	 */
-	private String serialNo;
+    /**
+     * 机器序列码
+     */
+    private String serialNo;
 
-	/**
-	 * 机型ID
-	 */
-	private Integer phoneModelId;
+    /**
+     * 机型ID
+     */
+    private Integer phoneModelId;
 
-	/**
-	 * 机型名称
-	 */
-	private String phoneModelName;
+    /**
+     * 机型名称
+     */
+    private String phoneModelName;
 
-	/**
-	 * 已用次数
-	 */
-	private Integer useAmount;
+    /**
+     * 已用次数
+     */
+    private Integer useAmount;
 
-	/**
-	 * 未用次数
-	 */
-	private Integer unuseAmount;
+    /**
+     * 未用次数
+     */
+    private Integer unuseAmount;
 
-	/**
-	 * 状态 1启用 0禁用
-	 */
-	private Integer status;
+    /**
+     * 状态 1启用 0禁用
+     */
+    private Integer status;
 
-	/**
-	 * 注册时间
-	 */
-	private Date createTime;
+    /**
+     * 注册时间
+     */
+    private Date createTime;
 
-	private Date updateTime;
+    private Date updateTime;
 
-	/**
-	 * 删除标记
-	 */
-	private Integer deleteFlag;
+    private String userName;
+
+    private String phone;
+
+    /**
+     * 删除标记
+     */
+    private Integer deleteFlag;
+
+    private Integer dealerId;
 
 }
