@@ -3,7 +3,6 @@ package com.yunjian.core.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +22,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.BusinessUtils;
 import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.DateUtils;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.Query;
 import com.yunjian.common.utils.R;
@@ -79,11 +77,9 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
 	public R updateStatus(Map<String, Object> params) {
 		int id = (int) params.get("id");
 		int status = (int)params.get("status");
-		String comment = (String)params.get("comment");
 		PurchaseOrder order = new PurchaseOrder();
 		order.setId(id);
 		order.setStatus(status);
-		order.setComment(comment);
 		UpdateWrapper<PurchaseOrder> updateWrapper = new UpdateWrapper<>(); 
 		updateWrapper.eq("id", id);
 		updateWrapper.set("status", status);
@@ -106,7 +102,7 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
             Account account = SecurityContext.getUserPrincipal();
             PurchaseOrder order = new PurchaseOrder();
             order.setOrderNo(BusinessUtils.createOrderNo());
-            order.setComment(param.getComment());
+            order.setRemark(param.getComment());
             order.setAccountId(account.getId());
             //Address address = addressService.getOne(new QueryWrapper<Address>().eq("id", param.getAddressId()));
             order.setAddress_id(param.getAddressId());
