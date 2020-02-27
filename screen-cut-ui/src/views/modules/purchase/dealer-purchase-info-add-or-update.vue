@@ -4,65 +4,68 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
     append-to-body>
-    <div slot="title">{{ opt==1?'详情':'修改' }}</div>
+    <!-- 自定义动态的弹窗标题 -->
+    <div slot="title" v-if="dataForm.opt==1">详情</div>
+    <div slot="title" v-else-if="!dataForm.id">新增</div>
+    <div slot="title" v-else-if="dataForm.id">修改</div>
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px" size="mini">
       <el-input v-if="false" v-model="dataForm.id"></el-input>
 
       <el-row :gutter="20">
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-form-item label="采购单号" v-if="dataForm.id!=0" :disabled="true">
-              <el-input v-model="dataForm.orderNo" prop=""></el-input>
+            <el-form-item label="采购单号" prop="orderNo"  v-if="dataForm.id!=0" >
+              <el-input v-model="dataForm.orderNo" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="经销商名称">
-              <el-input v-model="dataForm.dealerName" prop=""></el-input>
+            <el-form-item label="经销商名称" prop="dealerName" >
+              <el-input v-model="dataForm.dealerName" placeholder="必填"></el-input>
             </el-form-item>
-            <el-form-item label="其他联系方式">
-              <el-input v-model="dataForm.otherContact" prop=""></el-input>
+            <el-form-item label="其他联系方式" prop="otherContact">
+              <el-input v-model="dataForm.otherContact" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item label="刀片数">
-              <el-input v-model="dataForm.bladeNo" prop=""></el-input>
+            <el-form-item label="刀片数" prop="bladeNo" >
+              <el-input v-model="dataForm.bladeNo" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item label="刀片说明">
-              <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3" prop=""></el-input>
+            <el-form-item label="刀片说明" prop="bladeExplain" >
+              <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item label="机器数">
-              <el-input v-model="dataForm.deviceNo" prop=""></el-input>
+            <el-form-item label="机器数" prop="deviceNo" >
+              <el-input v-model="dataForm.deviceNo" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item label="机器说明">
-              <el-input type="textarea" v-model="dataForm.deviceExplain" :rows="3" prop=""></el-input>
+            <el-form-item label="机器说明" prop="deviceExplain">
+              <el-input type="textarea" v-model="dataForm.deviceExplain"  :rows="3" placeholder="选填"></el-input>
             </el-form-item>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-form-item label="公司">
-              <el-input v-model="dataForm.company" prop=""></el-input>
+            <el-form-item label="公司" prop="company" >
+              <el-input v-model="dataForm.company" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item label="经销商Email">
-              <el-input v-model="dataForm.dealerEmail" prop=""></el-input>
+            <el-form-item label="经销商Email" prop="dealerEmail" >
+              <el-input v-model="dataForm.dealerEmail" placeholder="必填"></el-input>
             </el-form-item>
-            <el-form-item label="订单状态" v-if="dataForm.id!=0">
-              <el-select v-model="dataForm.status" prop="">
+            <el-form-item label="订单状态" prop="status" v-if="dataForm.id!=0" >
+              <el-select v-model="dataForm.status" >
                 <el-option label="未确认" value="1"></el-option>
                 <el-option label="已确认" value="2"></el-option>
                 <el-option label="已拒绝" value="3"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="膜数">
-              <el-input v-model="dataForm.filmNo" prop=""></el-input>
+            <el-form-item label="膜数" prop="filmNo" >
+              <el-input v-model="dataForm.filmNo" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item label="膜说明">
-              <el-input type="textarea" v-model="dataForm.filmExplain" :rows="3" prop=""></el-input>
+            <el-form-item label="膜说明" prop="filmExplain" >
+              <el-input type="textarea" v-model="dataForm.filmExplain" :rows="3" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item label="次数">
-              <el-input v-model="dataForm.useTimes" prop=""></el-input>
+            <el-form-item label="次数" prop="useTimes" >
+              <el-input v-model="dataForm.useTimes" placeholder="选填"></el-input>
             </el-form-item>
-            <el-form-item v-if="dataForm.id!=0" label="创建时间">
-              <el-input :disabled="true" v-model="dataForm.createTime" prop=""></el-input>
+            <el-form-item v-if="dataForm.id!=0" label="创建时间" prop="createTime">
+              <el-input :disabled="true" v-model="dataForm.createTime" ></el-input>
             </el-form-item>
-            <el-form-item label="回复">
-              <el-input type="textarea" :rows="3" v-model="dataForm.comment" prop=""></el-input>
+            <el-form-item label="回复"  prop="comment">
+              <el-input type="textarea" :rows="3" v-model="dataForm.comment" placeholder="选填"></el-input>
             </el-form-item>
           </div>
         </el-col>
@@ -70,7 +73,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">关闭</el-button>
-      <el-button @click="saveOrderInfo()" type="primary" v-if="opt==2">保存</el-button>
+      <el-button @click="saveOrderInfo()" type="primary" v-if="dataForm.opt!=1">保存</el-button>
     </span>
   </el-dialog>
 </template>
@@ -80,8 +83,8 @@
     data () {
       return {
         visible: false,
-        opt: '',
         dataForm: {
+          opt: '',
           orderNo: '',
           company: '',
           dealerName: '',
@@ -103,7 +106,29 @@
             { required: true, message: '经销商名不能为空', trigger: 'blur' }
           ],
           dealerEmail: [
-            { required: true, message: '经销商邮箱不能为空', trigger: 'blur' }
+            { required: true, message: '经销商邮箱不能为空', trigger: 'blur' },
+            {
+              validator: function(rule, value, callback) {
+                if (/^\w{1,64}@[a-z0-9\-]{1,256}(\.[a-z]{2,6}){1,2}$/i.test(value) == false) {
+                  callback(new Error("邮箱格式错误"))
+                } else {
+                  callback()
+                }
+              },
+              trigger: 'blur'
+            }
+          ],
+          bladeNo: [
+            { type: 'integer', message: '请输入正整数', trigger: 'change' }
+          ],
+          filmNo: [
+            { type: 'integer', message: '请输入正整数', trigger: 'change' }
+          ],
+          deviceNo: [
+            { type: 'integer', message: '请输入正整数', trigger: 'change' }
+          ],
+          useTimes: [
+            { type: 'integer', message: '请输入正整数', trigger: 'change' }
           ]
         }
       }
@@ -111,7 +136,7 @@
     methods: {
       init (id, opt) {
         this.visible = true
-        this.opt = opt
+        this.dataForm.opt = opt
         this.dataForm.id = id || 0
         if (this.dataForm.id) {
           this.$http({

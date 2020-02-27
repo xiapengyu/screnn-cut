@@ -26,7 +26,7 @@ public class DealerOrder implements Serializable {
 	
 	private Integer id;
 	
-	private Integer dealerId;
+	private Long dealerId;
 
 	/**
 	 * 采购单号

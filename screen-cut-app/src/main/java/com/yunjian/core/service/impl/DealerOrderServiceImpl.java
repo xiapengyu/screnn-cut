@@ -34,7 +34,7 @@ public class DealerOrderServiceImpl extends ServiceImpl<DealerOrderMapper, Deale
 	public PageUtils queryPage(Map<String, Object> params) {
 		String orderNo = (String)params.get("orderNo");
         String email = (String)params.get("email");
-        Integer dealerId = (Integer)params.get("dealerId");
+        Long dealerId = (Long)params.get("dealerId");
 
         IPage<DealerOrder> page = this.page(
                 new Query<DealerOrder>().getPage(params),
