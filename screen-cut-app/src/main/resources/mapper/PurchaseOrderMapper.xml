@@ -32,7 +32,9 @@
 		 	<if test="map.email != null and map.email != '' ">
               and a.email =#{map.email}
             </if>
-			and a.dealer_id=#{map.dealerId}
+            <if test="map.dealerId != null and map.dealerId != 0 ">
+              and a.dealer_id=#{map.dealerId}
+            </if>
 		</where>
     </select>
     
