@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -28,7 +29,7 @@ public class RedeemCodeController {
     /**
      *用户扫描兑换码
      */
-    @GetMapping("/swapCode")
+    @PostMapping("/swapCode")
     public ResponseDto swapCode(String redeemNo){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         logger.info("请求地址>>>【{},请求参数>>>【{}】", request.getRequestURL(), request.getQueryString());

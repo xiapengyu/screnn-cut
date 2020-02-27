@@ -110,7 +110,7 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
         try {
             Account account = SecurityContext.getUserPrincipal();
             code = this.getOne(new QueryWrapper<RedeemCode>()
-                    .eq("redeem_no", redeemNo).eq("status", 1));
+                    .eq("redeem_no", redeemNo));
             logger.info("扫描的兑换码信息{}", JsonUtil.toJsonString(code));
             if(code == null){
                 return new ResponseDto(Constant.FAIL_CODE, null, "无法识别的兑换码");
