@@ -18,16 +18,23 @@
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
         <el-button type="primary" @click="addHandle()">新增</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">批量启用</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">批量禁用</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">批量删除</el-button>
+        <el-button type="primary" @click="batchEnable()" :disabled="dataListSelections.length <= 0">批量启用</el-button>
+        <el-button type="danger" @click="batchDisable()" :disabled="dataListSelections.length <= 0">批量禁用</el-button>
+        <el-button type="danger"  @click="batchDelete()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
       border
       v-loading="dataListLoading"
+      @selection-change="selectionChangeHandle"
       style="width: 100%;">
+      <el-table-column
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column
         prop="id"
         header-align="center"
@@ -126,7 +133,8 @@
         dataListLoading: false,
         addOrUpdateVisible: false,
         addRedeemVisible: false,
-        statusList: [{'id': 0, 'label': '禁用'}, {'id': 1, 'label': '正常'}, {'id': 2, 'label': '已兑换'}]
+        statusList: [{'id': 0, 'label': '禁用'}, {'id': 1, 'label': '正常'}, {'id': 2, 'label': '已兑换'}],
+        dataListSelections: []
       }
     },
     components: {
@@ -178,6 +186,10 @@
           this.$refs.addOrUpdate.init(id, op)
         })
       },
+      // 多选
+      selectionChangeHandle (val) {
+        this.dataListSelections = val
+      },
       addHandle () {
         this.addRedeemVisible = true
         this.$nextTick(() => {
@@ -220,6 +232,100 @@
         this.dataForm.redeemNo = ''
         this.dataForm.status = ''
         this.getDataList()
+      },
+      batchEnable () {
+        console.log('')
+        var idList = this.dataListSelections.map(item => {
+          return item.id
+        })
+        this.$confirm(`确定进行批量删除操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/sys/redeemCode/batchEnable'),
+            method: 'post',
+            data: this.$http.adornData({
+              'idList': idList
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {})
+      },
+      batchDelete () {
+        var idList = this.dataListSelections.map(item => {
+          return item.id
+        })
+        this.$confirm(`确定进行批量删除操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/sys/redeemCode/batchDelete'),
+            method: 'post',
+            data: this.$http.adornData({
+              'idList': idList
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {})
+      },
+      batchDisable () {
+        var idList = this.dataListSelections.map(item => {
+          return item.id
+        })
+        this.$confirm(`确定进行批量删除操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl('/sys/redeemCode/batchDisable'),
+            method: 'post',
+            data: this.$http.adornData({
+              'idList': idList
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
+        }).catch(() => {})
       }
     }
   }

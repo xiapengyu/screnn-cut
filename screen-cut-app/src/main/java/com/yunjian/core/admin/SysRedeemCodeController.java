@@ -4,6 +4,7 @@ package com.yunjian.core.admin;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,9 @@ public class SysRedeemCodeController {
         try {
             List<Integer> idList = (List<Integer>) params.get("idList");
             if(!idList.isEmpty()){
-                redeemCodeService.remove(new QueryWrapper<RedeemCode>().in("id", idList));
+                //删除选中的非启用状态的兑换码
+                redeemCodeService.remove(new QueryWrapper<RedeemCode>()
+                        .in("id", idList).ne("status", 1));
                 return R.ok();
             }else{
                 return R.error("参数错误");
@@ -91,6 +94,56 @@ public class SysRedeemCodeController {
         } catch (Exception e) {
             logger.error("批量删除兑换码发生异常", e);
             return R.error("批量删除兑换码发生异常");
+        }
+    }
+
+    /**
+     * 批量启用兑换码
+     */
+    @SuppressWarnings("unchecked")
+    @PostMapping("/batchEnable")
+    public R batchEnable(@RequestBody Map<String, Object> params){
+        logger.info("批量启用兑换码{}", JsonUtil.toJsonString(params));
+        try {
+            List<Integer> idList = (List<Integer>) params.get("idList");
+            if(!idList.isEmpty()){
+                //启用选中的不是已兑换状态的兑换码
+                UpdateWrapper updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
+                RedeemCode code = new RedeemCode();
+                code.setStatus(1);
+                redeemCodeService.update(code, updateQuery);
+                return R.ok();
+            }else{
+                return R.error("参数错误");
+            }
+        } catch (Exception e) {
+            logger.error("量启用兑换码发生异常", e);
+            return R.error("量启用兑换码发生异常");
+        }
+    }
+
+    /**
+     * 批量禁用兑换码
+     */
+    @SuppressWarnings("unchecked")
+    @PostMapping("/batchDisable")
+    public R batchDisable(@RequestBody Map<String, Object> params){
+        logger.info("批量启用兑换码{}", JsonUtil.toJsonString(params));
+        try {
+            List<Integer> idList = (List<Integer>) params.get("idList");
+            if(!idList.isEmpty()){
+                //启用选中的不是已兑换状态的兑换码
+                UpdateWrapper updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
+                RedeemCode code = new RedeemCode();
+                code.setStatus(0);
+                redeemCodeService.update(code, updateQuery);
+                return R.ok();
+            }else{
+                return R.error("参数错误");
+            }
+        } catch (Exception e) {
+            logger.error("批量禁用兑换码发生异常", e);
+            return R.error("批量禁用兑换码发生异常");
         }
     }
 
