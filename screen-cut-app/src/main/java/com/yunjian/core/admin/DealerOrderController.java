@@ -47,11 +47,14 @@ public class DealerOrderController {
 	public R queryOrderByPage(@RequestBody Map<String, Object> params) {
 		SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
 		SysRoleEntity role = (SysRoleEntity) HttpContextUtils.getLoginUser().get("role");
-		if(role.getRoleId()==2) { //2：经销商
+		int isDealer = 0;
+		if(role!=null && role.getRoleId()==2) { //2：经销商
 			params.put("dealerId", user.getUserId());
+			isDealer = 1;
 		}
 		PageUtils page = dealerOrderService.queryPage(params);
 		R r = R.ok().put("page", page);
+		r.put("isDealer", isDealer);
 		return r;
 	}
 	
