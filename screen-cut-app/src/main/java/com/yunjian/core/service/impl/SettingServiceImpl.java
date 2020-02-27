@@ -1,6 +1,7 @@
 package com.yunjian.core.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +35,14 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
         try {
             Account account = SecurityContext.getUserPrincipal();
+            //第一个参数配置默认使用
+            List<Setting> list = this.list(new QueryWrapper<Setting>().eq("account_id", account.getId()));
+            int isUse = list.isEmpty() ? 1 : 0;
             if(param.getId() == null || param.getId() <= 0){
                 param.setCreateTime(new Date());
                 param.setUpdateTime(new Date());
                 param.setAccountId(account.getId());
-                param.setIsUse(1);
+                param.setIsUse(isUse);
                 this.saveOrUpdate(param);
             }else{
                 Setting setting = this.getOne(new QueryWrapper<Setting>().eq("id", param.getId()));

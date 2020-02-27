@@ -1,21 +1,20 @@
 package com.yunjian.core.api;
 
-import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.core.dto.ResponseDto;
-import com.yunjian.core.service.IRedeemCodeService;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.service.IRedeemCodeService;
 
 @RestController
 @RequestMapping("/api/redeemCode")

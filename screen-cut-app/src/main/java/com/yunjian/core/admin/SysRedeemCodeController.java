@@ -1,16 +1,9 @@
 package com.yunjian.core.admin;
 
 
-import com.alibaba.druid.util.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.entity.Distributor;
-import com.yunjian.core.entity.RedeemCode;
-import com.yunjian.core.service.IRedeemCodeService;
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
+import com.alibaba.druid.util.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.R;
+import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.entity.RedeemCode;
+import com.yunjian.core.service.IRedeemCodeService;
 
 /**
  * <p>
@@ -77,7 +76,8 @@ public class SysRedeemCodeController {
     /**
      * 批量删除兑换码
      */
-    @PostMapping("/batchDelete")
+    @SuppressWarnings("unchecked")
+	@PostMapping("/batchDelete")
     public R batchDelete(@RequestBody Map<String, Object> params){
         logger.info("批量删除兑换码{}", JsonUtil.toJsonString(params));
         try {

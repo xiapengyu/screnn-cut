@@ -9,12 +9,9 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Maps;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.PurchaseDetail;
-import com.yunjian.core.entity.PurchaseOrder;
 import com.yunjian.core.mapper.PurchaseDetailMapper;
 import com.yunjian.core.mapper.PurchaseOrderMapper;
 import com.yunjian.core.service.IPurchaseDetailService;

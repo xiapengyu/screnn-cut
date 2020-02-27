@@ -1,6 +1,18 @@
 package com.yunjian.core.api;
 
 
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
@@ -11,14 +23,6 @@ import com.yunjian.core.entity.PhoneBrand;
 import com.yunjian.core.entity.PhoneModel;
 import com.yunjian.core.service.IPhoneBrandService;
 import com.yunjian.core.service.IPhoneModelService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -49,29 +53,8 @@ public class PhoneBrandController {
     public ResponseDto queryBrandList(@RequestBody Map<String, Object> param){
         logger.info("查询品牌列表");
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-
-        String type = StringUtil.obj2String(param.get("type"));
-        if(StringUtils.isEmpty(type)){
-            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "参数错误");
-        }
-
-        List<PhoneModel> modelList = phoneModelService.list(new QueryWrapper<PhoneModel>().eq("type", Integer.parseInt(type)));
-        List<Integer> brandIdList = new ArrayList<>();
-        modelList.forEach(item -> {
-            if(!brandIdList.contains(item.getBrandId())){
-                brandIdList.add(item.getBrandId());
-            }
-        });
-        logger.info("有数据的品牌");
-        if(brandIdList.isEmpty()){
-            List<PhoneBrand> list = new ArrayList<>();
-            response.setData(list);
-        }else{
-            List<PhoneBrand> list = phoneBrandService.list(new QueryWrapper<PhoneBrand>()
-                    .in("id", brandIdList)
-                    .eq("delete_flag", 1));
-            response.setData(list);
-        }
+        List<PhoneBrand> list = phoneBrandService.list(new QueryWrapper<PhoneBrand>() .eq("delete_flag", 1));
+        response.setData(list);
         return response;
     }
 

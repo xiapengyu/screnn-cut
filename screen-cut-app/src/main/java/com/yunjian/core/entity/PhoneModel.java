@@ -69,7 +69,7 @@ public class PhoneModel implements Serializable {
     private String originName;
 
     private Integer type;
-
+    
     private String md5;
 
 }
