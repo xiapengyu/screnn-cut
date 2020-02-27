@@ -58,7 +58,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 			queryWrapper.like("name", name);
 		}
 
-		SysUserEntity loginUser = HttpContextUtils.getLoginUser();
+		SysUserEntity loginUser = HttpContextUtils.getLoginSysUserEntity();
 		if(loginUser.getUserId() != Constant.SUPER_ADMIN){
 			queryWrapper.eq("creator_id", loginUser.getUserId());
 		}
@@ -139,7 +139,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 			goods.setCreateTime(new Date());
 			goods.setUpdateTime(new Date());
 			goods.setDeleteFlag(1);
-			SysUserEntity loginUser = HttpContextUtils.getLoginUser();
+			SysUserEntity loginUser = HttpContextUtils.getLoginSysUserEntity();
 			goods.setCreatorId(loginUser.getUserId());
 			if(this.saveOrUpdate(goods)) {
 				List<GoodsImg> imgList = new ArrayList<GoodsImg>();

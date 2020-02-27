@@ -37,6 +37,27 @@ public class HttpContextUtils {
 		return request.getHeader("Origin");
 	}
 
+	public static SysUserEntity getLoginSysUserEntity(){
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		// 获取 servlet上下文
+		ServletContext sc = request.getServletContext();
+		// 获取 spring 容器
+		AbstractApplicationContext cxt = (AbstractApplicationContext) WebApplicationContextUtils.getWebApplicationContext(sc);
+		SysUserService sysUserServiceImpl = (SysUserService) cxt.getBean("sysUserService");
+		SysUserTokenService sysUserTokenServiceImpl = (SysUserTokenService) cxt.getBean("sysUserTokenService");
+
+		String token = request.getHeader("token");
+		SysUserTokenEntity tokenEntity = sysUserTokenServiceImpl.getOne(new QueryWrapper<SysUserTokenEntity>()
+				.eq("token", token).gt("expire_time", new Date()));
+
+		if(tokenEntity == null){
+			return null;
+		}
+		SysUserEntity userEntity = sysUserServiceImpl.getOne(new QueryWrapper<SysUserEntity>()
+				.eq("user_id", tokenEntity.getUserId()));
+		return userEntity;
+	}
+
 	public static Map<String,Object> getLoginUser(){
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		// 获取 servlet上下文

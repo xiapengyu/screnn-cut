@@ -199,7 +199,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         if(!StringUtils.isEmpty(email)){
             queryWrapper.like("email", email);
         }
-		SysUserEntity loginUser = HttpContextUtils.getLoginUser();
+		SysUserEntity loginUser = HttpContextUtils.getLoginSysUserEntity();
         if(loginUser.getUserId() != Constant.SUPER_ADMIN){
 			queryWrapper.eq("dealer_id", loginUser.getUserId().intValue());
 		}

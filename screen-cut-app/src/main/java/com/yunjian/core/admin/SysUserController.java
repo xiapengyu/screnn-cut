@@ -184,7 +184,7 @@ public class SysUserController extends AbstractController {
 		logger.info("解析数据{}", JsonUtil.toJsonString(array));
 		uploadFile.delete();
 		List<SysUserEntity> resultList = new ArrayList<>();
-		SysUserEntity loginUser = HttpContextUtils.getLoginUser();
+		SysUserEntity loginUser = HttpContextUtils.getLoginSysUserEntity();
 		try {
 			if(array.size() > 0){
 				for(Object item : array) {
