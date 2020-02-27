@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunjian.common.utils.BusinessUtils;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.DateUtils;
 import com.yunjian.common.utils.PageUtils;
@@ -108,7 +109,7 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
         try {
             Account account = SecurityContext.getUserPrincipal();
             PurchaseOrder order = new PurchaseOrder();
-            order.setOrderNo(createOrderNo());
+            order.setOrderNo(BusinessUtils.createOrderNo());
             order.setComment(param.getComment());
             order.setAccountId(account.getId());
             Address address = addressService.getOne(new QueryWrapper<Address>().eq("id", param.getAddressId()));
@@ -262,12 +263,4 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
         return dto;
     }
 
-    private String createOrderNo() {
-        String orderNo = "";
-        String prefix = DateUtils.format(new Date(), "yyyyMMddHHmmss");
-        String suffix = (int) ((Math.random() * 9 + 1) * 1000000) + "";
-        orderNo = prefix + suffix;
-        return orderNo;
-    }
-   
 }

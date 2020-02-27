@@ -1,6 +1,7 @@
 package com.yunjian.core.admin;
 
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yunjian.common.annotation.SysLog;
+import com.yunjian.common.utils.BusinessUtils;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.DealerOrder;
@@ -50,6 +52,9 @@ public class DealerOrderController {
 	@SysLog("保存字典")
 	@PostMapping("/save")
 	public R save(@RequestBody DealerOrder dealerOrder){
+		if(dealerOrder.getId()==null) {
+			dealerOrder.setOrderNo(BusinessUtils.createOrderNo());
+		}
 		dealerOrderService.saveOrUpdate(dealerOrder);
 		return R.ok();
 	}
@@ -66,13 +71,24 @@ public class DealerOrderController {
 	/**
 	 * 确认或者拒绝订单订单信息
 	 */
-	@GetMapping("/confirm")
+	@PostMapping("/confirm")
 	public R confirm(@RequestBody Map<String, Object> params){
 		DealerOrder order = new DealerOrder();
-		order.setId((Long)params.get("id"));
+		order.setId((Integer)params.get("id"));
 		order.setStatus((Integer)params.get("status"));
 		order.setComment((String)params.get("comment"));
 		dealerOrderService.updateById(order);
+		return R.ok();
+	}
+	
+	/**
+	 * 删除
+	 */
+	@SysLog("删除经销商采购单")
+	@PostMapping("/delete")
+	public R delete(@RequestBody Long[] ids){
+		dealerOrderService.removeByIds(Arrays.asList(ids));
+
 		return R.ok();
 	}
 
