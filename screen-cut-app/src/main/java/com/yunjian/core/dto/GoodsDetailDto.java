@@ -9,6 +9,8 @@ import com.yunjian.core.entity.GoodsType;
 public class GoodsDetailDto extends Goods {
 
 	private static final long serialVersionUID = 1L;
+	
+	private String coverImg = "";
 
 	private List<GoodsType> typeList = new ArrayList<>();
 
@@ -29,5 +31,13 @@ public class GoodsDetailDto extends Goods {
 	public void setImageList(List<String> imageList) {
 		this.imageList = imageList;
 	}
-    
+
+	public String getCoverImg() {
+		return coverImg;
+	}
+
+	public void setCoverImg(String coverImg) {
+		this.coverImg = coverImg;
+	}
+	
 }
