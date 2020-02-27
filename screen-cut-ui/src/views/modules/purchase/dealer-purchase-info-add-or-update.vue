@@ -4,13 +4,14 @@
     :close-on-click-modal="false"
     :visible.sync="visible"
     append-to-body>
-    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px" size="mini">
+    <div slot="title">{{ opt==1?'详情':'修改' }}</div>
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px" size="mini">
       <el-input v-if="false" v-model="dataForm.id"></el-input>
 
       <el-row :gutter="20">
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-form-item label="采购单号" >
+            <el-form-item label="采购单号" v-if="dataForm.id!=0" :disabled="true">
               <el-input v-model="dataForm.orderNo" prop=""></el-input>
             </el-form-item>
             <el-form-item label="经销商名称">
@@ -23,45 +24,45 @@
               <el-input v-model="dataForm.bladeNo" prop=""></el-input>
             </el-form-item>
             <el-form-item label="刀片说明">
-              <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3"></el-input>
+              <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3" prop=""></el-input>
             </el-form-item>
             <el-form-item label="机器数">
-              <el-input v-model="dataForm.deviceNo" ></el-input>
+              <el-input v-model="dataForm.deviceNo" prop=""></el-input>
             </el-form-item>
             <el-form-item label="机器说明">
-              <el-input type="textarea" v-model="dataForm.deviceExplain" :rows="3"></el-input>
+              <el-input type="textarea" v-model="dataForm.deviceExplain" :rows="3" prop=""></el-input>
             </el-form-item>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="grid-content bg-purple">
             <el-form-item label="公司">
-              <el-input v-model="dataForm.company" ></el-input>
+              <el-input v-model="dataForm.company" prop=""></el-input>
             </el-form-item>
             <el-form-item label="经销商Email">
-              <el-input v-model="dataForm.dealerEmail" ></el-input>
+              <el-input v-model="dataForm.dealerEmail" prop=""></el-input>
             </el-form-item>
             <el-form-item label="订单状态" v-if="dataForm.id!=0">
-              <el-select v-model="dataForm.status">
+              <el-select v-model="dataForm.status" prop="">
                 <el-option label="未确认" value="1"></el-option>
                 <el-option label="已确认" value="2"></el-option>
                 <el-option label="已拒绝" value="3"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="膜数">
-              <el-input v-model="dataForm.filmNo" ></el-input>
+              <el-input v-model="dataForm.filmNo" prop=""></el-input>
             </el-form-item>
             <el-form-item label="膜说明">
-              <el-input type="textarea" v-model="dataForm.filmExplain" :rows="3"></el-input>
+              <el-input type="textarea" v-model="dataForm.filmExplain" :rows="3" prop=""></el-input>
             </el-form-item>
             <el-form-item label="次数">
-              <el-input v-model="dataForm.useTimes" ></el-input>
+              <el-input v-model="dataForm.useTimes" prop=""></el-input>
             </el-form-item>
             <el-form-item v-if="dataForm.id!=0" label="创建时间">
-              <el-input :disabled="true" v-model="dataForm.createTime"></el-input>
+              <el-input :disabled="true" v-model="dataForm.createTime" prop=""></el-input>
             </el-form-item>
             <el-form-item label="回复">
-              <el-input type="textarea" :rows="3" v-model="dataForm.comment"></el-input>
+              <el-input type="textarea" :rows="3" v-model="dataForm.comment" prop=""></el-input>
             </el-form-item>
           </div>
         </el-col>
@@ -69,7 +70,7 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">关闭</el-button>
-      <el-button @click="saveOrderInfo()" type="primary">保存</el-button>
+      <el-button @click="saveOrderInfo()" type="primary" v-if="opt==2">保存</el-button>
     </span>
   </el-dialog>
 </template>
@@ -79,6 +80,7 @@
     data () {
       return {
         visible: false,
+        opt: '',
         dataForm: {
           orderNo: '',
           company: '',
@@ -95,12 +97,21 @@
           comment: '',
           createTime: '',
           status: ''
+        },
+        dataRule: {
+          dealerName: [
+            { required: true, message: '经销商名不能为空', trigger: 'blur' }
+          ],
+          dealerEmail: [
+            { required: true, message: '经销商邮箱不能为空', trigger: 'blur' }
+          ]
         }
       }
     },
     methods: {
-      init (id) {
+      init (id, opt) {
         this.visible = true
+        this.opt = opt
         this.dataForm.id = id || 0
         if (this.dataForm.id) {
           this.$http({

@@ -1,6 +1,6 @@
 <template>
   <div class="mod-user">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-form :inline="true"  :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <el-input v-model="dataForm.orderNo" placeholder="采购单号" clearable></el-input>
       </el-form-item>
@@ -47,12 +47,13 @@
         prop="otherContact"
         header-align="center"
         align="center"
-        label="其他练习方式">
+        label="其他联系方式">
       </el-table-column>
       <<el-table-column
         prop="bladeNo"
         header-align="center"
         align="center"
+        width="80"
         label="刀片数">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
@@ -65,6 +66,7 @@
         prop="filmNo"
         header-align="center"
         align="center"
+        width="80"
         label="膜数">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
@@ -77,6 +79,7 @@
         prop="deviceNo"
         header-align="center"
         align="center"
+        width="80"
         label="机器数">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
@@ -89,6 +92,7 @@
         prop="useTimes"
         header-align="center"
         align="center"
+        width="80"
         label="次数">
       </el-table-column>-->
       <el-table-column
@@ -101,6 +105,7 @@
           prop="status"
           header-align="center"
           align="center"
+          width="80"
           label="状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 1" size="small">未确认</el-tag>
@@ -112,19 +117,20 @@
         prop="createTime"
         header-align="center"
         align="center"
+        width="160"
         label="创建时间">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
-        width="200"
+        width="230"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.id)">详情</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">详情</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)">确认</el-button>
           <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)">拒绝</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 2)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -246,6 +252,7 @@
       },
       // 打开确认/拒绝窗口
       showConfirmWin (val, status) {
+        this.dataForm.comment = ''
         this.dataForm.id = val
         this.dataForm.status = status
         this.confirmDialogVisible = true
@@ -281,31 +288,32 @@
         })
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
+      addOrUpdateHandle (id, opt) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
+          this.$refs.addOrUpdate.init(id, opt)
         })
       },
       // 删除
       deleteHandle (id) {
-        this.$confirm(`确定进行删除操作?`, '提示', {
+        var typeIds = id ? [id] : this.dataListSelections.map(item => {
+          return item.id
+        })
+        this.$confirm(`确定执行删除?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/purchaseOrder/delete'),
+            url: this.$http.adornUrl('/sys/dealerPurchase/delete'),
             method: 'post',
-            data: this.$http.adornData({
-              'id': id
-            })
+            data: this.$http.adornData(typeIds, false)
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({
                 message: '操作成功',
                 type: 'success',
-                duration: 300,
+                duration: 1500,
                 onClose: () => {
                   this.getDataList()
                 }
