@@ -106,9 +106,11 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
     @Override
     public ResponseDto swapCode(String redeemNo) {
         ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+        RedeemCode code = null;
         try {
-            RedeemCode code = this.getOne(new QueryWrapper<RedeemCode>()
-                    .eq("redeem_no", redeemNo).eq("status", 1));
+            Account account = SecurityContext.getUserPrincipal();
+            code = this.getOne(new QueryWrapper<RedeemCode>()
+                    .eq("redeem_no", redeemNo));
             logger.info("扫描的兑换码信息{}", JsonUtil.toJsonString(code));
             if(code == null){
                 return new ResponseDto(Constant.FAIL_CODE, null, "无法识别的兑换码");
@@ -117,25 +119,33 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
             }else if (code.getStatus() == 2){   //已兑换
                 return new ResponseDto(Constant.FAIL_CODE, null, "兑换码已被使用");
             }
-            Account account = SecurityContext.getUserPrincipal();
-            //更新剩余切割次数
-            Account a = accountService.getOne(new QueryWrapper<Account>()
-                    .eq("id", account.getId()));
-            a.setUnuseAmount(account.getUnuseAmount() + code.getTimes());
-            a.setUpdateTime(new Date());
-            accountService.saveOrUpdate(a);
-
             //更新兑换码状态为已兑换
             code.setStatus(2);
             this.saveOrUpdate(code);
 
             //插入兑换记录
             RedeemRecord record = new RedeemRecord();
-            record.setAccountId(a.getId());
+            record.setAccountId(account.getId());
             record.setRedeemNo(redeemNo);
             record.setCreateTime(new Date());
             redeemRecordService.saveOrUpdate(record);
+
+            //更新剩余切割次数
+            Account a = accountService.getOne(new QueryWrapper<Account>()
+                    .eq("id", account.getId()));
+            a.setUnuseAmount(account.getUnuseAmount() + code.getTimes());
+            a.setUpdateTime(new Date());
+            accountService.saveOrUpdate(a);
         } catch (Exception e) {
+            logger.error("扫描兑换码异常", e);
+            //回退操作
+            if(code != null){
+                //回退状态
+                code.setStatus(1);
+                this.saveOrUpdate(code);
+                //删除兑换记录
+                redeemRecordService.remove(new QueryWrapper<RedeemRecord>().eq("redeem_no", code.getRedeemNo()));
+            }
             return new ResponseDto(Constant.FAIL_CODE, null, "扫描兑换码异常");
         }
         return response;

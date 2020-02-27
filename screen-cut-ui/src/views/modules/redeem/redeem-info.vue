@@ -60,9 +60,15 @@
         header-align="center"
         align="center"
         label="二维码">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           <div><img :src="scope.row.url"  min-width="55" height="55"></div>
-        </template>
+        </template> -->
+        <template slot-scope="scope">
+        <el-popover placement="right" title="" trigger="hover">
+          <img :src="scope.row.url" style="max-height: 150px;max-width: 150px" />
+          <img slot="reference" :src="scope.row.url" :alt="scope.row.url" style="max-height: 55px;max-width: 55px">
+        </el-popover>
+      </template>
       </el-table-column>
       <el-table-column
         prop="times"
@@ -77,7 +83,7 @@
         label="状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
-          <el-tag v-else-if="scope.row.status === 1" size="small" type="danger">启用</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small" >启用</el-tag>
           <el-tag v-else size="small">已兑换</el-tag>
         </template>
       </el-table-column>
@@ -238,7 +244,7 @@
         var idList = this.dataListSelections.map(item => {
           return item.id
         })
-        this.$confirm(`确定进行批量删除操作?`, '提示', {
+        this.$confirm(`确定进行批量启用操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -300,7 +306,7 @@
         var idList = this.dataListSelections.map(item => {
           return item.id
         })
-        this.$confirm(`确定进行批量删除操作?`, '提示', {
+        this.$confirm(`确定进行批量禁用操作?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
