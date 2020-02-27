@@ -128,8 +128,8 @@
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">详情</el-button>
-          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)">确认</el-button>
-          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)">拒绝</el-button>
+          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)" v-if="isDealer==0">确认</el-button>
+          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)" v-if="isDealer==0">拒绝</el-button>
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 2)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
@@ -177,6 +177,7 @@
   export default {
     data () {
       return {
+        isDealer: 0,
         dataForm: {
           id: '',
           status: '',
@@ -221,6 +222,7 @@
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
+            this.isDealer = data.isDealer
           } else {
             this.dataList = []
             this.totalPage = 0
