@@ -34,11 +34,13 @@ public class DealerOrderServiceImpl extends ServiceImpl<DealerOrderMapper, Deale
 	public PageUtils queryPage(Map<String, Object> params) {
 		String orderNo = (String)params.get("orderNo");
         String email = (String)params.get("email");
+        Integer dealerId = (Integer)params.get("dealerId");
 
         IPage<DealerOrder> page = this.page(
                 new Query<DealerOrder>().getPage(params),
                 new QueryWrapper<DealerOrder>()
                         .eq(StringUtils.isNotBlank(orderNo),"order_no", orderNo)
+                        .eq(dealerId!=0,"dealer_id", dealerId)
                         .like(StringUtils.isNotBlank(email),"dealer_email", email)
         );
         return new PageUtils(page);

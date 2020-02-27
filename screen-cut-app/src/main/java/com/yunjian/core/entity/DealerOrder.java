@@ -25,6 +25,8 @@ public class DealerOrder implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	
+	private Integer dealerId;
 
 	/**
 	 * 采购单号

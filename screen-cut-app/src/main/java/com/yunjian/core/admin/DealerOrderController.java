@@ -42,6 +42,8 @@ public class DealerOrderController {
 	 */
 	@PostMapping("/list")
 	public R queryOrderByPage(@RequestBody Map<String, Object> params) {
+		int dealerId = 3;
+		params.put("dealerId", dealerId);
 		PageUtils page = dealerOrderService.queryPage(params);
 		return R.ok().put("page", page);
 	}
@@ -53,6 +55,8 @@ public class DealerOrderController {
 	@PostMapping("/save")
 	public R save(@RequestBody DealerOrder dealerOrder){
 		if(dealerOrder.getId()==null) {
+			int dealerId = 3;
+			dealerOrder.setDealerId(dealerId);
 			dealerOrder.setOrderNo(BusinessUtils.createOrderNo());
 		}
 		dealerOrderService.saveOrUpdate(dealerOrder);
