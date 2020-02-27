@@ -2,26 +2,32 @@
   <el-dialog
     :title="'采购单详情'"
     :close-on-click-modal="false"
-    :visible.sync="visible">
+    :visible.sync="visible"
+    append-to-body>
 
     <div>
       <table style="width: 100%;">
         <tr>
-          <td style="width: 50%;">采购单号: {{ order.orderNo }}</td>
-          <td>收货人姓名: {{ order.userName }}</td></tr>
-        <tr>
-          <td>客户邮箱: {{ order.userEmail }}</td>
-          <td>收货人联系方式: {{ order.phone }}</td>
+          <td style="width: 50%;"><div><div class="info-label">采购单号:</div> <div class="info-value">{{ order.orderNo }}</div></div></td>
+          <td><div><div class="info-label">收货人姓名:</div> <div class="info-value">{{ order.userName }}</div></div></td>
         </tr>
         <tr>
-          <td>配送单状态:
+          <td style="width: 50%;"><div><div class="info-label">客户邮箱:</div> <div class="info-value">{{ order.userEmail }}</div></div></td>
+          <td><div><div class="info-label">收货人联系方式:</div> <div class="info-value">{{ order.phone }}</div></div></td>
+        </tr>
+        <tr>
+          <td style="width: 50%;"><div><div class="info-label">配送单状态::</div> <div class="info-value">
             <el-tag v-if="order.status === 1" size="small">未确认</el-tag>
             <el-tag v-else-if="order.status === 2" size="small" type="success">已确认</el-tag>
             <el-tag v-else-if="order.status === 3" size="small" type="danger">已拒绝</el-tag>
-          </td>
-          <td>配送地址: {{ order.address }}</td>
+          </div></div></td>
         </tr>
-        <tr><td colspan="2">备注: {{ order.remark }}</td></tr>
+        <tr>
+          <td colspan="2"><div><div class="info-label">配送地址:</div> <div class="info-value">{{ order.address }}</div></div></td>
+        </tr>
+        <tr>
+          <td colspan="2"><div><div class="info-label">备注:</div> <div class="info-value">{{ order.remark }}</div></div></td>
+        </tr>
       </table>
     </div>
 
@@ -60,16 +66,20 @@
         label="数量">
       </el-table-column>
     </el-table>
-
-
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">关闭</el-button>
     </span>
   </el-dialog>
 </template>
 
-<style scoped>
-
+<style>
+  .info-label{
+    width: 140px;
+    float: left;
+  }
+  .info-value{
+    float: left;
+  }
 </style>
 
 <script>

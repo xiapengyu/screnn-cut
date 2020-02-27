@@ -127,7 +127,7 @@
       :visible.sync="confirmDialogVisible"
       width="50%">
 
-      <el-form :model="dataForm" ref="dataForm" :rules="dataRules" @keyup.enter.native="confirmSubmit()" label-width="100px">
+      <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="confirmSubmit()" label-width="100px">
         <el-input v-if="false" prop="id" v-model="dataForm.id"></el-input>
         <el-form-item label="回复" prop="comment">
           <el-input type="textarea" v-model="dataForm.comment" placeholder="回复内容" :rows="5"></el-input>
