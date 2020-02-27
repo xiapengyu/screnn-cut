@@ -53,9 +53,13 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         String redeemNo = StringUtil.obj2String(params.get("redeemNo"));
+        String status = StringUtil.obj2String(params.get("status"));
         QueryWrapper<RedeemCode> queryWrapper = new QueryWrapper<RedeemCode>();
         if (!StringUtils.isEmpty(redeemNo)) {
             queryWrapper.like("redeem_no", redeemNo);
+        }
+        if(!StringUtils.isEmpty(status)){
+            queryWrapper.like("status", status);
         }
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
         IPage<RedeemCode> page = this.page(new Query<RedeemCode>().getPage(params), queryWrapper);

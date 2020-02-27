@@ -51,7 +51,7 @@ public class SysRoleController extends AbstractController {
 		QueryWrapper<SysUserRoleEntity> userQuery = new  QueryWrapper<SysUserRoleEntity>();
 		userQuery.eq("user_id", getUserId());
 		SysUserRoleEntity entity = sysUserRoleService.getOne(userQuery);
-		if(entity.getRoleId() != Constant.SUPER_ADMIN) {
+		if(entity != null && entity.getRoleId() != Constant.SUPER_ADMIN){
 			params.put("createUserId", getUserId());
 		}
 		PageUtils page = sysRoleService.queryPage(params);

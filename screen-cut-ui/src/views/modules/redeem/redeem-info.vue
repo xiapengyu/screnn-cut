@@ -5,6 +5,16 @@
         <el-input v-model="dataForm.redeemNo" placeholder="兑换编码" clearable></el-input>
       </el-form-item>
       <el-form-item>
+        <el-select v-model="dataForm.status" @change="choseStatus(dataForm.status)" placeholder="状态" style="width:100px;">
+          <el-option
+            v-for="item in statusList"
+            :key="item.id"
+            :label="item.label"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
         <el-button type="primary" @click="addHandle()">新增</el-button>
@@ -106,7 +116,8 @@
     data () {
       return {
         dataForm: {
-          redeemNo: ''
+          redeemNo: '',
+          status: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -114,7 +125,8 @@
         totalPage: 0,
         dataListLoading: false,
         addOrUpdateVisible: false,
-        addRedeemVisible: false
+        addRedeemVisible: false,
+        statusList: [{'id': 0, 'label': '禁用'}, {'id': 1, 'label': '正常'}, {'id': 2, 'label': '已兑换'}]
       }
     },
     components: {
@@ -134,7 +146,8 @@
           data: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'redeemNo': this.dataForm.redeemNo
+            'redeemNo': this.dataForm.redeemNo,
+            'status': this.dataForm.status
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -200,8 +213,12 @@
           })
         }).catch(() => {})
       },
+      choseStatus (status) {
+        this.dataForm.status = status
+      },
       clearQueryData () {
         this.dataForm.redeemNo = ''
+        this.dataForm.status = ''
         this.getDataList()
       }
     }
