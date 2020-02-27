@@ -42,14 +42,12 @@ public class PurchaseOrder implements Serializable {
     
     private Integer status;
     
-    private String comment;
-
     private Date createTime;
 
     private Date updateTime;
 
     private Integer deleteFlag;
 
-
+    private String remark;
     
 }

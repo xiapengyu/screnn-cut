@@ -8,7 +8,7 @@
         <result column="account_id" property="accountId" />
         <result column="address_id" property="address" />
         <result column="status" property="status" />
-        <result column="comment" property="comment" />
+        <result column="remark" property="remark" />
         <result column="create_time" property="createTime" />
     </resultMap>
     
@@ -20,7 +20,7 @@
     </resultMap>
     
     <select id="selectPageVoOfAppuser" parameterType="java.util.HashMap" resultType="com.yunjian.core.vo.PurchaseOrderVo">
-    	select o.id,o.order_no,o.status, o.`comment`,o.create_time,a.email as userEmail,
+    	select o.id,o.order_no,o.status, o.remark,o.create_time,a.email as userEmail,
     	ad.user_name as userName,ad.phone,ad.address 
     	from tb_purchase_order o
 		left join tb_account a on a.id = o.account_id 
@@ -39,7 +39,7 @@
     </select>
     
     <select id="queryPurchaseOrderOfAppuser" parameterType="java.util.HashMap" resultType="com.yunjian.core.vo.PurchaseOrderVo">
-    	select o.id,o.order_no,o.status, o.`comment`,o.create_time,a.email as userEmail,
+    	select o.id,o.order_no,o.status, o.remark,o.create_time,a.email as userEmail,
     	ad.user_name as userName,ad.phone,ad.address 
     	from tb_purchase_order o
 		left join tb_account a on a.id = o.account_id 

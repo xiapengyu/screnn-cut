@@ -21,7 +21,7 @@
           </td>
           <td>配送地址: {{ order.address }}</td>
         </tr>
-        <tr><td colspan="2">回复说明: {{ order.comment }}</td></tr>
+        <tr><td colspan="2">备注: {{ order.remark }}</td></tr>
       </table>
     </div>
 
