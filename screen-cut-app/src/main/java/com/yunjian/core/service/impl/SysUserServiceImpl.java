@@ -2,21 +2,10 @@
 
 package com.yunjian.core.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.exception.RRException;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.core.dao.SysUserDao;
-import com.yunjian.core.entity.Distributor;
-import com.yunjian.core.entity.SysUserEntity;
-import com.yunjian.core.entity.SysUserRoleEntity;
-import com.yunjian.core.service.SysRoleService;
-import com.yunjian.core.service.SysUserRoleService;
-import com.yunjian.core.service.SysUserService;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -27,10 +16,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunjian.common.exception.RRException;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.Query;
+import com.yunjian.common.utils.R;
+import com.yunjian.core.dao.SysUserDao;
+import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.entity.SysUserRoleEntity;
+import com.yunjian.core.service.SysRoleService;
+import com.yunjian.core.service.SysUserRoleService;
+import com.yunjian.core.service.SysUserService;
 
 
 /**

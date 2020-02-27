@@ -1,30 +1,42 @@
 package com.yunjian.core.admin;
 
 
-import com.alibaba.druid.util.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.*;
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.entity.Distributor;
-import com.yunjian.core.entity.SysUserEntity;
-import com.yunjian.core.service.IDeviceService;
-import com.yunjian.core.service.SysUserService;
-import net.sf.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.alibaba.druid.util.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.ExcelUtil;
+import com.yunjian.common.utils.FileUtil;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.R;
+import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.entity.Device;
+import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.service.IDeviceService;
+import com.yunjian.core.service.SysUserService;
+
+import net.sf.json.JSONArray;
 
 /**
  * <p>
@@ -85,7 +97,7 @@ public class SysDeviceController extends AbstractController {
         SysUserEntity loginUser = getUser();
         if (!StringUtils.isEmpty(id)) {
             Device device = deviceService.getOne(new QueryWrapper<Device>().eq("id", id));
-            QueryWrapper query = new QueryWrapper<SysUserEntity>();
+            QueryWrapper<SysUserEntity> query = new QueryWrapper<SysUserEntity>();
             if(loginUser.getUserId() != Constant.SUPER_ADMIN){
                 query.eq("creator_id", loginUser.getUserId());
             }
@@ -124,7 +136,7 @@ public class SysDeviceController extends AbstractController {
     public R queryTotalSysUser() {
         logger.info("查询有权限的经销商列表");
         SysUserEntity loginUser = getUser();
-        QueryWrapper query = new QueryWrapper<SysUserEntity>();
+        QueryWrapper<SysUserEntity> query = new QueryWrapper<SysUserEntity>();
         if(loginUser.getUserId() != Constant.SUPER_ADMIN){
             query.eq("user_id", loginUser.getUserId());
         }
