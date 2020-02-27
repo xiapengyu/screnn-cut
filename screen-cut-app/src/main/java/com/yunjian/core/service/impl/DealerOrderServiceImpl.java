@@ -40,7 +40,7 @@ public class DealerOrderServiceImpl extends ServiceImpl<DealerOrderMapper, Deale
                 new Query<DealerOrder>().getPage(params),
                 new QueryWrapper<DealerOrder>()
                         .eq(StringUtils.isNotBlank(orderNo),"order_no", orderNo)
-                        .eq(dealerId!=0,"dealer_id", dealerId)
+                        .eq(dealerId!=null && dealerId!=0,"dealer_id", dealerId)
                         .like(StringUtils.isNotBlank(email),"dealer_email", email)
         );
         return new PageUtils(page);
