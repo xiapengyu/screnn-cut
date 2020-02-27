@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.annotation.SysLog;
 import com.yunjian.common.utils.BusinessUtils;
 import com.yunjian.common.utils.HttpContextUtils;
@@ -22,7 +21,6 @@ import com.yunjian.core.entity.DealerOrder;
 import com.yunjian.core.entity.SysRoleEntity;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IDealerOrderService;
-import com.yunjian.core.service.SysRoleService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,11 +50,8 @@ public class DealerOrderController {
 		if(role.getRoleId()==2) { //2：经销商
 			params.put("dealerId", user.getUserId());
 		}
-		
 		PageUtils page = dealerOrderService.queryPage(params);
-		
 		R r = R.ok().put("page", page);
-		
 		return r;
 	}
 	
