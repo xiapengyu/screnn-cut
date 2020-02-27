@@ -184,8 +184,7 @@
             'page': this.pageIndex,
             'limit': this.pageSize,
             'orderNo': this.dataForm.orderNo,
-            'email': this.dataForm.email,
-            'accountType': 1
+            'email': this.dataForm.email
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

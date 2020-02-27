@@ -38,8 +38,6 @@ public class PurchaseOrder implements Serializable {
      */
     private Integer accountId;
     
-    private Integer accountType;
-
     private Integer address_id;
     
     private Integer status;

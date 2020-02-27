@@ -28,13 +28,6 @@ public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder> {
 	 */
 	IPage<PurchaseOrderVo> selectPageVoOfAppuser(Page<PurchaseOrderVo> page, Map<String,Object> map);
 
-	/**
-	 * 查询经销商的采购列表
-	 * @param page
-	 * @param map
-	 * @return
-	 */
-	IPage<PurchaseOrderVo> selectPageVoOfDealer(Page<PurchaseOrderVo> page, Map<String, Object> map);
 
 	/**
 	 * 查询app用户的采购单信息
@@ -43,13 +36,5 @@ public interface PurchaseOrderMapper extends BaseMapper<PurchaseOrder> {
 	 * @return
 	 */
 	PurchaseOrderVo queryPurchaseOrderOfAppuser(Map<String, Object> params);
-
-	/**
-	 * 查询经销商的采购单信息
-	 * @param page
-	 * @param map
-	 * @return
-	 */
-	PurchaseOrderVo queryPurchaseOrderOfDealer(Map<String, Object> params);
 
 }

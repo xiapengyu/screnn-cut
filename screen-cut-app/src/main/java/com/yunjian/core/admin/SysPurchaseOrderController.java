@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yunjian.common.utils.HttpContextUtils;
 import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
+import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IPurchaseDetailService;
 import com.yunjian.core.service.IPurchaseOrderService;
 
@@ -42,6 +44,8 @@ public class SysPurchaseOrderController {
 	@PostMapping("/list")
 	public R queryOrderByPage(@RequestBody Map<String, Object> params) {
 		logger.info("分页查询采购单列表{}", JsonUtil.toJsonString(params));
+		SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
+		params.put("dealerId", user.getUserId());
 		PageUtils page = purchaseOrderService.queryOrderByPage4Sys(params);
 		return R.ok().put("page", page);
 	}

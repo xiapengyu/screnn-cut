@@ -33,22 +33,13 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailMapper,
 	@Resource
 	private PurchaseDetailMapper purchaseDetailMapper;
 	
-	@Autowired
-    private IPurchaseOrderService purchaseOrderService;
-	
 	@Resource
     private PurchaseOrderMapper purchaseOrderMapper;
 	
 	@Override
 	public R queryPurchaseDetailInfo(Map<String, Object> params) {		
-		int accountType = (int) params.get("accountType");
 		PurchaseOrderVo orderVo = null;
-    	if(accountType==1) {
-    		orderVo = purchaseOrderMapper.queryPurchaseOrderOfAppuser(params);
-    	}else {
-    		orderVo = purchaseOrderMapper.queryPurchaseOrderOfDealer(params);
-    	}
-    	
+		orderVo = purchaseOrderMapper.queryPurchaseOrderOfAppuser(params);
     	R r = R.ok();
     	List<PurchaseDetailVo> detailList = purchaseDetailMapper.queryPurchaseDetailList(orderVo.getOrderNo());
     	double allTotalPrice = 0;
