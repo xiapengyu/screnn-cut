@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 /**
  * 角色
  *
@@ -39,6 +41,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 	private SysUserService sysUserService;
     @Autowired
     private SysUserRoleService sysUserRoleService;
+    
+    @Resource
+    private SysRoleDao sysRoleDao;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -115,5 +120,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		if(!menuIdList.containsAll(role.getMenuIdList())){
 			throw new RRException("新增角色的权限，已超出你的权限范围");
 		}
+	}
+
+	@Override
+	public SysRoleEntity queryByUserId(Long userId) {
+		return sysRoleDao.queryByUserId(userId);
 	}
 }

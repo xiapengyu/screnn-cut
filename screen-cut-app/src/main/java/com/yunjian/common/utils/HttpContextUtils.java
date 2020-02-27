@@ -3,8 +3,11 @@
 package com.yunjian.common.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Maps;
+import com.yunjian.core.entity.SysRoleEntity;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.entity.SysUserTokenEntity;
+import com.yunjian.core.service.SysRoleService;
 import com.yunjian.core.service.SysUserService;
 import com.yunjian.core.service.SysUserTokenService;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -15,6 +18,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 public class HttpContextUtils {
 
@@ -33,7 +37,7 @@ public class HttpContextUtils {
 		return request.getHeader("Origin");
 	}
 
-	public static SysUserEntity getLoginUser(){
+	public static Map<String,Object> getLoginUser(){
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		// 获取 servlet上下文
 		ServletContext sc = request.getServletContext();
@@ -51,7 +55,13 @@ public class HttpContextUtils {
 		}
 		SysUserEntity userEntity = sysUserServiceImpl.getOne(new QueryWrapper<SysUserEntity>()
 				.eq("user_id", tokenEntity.getUserId()));
-
-		return userEntity;
+		
+		SysRoleService sysRoleService = (SysRoleService) cxt.getBean("sysRoleService");
+		SysRoleEntity role = sysRoleService.queryByUserId(userEntity.getUserId());
+		Map<String,Object> map = Maps.newHashMap();
+		map.put("sysUser", userEntity);
+		map.put("role", role);
+		
+		return map;
 	}
 }

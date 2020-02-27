@@ -12,14 +12,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.annotation.SysLog;
 import com.yunjian.common.utils.BusinessUtils;
 import com.yunjian.common.utils.HttpContextUtils;
 import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.DealerOrder;
+import com.yunjian.core.entity.SysRoleEntity;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IDealerOrderService;
+import com.yunjian.core.service.SysRoleService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,11 +47,14 @@ public class DealerOrderController {
 	 */
 	@PostMapping("/list")
 	public R queryOrderByPage(@RequestBody Map<String, Object> params) {
-		SysUserEntity user = HttpContextUtils.getLoginUser();
-		params.put("dealerId", user.getUserId());
+		SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
+		SysRoleEntity role = (SysRoleEntity) HttpContextUtils.getLoginUser().get("role");
+		if(role.getRoleId()==2) { //2：经销商
+			params.put("dealerId", user.getUserId());
+		}
+		
 		PageUtils page = dealerOrderService.queryPage(params);
 		
-		//获取当前登录用户角色
 		R r = R.ok().put("page", page);
 		
 		return r;
@@ -60,7 +66,7 @@ public class DealerOrderController {
 	@SysLog("保存字典")
 	@PostMapping("/save")
 	public R save(@RequestBody DealerOrder dealerOrder){
-		SysUserEntity user = HttpContextUtils.getLoginUser();
+		SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
 		if(dealerOrder.getId()==null) {
 			dealerOrder.setDealerId(user.getUserId());
 			dealerOrder.setStatus(1);
