@@ -127,11 +127,11 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
                     .eq("redeem_no", redeemNo));
             logger.info("扫描的兑换码信息{}", JsonUtil.toJsonString(code));
             if(code == null){
-                return new ResponseDto(Constant.FAIL_CODE, null, "无法识别的兑换码");
+                return new ResponseDto(Constant.FAIL_CODE, null, "无法识别的兑换码，如有疑问，请联系经销商处理");
             }else if (code.getStatus() == 0){   //未启用
-                return new ResponseDto(Constant.FAIL_CODE, null, "兑换码未生效");
+                return new ResponseDto(Constant.FAIL_CODE, null, "兑换码尚未启用，如有疑问，请联系经销商处理");
             }else if (code.getStatus() == 2){   //已兑换
-                return new ResponseDto(Constant.FAIL_CODE, null, "兑换码已被使用");
+                return new ResponseDto(Constant.FAIL_CODE, null, "兑换码已被使用，如有疑问，请联系经销商处理");
             }
             //更新兑换码状态为已兑换
             code.setStatus(2);

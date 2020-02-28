@@ -1,10 +1,13 @@
 package com.yunjian.core.admin;
 
 
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.druid.util.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.RedeemCode;
+import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.service.IRedeemCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.druid.util.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
-import com.yunjian.core.entity.RedeemCode;
-import com.yunjian.core.service.IRedeemCodeService;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -58,13 +55,8 @@ public class SysRedeemCodeController {
         try {
             String id = StringUtil.obj2String(params.get("id"));
             if(!StringUtils.isEmpty(id)){
-                RedeemCode code = redeemCodeService.getOne(new QueryWrapper<RedeemCode>().eq("id", id));
-                if(code.getStatus() == 1){
-                    return R.error("启用中的兑换码不能删除");
-                }else{
-                    redeemCodeService.remove(new QueryWrapper<RedeemCode>().eq("id", id));
-                    return R.ok();
-                }
+                redeemCodeService.remove(new QueryWrapper<RedeemCode>().eq("id", id));
+                return R.ok();
             }else{
                 return R.error("参数错误");
             }
@@ -85,8 +77,7 @@ public class SysRedeemCodeController {
             List<Integer> idList = (List<Integer>) params.get("idList");
             if(!idList.isEmpty()){
                 //删除选中的非启用状态的兑换码
-                redeemCodeService.remove(new QueryWrapper<RedeemCode>()
-                        .in("id", idList).ne("status", 1));
+                redeemCodeService.remove(new QueryWrapper<RedeemCode>().in("id", idList));
                 return R.ok();
             }else{
                 return R.error("参数错误");
@@ -107,7 +98,7 @@ public class SysRedeemCodeController {
         try {
             List<Integer> idList = (List<Integer>) params.get("idList");
             if(!idList.isEmpty()){
-                //启用选中的不是已兑换状态的兑换码
+                //启用没有使用过的兑换码
                 UpdateWrapper<RedeemCode> updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
                 RedeemCode code = new RedeemCode();
                 code.setStatus(1);
@@ -132,7 +123,7 @@ public class SysRedeemCodeController {
         try {
             List<Integer> idList = (List<Integer>) params.get("idList");
             if(!idList.isEmpty()){
-                //启用选中的不是已兑换状态的兑换码
+                //启用没有使用过的兑换码
                 UpdateWrapper<RedeemCode> updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
                 RedeemCode code = new RedeemCode();
                 code.setStatus(0);
@@ -182,14 +173,53 @@ public class SysRedeemCodeController {
     @PostMapping("/modifyRedeemCode")
     public R modifyRedeemCode(@RequestBody Map<String, Object> params){
         logger.info("修改兑换码信息{}", JsonUtil.toJsonString(params));
-        String id = StringUtil.obj2String(params.get("id"));
-        String status = StringUtil.obj2String(params.get("status"));
-        if(StringUtils.isEmpty(id) || StringUtils.isEmpty(status)){
-            return R.error("参数错误");
+        try {
+            String id = StringUtil.obj2String(params.get("id"));
+            String status = StringUtil.obj2String(params.get("status"));
+            if(StringUtils.isEmpty(id) || StringUtils.isEmpty(status)){
+                return R.error("参数错误");
+            }
+            RedeemCode code = redeemCodeService.getOne(new QueryWrapper<RedeemCode>().eq("id", Integer.parseInt(id)));
+            code.setStatus(Integer.parseInt(status));
+            redeemCodeService.saveOrUpdate(code);
+        } catch (Exception e) {
+            logger.error("修改兑换码信息异常", e);
+            return R.error("修改兑换码信息异常");
         }
-        RedeemCode code = redeemCodeService.getOne(new QueryWrapper<RedeemCode>().eq("id", Integer.parseInt(id)));
-        code.setStatus(Integer.parseInt(status));
-        redeemCodeService.saveOrUpdate(code);
+        return R.ok();
+    }
+
+    /**
+     * 按批次更新
+     */
+    @PostMapping("/modifyByBatchNo")
+    public R modifyByBatchNo(@RequestBody Map<String, Object> params){
+        logger.info("按批次更新{}", JsonUtil.toJsonString(params));
+        try {
+            String batchNo = StringUtil.obj2String(params.get("batchNo"));
+            String status = StringUtil.obj2String(params.get("status"));
+            if(StringUtils.isEmpty(batchNo) || StringUtils.isEmpty(status)){
+                return R.error("参数错误");
+            }
+            SysUserEntity sysUserEntity = HttpContextUtils.getLoginSysUserEntity();
+            QueryWrapper<RedeemCode> query = new QueryWrapper<RedeemCode>();
+            query.eq("batch_no", Integer.parseInt(batchNo));
+
+            if(sysUserEntity.getUserId() != Constant.SUPER_ADMIN){
+                query.eq("creator_id", sysUserEntity.getUserId());
+            }
+
+            if(redeemCodeService.list(query).isEmpty()){
+                return R.error("输入的批次无效");
+            }
+            query.ne("status", 2);
+            RedeemCode record = new RedeemCode();
+            record.setStatus(Integer.parseInt(status));
+            redeemCodeService.update(record, query);
+        } catch (Exception e) {
+            logger.error("按批次更新异常", e);
+            return R.error("按批次更新异常");
+        }
         return R.ok();
     }
 

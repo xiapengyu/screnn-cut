@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.yunjian.common.utils.*;
-import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.dto.SecurityContext;
+import com.yunjian.core.entity.*;
+import com.yunjian.core.service.IDeviceService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +24,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.core.dto.GoodsDetailDto;
 import com.yunjian.core.dto.GoodsDto;
 import com.yunjian.core.dto.GoodsReqDto;
-import com.yunjian.core.entity.Goods;
-import com.yunjian.core.entity.GoodsImg;
-import com.yunjian.core.entity.GoodsType;
 import com.yunjian.core.mapper.GoodsMapper;
 import com.yunjian.core.service.IGoodsImgService;
 import com.yunjian.core.service.IGoodsService;
@@ -47,6 +46,8 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 	private IGoodsImgService goodsImgService;
 	@Autowired
 	private IGoodsTypeService goodsTypeService;
+	@Autowired
+	private IDeviceService deviceService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -168,7 +169,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public PageUtils queryGoodsByPage(GoodsReqDto params) {
+		Account account = SecurityContext.getUserPrincipal();
+		Device device = deviceService.getOne(new QueryWrapper<Device>()
+				.eq("serial_no", account.getSerialNo()));
 		QueryWrapper<Goods> query = new QueryWrapper<Goods>();
+		query.eq("creator_id", device.getCreatorId());
 		if(!StringUtils.isEmpty(params.getName())){
 			query.like("name", params.getName());
 		}
