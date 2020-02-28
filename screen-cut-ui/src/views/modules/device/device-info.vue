@@ -59,6 +59,12 @@
         label="经销商">
       </el-table-column>
       <el-table-column
+        prop="email"
+        header-align="center"
+        align="center"
+        label="邮箱">
+      </el-table-column>
+      <el-table-column
         prop="status"
         header-align="center"
         align="center"

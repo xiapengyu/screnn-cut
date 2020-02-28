@@ -99,7 +99,7 @@ public class SysDeviceController extends AbstractController {
             Device device = deviceService.getOne(new QueryWrapper<Device>().eq("id", id));
             QueryWrapper<SysUserEntity> query = new QueryWrapper<SysUserEntity>();
             if(loginUser.getUserId() != Constant.SUPER_ADMIN){
-                query.eq("creator_id", loginUser.getUserId());
+                query.eq("user_id", loginUser.getUserId());
             }
             query.orderByDesc("create_time");
             List<SysUserEntity> userList = sysUserService.list(query);

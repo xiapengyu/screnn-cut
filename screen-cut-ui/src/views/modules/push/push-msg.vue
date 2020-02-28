@@ -11,7 +11,7 @@
         <el-input type='textarea' rows="5" placeholder="内容" v-model="dataForm.content" disabled></el-input>
       </el-form-item>
       <el-form-item label="推送对象" prop="selectAccount">
-          <el-select v-model="dataForm.selectAccount" value-key="id" @change="handleClick(dataForm.selectAccount)">
+          <el-select v-model="dataForm.selectAccount" filterable value-key="id" @change="handleClick(dataForm.selectAccount)">
             <el-option v-for="item in dataForm.accountList" :key="item.id" :label="item.email" :value="item"></el-option>
           </el-select>
       </el-form-item>

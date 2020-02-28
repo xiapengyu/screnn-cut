@@ -90,7 +90,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 				device.setCreatorName(user.getCompany());
 				device.setStatus(1);
 				device.setBuyTime(null);
-				device.setEmail(StringUtil.obj2String(params.get("email")));
+				device.setEmail(user.getEmail());
 				device.setUseTimes(0);
 				device.setRemainTimes(Integer.parseInt(StringUtil.obj2String(params.get("remainTimes"))));
 				device.setCreateTime(new Date());
