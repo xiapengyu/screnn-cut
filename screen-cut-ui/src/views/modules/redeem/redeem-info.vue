@@ -21,6 +21,7 @@
         <el-button type="primary" @click="batchEnable()" :disabled="dataListSelections.length <= 0">批量启用</el-button>
         <el-button type="danger" @click="batchDisable()" :disabled="dataListSelections.length <= 0">批量禁用</el-button>
         <el-button type="danger"  @click="batchDelete()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button type="primary"  @click="modifyHandle()">按批次更新</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -119,12 +120,14 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
     <add-redeem  v-if="addRedeemVisible" ref="addRedeem" @refreshDataList="getDataList"></add-redeem>
+    <modify-handle v-if="modifyVisible" ref="modifyHandle" @refreshDataList="getDataList"></modify-handle>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './redeem-info-add-or-update'
   import AddRedeem from './redeem-info-add'
+  import ModifyHandle from './redeem-info-modify'
   export default {
     data () {
       return {
@@ -139,13 +142,15 @@
         dataListLoading: false,
         addOrUpdateVisible: false,
         addRedeemVisible: false,
+        modifyVisible: false,
         statusList: [{'id': 0, 'label': '禁用'}, {'id': 1, 'label': '正常'}, {'id': 2, 'label': '已兑换'}],
         dataListSelections: []
       }
     },
     components: {
       AddOrUpdate,
-      AddRedeem
+      AddRedeem,
+      ModifyHandle
     },
     activated () {
       this.getDataList()
@@ -200,6 +205,12 @@
         this.addRedeemVisible = true
         this.$nextTick(() => {
           this.$refs.addRedeem.init()
+        })
+      },
+      modifyHandle () {
+        this.modifyVisible = true
+        this.$nextTick(() => {
+          this.$refs.modifyHandle.init()
         })
       },
       // 删除
