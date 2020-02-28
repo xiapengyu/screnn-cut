@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,7 +14,6 @@ import com.yunjian.core.entity.PurchaseDetail;
 import com.yunjian.core.mapper.PurchaseDetailMapper;
 import com.yunjian.core.mapper.PurchaseOrderMapper;
 import com.yunjian.core.service.IPurchaseDetailService;
-import com.yunjian.core.service.IPurchaseOrderService;
 import com.yunjian.core.vo.PurchaseDetailVo;
 import com.yunjian.core.vo.PurchaseOrderVo;
 

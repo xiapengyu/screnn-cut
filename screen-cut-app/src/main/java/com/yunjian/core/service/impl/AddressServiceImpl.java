@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -20,10 +19,8 @@ import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.Address;
-import com.yunjian.core.entity.Region;
 import com.yunjian.core.mapper.AddressMapper;
 import com.yunjian.core.service.IAddressService;
-import com.yunjian.core.service.IRegionService;
 
 /**
  * <p>
@@ -38,13 +35,9 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private IRegionService regionServiceImpl;
-
 	@Override
 	public ResponseDto saveAddress(Address param) {
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-		String detail = param.getAddress();
 		try {
 			Address address = null;
 			if (param.getId() != null && param.getId() > 0) {
@@ -61,21 +54,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 			address.setAccountId(account.getId());
 			address.setUserName(param.getUserName());
 			address.setPhone(param.getPhone());
-			
-			address.setProvinceId(param.getProvinceId());
-			Region province = regionServiceImpl.getOne(new QueryWrapper<Region>().eq("id", param.getProvinceId()));
-			address.setProvinceName(province.getShortName());
-			address.setCityId(param.getCityId());
-			Region city = regionServiceImpl.getOne(new QueryWrapper<Region>().eq("id", param.getCityId()));
-			address.setCityName(city.getShortName());
-			address.setDistrictId(param.getDistrictId());
-			Region district = regionServiceImpl.getOne(new QueryWrapper<Region>().eq("id", param.getDistrictId()));
-			address.setDistrictName(district.getShortName());
-
-			StringBuffer fullName = new StringBuffer("");
-			fullName.append(province.getName()).append(city.getName())
-					.append(district.getName()).append(detail);
-			address.setAddress(fullName.toString());
+			address.setAddress(param.getAddress());
 
 			Address defaultAddress = this
 					.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));

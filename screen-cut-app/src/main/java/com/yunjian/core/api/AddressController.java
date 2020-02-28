@@ -65,8 +65,7 @@ public class AddressController {
 	@ResponseBody
 	public ResponseDto saveAddress(@RequestBody Address param) {
 		logger.info("保存用户地址信息{}", JsonUtil.toJsonString(param));
-		if(param.getProvinceId() == null || param.getCityId() == null || param.getDistrictId() == null
-				|| StringUtils.isEmpty(param.getAddress()) || StringUtils.isEmpty(param.getUserName()) || StringUtils.isEmpty(param.getPhone())
+		if(StringUtils.isEmpty(param.getAddress()) || StringUtils.isEmpty(param.getUserName()) || StringUtils.isEmpty(param.getPhone())
 				|| param.getIsDefault() == null){
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_ERROR_MSG);
 		}

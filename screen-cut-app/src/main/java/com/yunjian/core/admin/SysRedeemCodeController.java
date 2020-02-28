@@ -108,7 +108,7 @@ public class SysRedeemCodeController {
             List<Integer> idList = (List<Integer>) params.get("idList");
             if(!idList.isEmpty()){
                 //启用选中的不是已兑换状态的兑换码
-                UpdateWrapper updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
+                UpdateWrapper<RedeemCode> updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
                 RedeemCode code = new RedeemCode();
                 code.setStatus(1);
                 redeemCodeService.update(code, updateQuery);
@@ -133,7 +133,7 @@ public class SysRedeemCodeController {
             List<Integer> idList = (List<Integer>) params.get("idList");
             if(!idList.isEmpty()){
                 //启用选中的不是已兑换状态的兑换码
-                UpdateWrapper updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
+                UpdateWrapper<RedeemCode> updateQuery = new UpdateWrapper<RedeemCode>().in("id", idList).ne("status", 2);
                 RedeemCode code = new RedeemCode();
                 code.setStatus(0);
                 redeemCodeService.update(code, updateQuery);

@@ -4,8 +4,6 @@ package com.yunjian.core.admin;
 import java.util.List;
 import java.util.Map;
 
-import com.yunjian.common.utils.*;
-import com.yunjian.core.entity.SysUserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.R;
+import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Ad;
 import com.yunjian.core.entity.AdPosition;
 import com.yunjian.core.service.IAdPositionService;

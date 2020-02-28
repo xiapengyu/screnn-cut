@@ -22,8 +22,6 @@ import com.yunjian.core.entity.SysRoleEntity;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IDealerOrderService;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * <p>
  * 经销商采购列表 前端控制器
@@ -32,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author laizhiwen
  * @since 2020-02-26
  */
-@Slf4j
 @RestController
 @RequestMapping("/sys/dealerPurchase")
 public class DealerOrderController {

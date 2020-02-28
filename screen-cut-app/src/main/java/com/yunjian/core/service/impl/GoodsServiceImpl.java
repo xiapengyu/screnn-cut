@@ -226,6 +226,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 				imgUrlList.add(item.getImageUrl());
 			});
 			dto.setImageList(imgUrlList);
+			dto.setCoverImg(imgUrlList.get(0));
 		}
 		return dto;
 	}

@@ -108,9 +108,9 @@
           dealerEmail: [
             { required: true, message: '经销商邮箱不能为空', trigger: 'blur' },
             {
-              validator: function(rule, value, callback) {
-                if (/^\w{1,64}@[a-z0-9\-]{1,256}(\.[a-z]{2,6}){1,2}$/i.test(value) == false) {
-                  callback(new Error("邮箱格式错误"))
+              validator: function (rule, value, callback) {
+                if (/^\w{1,64}@[a-z0-9]{1,256}(\.[a-z]{2,6}){1,2}$/i.test(value) === false) {
+                  callback(new Error('邮箱格式错误'))
                 } else {
                   callback()
                 }
