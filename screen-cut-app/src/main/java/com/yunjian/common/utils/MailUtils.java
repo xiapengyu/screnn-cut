@@ -24,7 +24,7 @@ public class MailUtils {
 	public static String mail_password = "nsmdglrjxoxkchjj";	//smtp登录都是使用授权码登录而不是邮箱密码
 	public static String mail_transport_protocol = "smtp";
 	public static String mail_smtp_host = "smtp.qq.com";
-	public static String mail_smtp_port = "25";
+	public static String mail_smtp_port = "587";
 	public static String mail_smtp_auth = "true";
 	public static int mail_smtp_timeout = 10000;
 	
