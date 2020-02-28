@@ -49,7 +49,7 @@ public class SysImageController {
             if (name.lastIndexOf(".") >= 0){
                 extName = name.substring(file.getOriginalFilename().lastIndexOf("."));
             }
-            ResponseDto response = imageService.uploadImage(file.getBytes(), fileUploadServer + "ad/", extName);
+            ResponseDto response = imageService.uploadImage(file.getBytes(), fileUploadServer + "picture/", extName);
             return R.ok().put("imagePath", response.getData());
         } catch (IOException e) {
             logger.info("上传文件失败", e);

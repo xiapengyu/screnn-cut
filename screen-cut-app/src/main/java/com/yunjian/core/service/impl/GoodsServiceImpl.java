@@ -10,7 +10,7 @@ import java.util.Map;
 import com.yunjian.common.utils.*;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.*;
-import com.yunjian.core.service.IDeviceService;
+import com.yunjian.core.service.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +25,6 @@ import com.yunjian.core.dto.GoodsDetailDto;
 import com.yunjian.core.dto.GoodsDto;
 import com.yunjian.core.dto.GoodsReqDto;
 import com.yunjian.core.mapper.GoodsMapper;
-import com.yunjian.core.service.IGoodsImgService;
-import com.yunjian.core.service.IGoodsService;
-import com.yunjian.core.service.IGoodsTypeService;
 
 /**
  * <p>
@@ -47,7 +44,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 	@Autowired
 	private IGoodsTypeService goodsTypeService;
 	@Autowired
-	private IDeviceService deviceService;
+	private IAccountService accountService;
 
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
@@ -170,10 +167,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 	@Override
 	public PageUtils queryGoodsByPage(GoodsReqDto params) {
 		Account account = SecurityContext.getUserPrincipal();
-		Device device = deviceService.getOne(new QueryWrapper<Device>()
-				.eq("serial_no", account.getSerialNo()));
+		Account a = accountService.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
 		QueryWrapper<Goods> query = new QueryWrapper<Goods>();
-		query.eq("creator_id", device.getCreatorId());
+		query.eq("creator_id", a.getDealerId());
 		if(!StringUtils.isEmpty(params.getName())){
 			query.like("name", params.getName());
 		}

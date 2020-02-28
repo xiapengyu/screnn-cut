@@ -212,7 +212,7 @@
           url: this.$http.adornUrl('/sys/dealerPurchase/list'),
           method: 'POST',
           data: this.$http.adornData({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'orderNo': this.dataForm.orderNo,
             'email': this.dataForm.email,

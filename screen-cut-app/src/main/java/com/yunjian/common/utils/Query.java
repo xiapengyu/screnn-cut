@@ -25,8 +25,11 @@ public class Query<T> {
         long curPage = 1;
         long limit = 10;
 
-        if(params.get(Constant.PAGE) != null){
+        /*if(params.get(Constant.PAGE) != null){
             curPage = Long.parseLong(params.get(Constant.PAGE) + "");
+        }*/
+        if(params.get(Constant.CURR_PAGE) != null){
+            curPage = Long.parseLong(params.get(Constant.CURR_PAGE) + "");
         }
         if(params.get(Constant.LIMIT) != null){
             limit = Long.parseLong(params.get(Constant.LIMIT) + "");
@@ -36,7 +39,7 @@ public class Query<T> {
         Page<T> page = new Page<>(curPage, limit);
 
         //分页参数
-        params.put(Constant.PAGE, page);
+        params.put(Constant.CURR_PAGE, page);
 
         //排序字段
         //防止SQL注入（因为sidx、order是通过拼接SQL实现排序的，会有SQL注入风险）

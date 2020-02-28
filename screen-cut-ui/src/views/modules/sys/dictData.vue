@@ -128,7 +128,7 @@
           url: this.$http.adornUrl('/sys/dictData/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'dictType': this.dataForm.dictType,
             'dictLabel': this.dataForm.dictLabel,

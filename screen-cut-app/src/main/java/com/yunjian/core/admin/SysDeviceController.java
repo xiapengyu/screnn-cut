@@ -140,7 +140,7 @@ public class SysDeviceController extends AbstractController {
         if(loginUser.getUserId() != Constant.SUPER_ADMIN){
             query.eq("user_id", loginUser.getUserId());
         }
-        query.orderByDesc("create_time");
+        query.ne("user_id", 1L).orderByDesc("create_time");
         List<SysUserEntity> userList = sysUserService.list(query);
         return R.ok().put("userList", userList);
     }

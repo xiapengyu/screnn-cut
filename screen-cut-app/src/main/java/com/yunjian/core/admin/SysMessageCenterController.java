@@ -28,7 +28,7 @@ public class SysMessageCenterController {
         logger.info("推送信息{}", JsonUtil.toJsonString(params));
         String title = StringUtil.obj2String(params.get("title"));
         String content = StringUtil.obj2String(params.get("content"));
-        
+
         return null;
     }
 

@@ -155,7 +155,7 @@
           url: this.$http.adornUrl('/sys/device/list'),
           method: 'post',
           data: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'serialNo': this.dataForm.serialNo,
             'creatorName': this.dataForm.creatorName,

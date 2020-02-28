@@ -147,7 +147,7 @@
           url: this.$http.adornUrl('/sys/goods/list'),
           method: 'POST',
           data: this.$http.adornData({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'name': this.dataForm.name,
             'typeId': this.dataForm.typeId

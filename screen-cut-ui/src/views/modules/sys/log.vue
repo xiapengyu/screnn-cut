@@ -107,7 +107,7 @@
           url: this.$http.adornUrl('/sys/log/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'key': this.dataForm.key
           })

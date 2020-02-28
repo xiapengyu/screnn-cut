@@ -3,14 +3,14 @@
     title="推送"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
+    <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
       <el-form-item label="标题" prop="title">
         <el-input v-model="dataForm.title" placeholder="标题" disabled></el-input>
       </el-form-item>
       <el-form-item label="内容" prop="content" >
         <el-input type='textarea' rows="5" placeholder="内容" v-model="dataForm.content" disabled></el-input>
       </el-form-item>
-      <el-form-item label="推送对象" prop="selectAccount" :class="{ 'is-required': true }">
+      <el-form-item label="推送对象" prop="selectAccount">
           <el-select v-model="dataForm.selectAccount" value-key="id" @change="handleClick(dataForm.selectAccount)">
             <el-option v-for="item in dataForm.accountList" :key="item.id" :label="item.email" :value="item"></el-option>
           </el-select>
@@ -21,7 +21,8 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">关闭</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">推送</el-button>
+      <el-button type="primary" @click="push()">推送</el-button>
+      <el-button type="primary" @click="pushAll()">全量推送</el-button>
     </span>
   </el-dialog>
 </template>
@@ -41,11 +42,6 @@
           selectAccount: '',
           accountList: [],
           accountIdList: []
-        },
-        dataRule: {
-          selectAccount: [
-            { required: true, message: '推送对象不能为空', trigger: 'blur' }
-          ]
         }
       }
     },
@@ -86,7 +82,7 @@
         }
       },
       // 表单提交
-      dataFormSubmit () {
+      push () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             if (this.selectAll === 0 && this.tags.length === 0) {
@@ -116,6 +112,30 @@
                 }
               })
             }
+          }
+        })
+      },
+      // 表单提交
+      pushAll () {
+        this.$http({
+          url: this.$http.adornUrl(`/sys/push/pushAll`),
+          method: 'post',
+          data: this.$http.adornData({
+            'id': this.dataForm.id
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 500,
+              onClose: () => {
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
+          } else {
+            this.$message.error(data.msg)
           }
         })
       },

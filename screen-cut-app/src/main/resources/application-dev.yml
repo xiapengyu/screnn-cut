@@ -50,10 +50,10 @@ spring:
 #图片服务器配置
 tomcat:
   file:
-    server: http://49.235.168.70:8085/upload/
+    server: http://134.175.242.78:8001/upload/
     
 template:
   distributor:
-    url: http://49.235.168.70:8085/upload/template/distributorTemplate.xls
+    url: http://134.175.242.78:8001/upload/template/distributorTemplate.xls
   device:
-    url: http://49.235.168.70:8085/upload/template/deviceTemplate.xls
+    url: http://134.175.242.78:8001/upload/template/deviceTemplate.xls

@@ -142,7 +142,7 @@
           url: this.$http.adornUrl('/sys/distributor/list'),
           method: 'post',
           data: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'name': this.dataForm.name
           })

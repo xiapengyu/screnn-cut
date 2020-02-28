@@ -17,7 +17,7 @@
           <el-input v-model="dataForm.times" placeholder="切割次数" disabled></el-input>
       </el-form-item>
       <el-form-item label="状态" size="mini" prop="status">
-        <el-radio-group v-model="dataForm.status" :disabled="this.dataForm.status===2 || this.dataForm.op===0">
+        <el-radio-group v-model="dataForm.status" :disabled="this.dataForm.op===0">
           <el-radio :label="0">禁用</el-radio>
           <el-radio :label="1">启用</el-radio>
           <el-radio :label="2">已兑换</el-radio>

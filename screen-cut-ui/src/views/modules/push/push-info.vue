@@ -113,7 +113,7 @@
           url: this.$http.adornUrl('/sys/push/list'),
           method: 'post',
           data: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'title': this.dataForm.title,
             'content': this.dataForm.content

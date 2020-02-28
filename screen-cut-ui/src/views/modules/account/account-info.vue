@@ -120,7 +120,7 @@
           url: this.$http.adornUrl('/sys/account/list'),
           method: 'post',
           data: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'userName': this.dataForm.userName,
             'email': this.dataForm.email

@@ -163,7 +163,7 @@
           url: this.$http.adornUrl('/sys/redeemCode/list'),
           method: 'post',
           data: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'redeemNo': this.dataForm.redeemNo,
             'status': this.dataForm.status

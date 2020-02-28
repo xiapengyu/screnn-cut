@@ -181,7 +181,7 @@
           url: this.$http.adornUrl('/sys/purchaseOrder/list'),
           method: 'POST',
           data: this.$http.adornData({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'orderNo': this.dataForm.orderNo,
             'email': this.dataForm.email

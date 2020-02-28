@@ -99,4 +99,15 @@ public class SysPushController {
         return R.ok("暂未开发");
     }
 
+    /**
+     * 全量推送
+     * @param params
+     * @return
+     */
+    @PostMapping("/pushAll")
+    public R pushAll(@RequestBody Map<String, Object> params){
+        logger.info("推送消息{}", JsonUtil.toJsonString(params));
+        return R.ok("暂未开发");
+    }
+
 }

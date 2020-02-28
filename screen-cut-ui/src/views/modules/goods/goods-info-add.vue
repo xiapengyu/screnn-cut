@@ -8,7 +8,7 @@
         <el-input v-model="dataForm.name" placeholder="名称"></el-input>
       </el-form-item>
       <el-form-item label="描述" prop="comment" :class="{ 'is-required': true }">
-        <el-input v-model="dataForm.comment" placeholder="描述"></el-input>
+        <el-input type='textarea' rows="5" placeholder="描述" v-model="dataForm.comment"></el-input>
       </el-form-item>
       <el-form-item label="价格" prop="price" :class="{ 'is-required': true }">
           <el-input v-model="dataForm.price" placeholder="0.00">
@@ -16,7 +16,7 @@
           </el-input>
       </el-form-item>
       <el-form-item label="是否打折" size="mini" prop="isDiscount" :class="{ 'is-required': true }">
-        <el-radio-group v-model="dataForm.isDiscount" @change="radioChange(this.dataForm.isDiscount)">
+        <el-radio-group v-model="dataForm.isDiscount" @change="radioChange(dataForm.isDiscount)">
           <el-radio :label="0">否</el-radio>
           <el-radio :label="1">是</el-radio>
         </el-radio-group>
@@ -44,6 +44,7 @@
       <el-form-item label="图片" :class="{ 'is-required': true }">
           <el-upload
             list-type="picture-card"
+            ref="refresh"
             :action=this.uploadUrl
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -66,7 +67,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+      <el-button @click="close()">取消</el-button>
       <el-button @click="saveGoodsInfo()">保存</el-button>
     </span>
   </el-dialog>
@@ -167,6 +168,7 @@
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
+                this.$refs.refresh.clearFiles()
                 this.$message({
                   message: '操作成功',
                   type: 'success',
@@ -182,6 +184,10 @@
             })
           }
         })
+      },
+      close () {
+        this.$refs.refresh.clearFiles()
+        this.visible = false
       },
       handleAvatarSuccess: function (response) {
         this.goodsImageList.push(response.imagePath)

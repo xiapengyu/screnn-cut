@@ -105,7 +105,7 @@
           url: this.$http.adornUrl('/sys/role/list'),
           method: 'get',
           params: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'roleName': this.dataForm.roleName
           })

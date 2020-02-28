@@ -101,7 +101,7 @@
           url: this.$http.adornUrl('/sys/phoneBrand/phoneBrandList'),
           method: 'post',
           data: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'phoneBrand': this.dataForm.brandName
           })

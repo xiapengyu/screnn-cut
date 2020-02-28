@@ -142,7 +142,7 @@
           url: this.$http.adornUrl('/sys/ad/adInfoList'),
           method: 'post',
           data: this.$http.adornParams({
-            'page': this.pageIndex,
+            'currPage': this.pageIndex,
             'limit': this.pageSize,
             'status': this.dataForm.status,
             'positionId': this.dataForm.positionId
