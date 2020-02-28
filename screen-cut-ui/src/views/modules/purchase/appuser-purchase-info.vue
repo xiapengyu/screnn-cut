@@ -73,10 +73,10 @@
         label="次数">
       </el-table-column>-->
       <el-table-column
-        prop="comment"
+        prop="remark"
         header-align="center"
         align="center"
-        label="回复说明">
+        label="备注">
       </el-table-column>
       <el-table-column
           prop="status"
