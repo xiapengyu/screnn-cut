@@ -79,8 +79,16 @@
 </template>
 
 <script>
+  import { isIngeger } from '@/utils/validate'
   export default {
     data () {
+      var isvalidateInteger = (rule, value, callback) => {
+        if (!isIngeger(value)) {
+          callback(new Error('请输入正整数'))
+        } else {
+          callback()
+        }
+      }
       return {
         visible: false,
         dataForm: {
@@ -119,16 +127,16 @@
             }
           ],
           bladeNo: [
-            { type: 'integer', message: '请输入正整数', trigger: 'change' }
+            { validator: isvalidateInteger, message: '请输入正整数', trigger: 'change' }
           ],
           filmNo: [
-            { type: 'integer', message: '请输入正整数', trigger: 'change' }
+            { validator: isvalidateInteger, message: '请输入正整数', trigger: 'change' }
           ],
           deviceNo: [
-            { type: 'integer', message: '请输入正整数', trigger: 'change' }
+            { validator: isvalidateInteger, message: '请输入正整数', trigger: 'change' }
           ],
           useTimes: [
-            { type: 'integer', message: '请输入正整数', trigger: 'change' }
+            { validator: isvalidateInteger, message: '请输入正整数', trigger: 'change' }
           ]
         }
       }

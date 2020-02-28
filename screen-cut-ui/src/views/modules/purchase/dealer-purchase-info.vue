@@ -41,12 +41,14 @@
         prop="dealerEmail"
         header-align="center"
         align="center"
+        width="160"
         label="经销商邮箱">
       </el-table-column>
       <el-table-column
         prop="otherContact"
         header-align="center"
         align="center"
+        width="120"
         label="其他联系方式">
       </el-table-column>
       <<el-table-column
