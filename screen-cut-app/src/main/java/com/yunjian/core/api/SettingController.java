@@ -65,6 +65,9 @@ public class SettingController {
         logger.info("保存参数设置(新增/修改){}", JsonUtil.toJsonString(param));
         if(StringUtils.isEmpty(param.getName()) || param.getSpeed() == null || param.getPressure() == null){
             return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_ERROR_MSG);
+        }else if((param.getSpeed() < 100 || param.getSpeed() > 800)
+                || (param.getPressure() < 300 || param.getPressure() > 1000)){
+            return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "切割速度或切割压力不在规定区间");
         }
         return settingService.saveSetting(param);
     }

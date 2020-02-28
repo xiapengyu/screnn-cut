@@ -79,13 +79,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				account.setUserName("");
 				account.setPhone("");
 				account.setDealerId(device.getCreatorId().intValue());
-				if(device.getType() == 1){
-					account.setUseAmount(0);
-					account.setUnuseAmount(0);
-				}else{
-					account.setUseAmount(0);
-					account.setUnuseAmount(device.getRemainTimes());
-				}
 				account.setStatus(1);
 				this.save(account);
 				
@@ -220,7 +213,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
             	account = this.getOne(new QueryWrapper<Account>().eq("id", id));
             }
             account.setStatus(Integer.parseInt(params.get("status").toString()));
-            account.setUnuseAmount(Integer.parseInt(params.get("unuseAmount").toString()));
             account.setUpdateTime(new Date());
             this.saveOrUpdate(account);
         } catch (Exception e) {

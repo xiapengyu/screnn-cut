@@ -58,16 +58,6 @@ public class Account implements Serializable {
     private String phoneModelName;
 
     /**
-     * 已用次数
-     */
-    private Integer useAmount;
-
-    /**
-     * 未用次数
-     */
-    private Integer unuseAmount;
-
-    /**
      * 状态 1启用 0禁用
      */
     private Integer status;

@@ -19,7 +19,7 @@
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status" :disabled="this.dataForm.status===2 || this.dataForm.op===0">
           <el-radio :label="0">禁用</el-radio>
-          <el-radio :label="1">正常</el-radio>
+          <el-radio :label="1">启用</el-radio>
           <el-radio :label="2">已兑换</el-radio>
         </el-radio-group>
       </el-form-item>

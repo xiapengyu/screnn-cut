@@ -1,8 +1,10 @@
 package com.yunjian.core.service;
 
 import com.yunjian.common.utils.PageUtils;
+import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.MessageCenter;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -17,6 +19,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMessageCenterService extends IService<MessageCenter> {
 
-	PageUtils queryPage(Map<String, Object> param);
+    PageUtils queryPage(Map<String, Object> param);
+
+    public void saveMessage(MessageCenter msg);
+
+    ResponseDto deleteMsg(List<Integer> idList);
 
 }

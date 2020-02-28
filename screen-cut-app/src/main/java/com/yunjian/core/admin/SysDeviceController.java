@@ -155,9 +155,16 @@ public class SysDeviceController extends AbstractController {
                     Map<String, Object> map = JsonUtil.toMap(item.toString());
                     Device device = new Device();
                     device.setSerialNo(map.get("0").toString().trim());
-                    device.setType((int) Double.parseDouble(map.get("1").toString().trim()));
+                    int type = (int) Double.parseDouble(map.get("1").toString().trim());
+                    device.setType(type);
                     device.setEmail(map.get("2").toString().trim());
-                    device.setRemainTimes((int) Double.parseDouble(map.get("3").toString().trim()));
+                    if(type == 1){
+                        device.setRemainTimes(0);
+                        device.setUseTimes(0);
+                    }else{
+                        device.setRemainTimes((int) Double.parseDouble(map.get("3").toString().trim()));
+                        device.setUseTimes(0);
+                    }
                     device.setBuyTime(new Date());
                     device.setStatus(1);
                     device.setCreateTime(new Date());

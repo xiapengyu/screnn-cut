@@ -46,11 +46,15 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
                 this.saveOrUpdate(param);
             }else{
                 Setting setting = this.getOne(new QueryWrapper<Setting>().eq("id", param.getId()));
-                setting.setName(param.getName());
-                setting.setSpeed(param.getSpeed());
-                setting.setPressure(param.getPressure());
-                setting.setUpdateTime(new Date());
-                this.saveOrUpdate(setting);
+                if(setting == null){
+                    return new ResponseDto(Constant.FAIL_CODE, null, "未查询到参数配置信息");
+                }else{
+                    setting.setName(param.getName());
+                    setting.setSpeed(param.getSpeed());
+                    setting.setPressure(param.getPressure());
+                    setting.setUpdateTime(new Date());
+                    this.saveOrUpdate(setting);
+                }
             }
         } catch (Exception e) {
         	logger.error("保存参数设置失败", e);

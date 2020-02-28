@@ -1,13 +1,12 @@
 package com.yunjian.core.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.TableName;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -23,34 +22,36 @@ import lombok.experimental.Accessors;
 @TableName("tb_message_center")
 public class MessageCenter implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Integer id;
+    private Integer id;
 
-	/**
-	 * 用户id
-	 */
-	private Integer accountId;
+    /**
+     * 用户id
+     */
+    private Integer accountId;
 
-	/**
-	 * 标题
-	 */
-	private String title;
+    /**
+     * 标题
+     */
+    private String title;
 
-	/**
-	 * 内容
-	 */
-	private String content;
+    /**
+     * 内容
+     */
+    private String content;
 
-	/**
-	 * 已读标记 0未读 1已读
-	 */
-	private Integer isRead;
+    /**
+     * 已读标记 0未读 1已读
+     */
+    private Integer isRead;
 
-	private Date createTime;
+    private Date createTime;
 
-	private Date updateTime;
+    private Date updateTime;
 
-	private Integer deleteFlag;
+    private Integer deleteFlag;
+
+    private Long creatorId;
 
 }

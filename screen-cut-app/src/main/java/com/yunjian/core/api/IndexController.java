@@ -59,8 +59,8 @@ public class IndexController {
             dto.setAccountType(1);
         }else{
             dto.setAccountType(2);
-            dto.setUnUseAmount(account.getUnuseAmount());
-            dto.setUseAmount(account.getUseAmount());
+            dto.setUnUseAmount(device.getRemainTimes());
+            dto.setUseAmount(device.getUseTimes());
         }
         response.setData(dto);
         return response;

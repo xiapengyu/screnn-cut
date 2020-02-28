@@ -6,10 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yunjian.common.utils.*;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
-import com.yunjian.core.entity.Account;
-import com.yunjian.core.entity.RedeemCode;
-import com.yunjian.core.entity.RedeemRecord;
-import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.entity.*;
 import com.yunjian.core.mapper.RedeemCodeMapper;
 import com.yunjian.core.service.*;
 import org.apache.shiro.SecurityUtils;
@@ -48,6 +45,8 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
     private IAccountService accountService;
     @Autowired
     private IRedeemRecordService redeemRecordService;
+    @Autowired
+    private IDeviceService deviceService;
 
     @Value("${tomcat.file.server}")
     private String fileUploadServer = "";
@@ -117,6 +116,13 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
         RedeemCode code = null;
         try {
             Account account = SecurityContext.getUserPrincipal();
+            Account a = accountService.getOne(new QueryWrapper<Account>()
+                    .eq("id", account.getId()));
+            Device device = deviceService.getOne(new QueryWrapper<Device>()
+                    .eq("serial_no", a.getSerialNo()));
+            if(device.getType() == 1){
+                return new ResponseDto(Constant.FAIL_CODE, null, "当前用户不限制切割次数，无法使用兑换码");
+            }
             code = this.getOne(new QueryWrapper<RedeemCode>()
                     .eq("redeem_no", redeemNo));
             logger.info("扫描的兑换码信息{}", JsonUtil.toJsonString(code));
@@ -138,12 +144,8 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
             record.setCreateTime(new Date());
             redeemRecordService.saveOrUpdate(record);
 
-            //更新剩余切割次数
-            Account a = accountService.getOne(new QueryWrapper<Account>()
-                    .eq("id", account.getId()));
-            a.setUnuseAmount(account.getUnuseAmount() + code.getTimes());
-            a.setUpdateTime(new Date());
-            accountService.saveOrUpdate(a);
+            device.setRemainTimes(device.getRemainTimes() + code.getTimes());
+            deviceService.saveOrUpdate(device);
         } catch (Exception e) {
             logger.error("扫描兑换码异常", e);
             //回退操作
