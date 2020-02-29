@@ -1,7 +1,7 @@
 {
-  "name": "quick-application-ui",
+  "name": "screen-cut-ui",
   "version": "1.2.2",
-  "description": "quick-application-ui 基于vue、element-ui构建开发",
+  "description": "screen-cut-ui 基于vue、element-ui构建开发",
   "author": "www.yunjianit.com",
   "private": true,
   "scripts": {
