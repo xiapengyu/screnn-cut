@@ -7,11 +7,6 @@
       <el-form-item label="序列码" prop="serialNo" :class="{ 'is-required': true }">
         <el-input v-model="dataForm.serialNo" placeholder="序列码"></el-input>
       </el-form-item>
-      <el-form-item label="经销商" prop="creatorId" :class="{ 'is-required': true }">
-          <el-select v-model="dataForm.creatorId">
-            <el-option v-for="item in userList" :key="item.userId" :label="item.company" :value="item.userId" />
-          </el-select>
-      </el-form-item>
       <el-form-item label="类型" prop="type" :class="{ 'is-required': true }">
         <el-radio-group v-model="dataForm.type">
           <el-radio :label="1">不限次数</el-radio>
@@ -44,7 +39,6 @@
         userList: [],
         dataForm: {
           serialNo: '',
-          creatorId: '',
           type: 1,
           status: 1,
           remainTimes: 0
@@ -52,9 +46,6 @@
         dataRule: {
           serialNo: [
             { required: true, message: '序列码不能为空', trigger: 'blur' }
-          ],
-          creatorId: [
-            { required: true, message: '经销商不能为空', trigger: 'blur' }
           ],
           type: [
             { required: true, message: '类型不能为空', trigger: 'blur' }
@@ -93,7 +84,6 @@
               data: this.$http.adornData({
                 'serialNo': this.dataForm.serialNo,
                 'status': this.dataForm.status,
-                'creatorId': this.dataForm.creatorId,
                 'type': this.dataForm.type,
                 'remainTimes': this.dataForm.remainTimes
               })

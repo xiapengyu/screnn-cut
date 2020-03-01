@@ -23,14 +23,11 @@ import com.yunjian.core.entity.AdPosition;
 import com.yunjian.core.service.IAdPositionService;
 import com.yunjian.core.service.IAdService;
 
-import io.swagger.annotations.Api;
-
 /**
  * @author xiapengyu
  * @since 2020-01-29
  */
 
-@Api("广告管理api")
 @RestController
 @RequestMapping("/sys/ad")
 public class SysAdController {

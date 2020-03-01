@@ -2,9 +2,11 @@ package com.yunjian.core.api;
 
 import java.util.Date;
 
+import com.yunjian.common.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +24,6 @@ import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IEmailCodeService;
 
 import io.swagger.annotations.Api;
-import jodd.util.StringUtil;
 
 @Api("用户账号与登录相关接口")
 @RestController
@@ -46,7 +47,7 @@ public class LoginController {
 	@ResponseBody
 	public ResponseDto getEmailCode(@RequestBody Account param) {
 		logger.info("获取邮箱验证码{}", JsonUtil.toJsonString(param));
-		if(StringUtil.isEmpty(param.getEmail())) {
+		if(StringUtils.isEmpty(param.getEmail())) {
 			return new ResponseDto(Constant.FAIL_CODE, null, "请输入正确的邮箱地址");
 		}
 		return emailCodeServiceImpl.sendEmailCode(param);
@@ -61,15 +62,15 @@ public class LoginController {
 	@ResponseBody
 	public ResponseDto register(@RequestBody AccountDto param) {
 		logger.info("用户注册{}", JsonUtil.toJsonString(param));
-		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword()) 
-				|| StringUtil.isEmpty(param.getSerialNo()) || StringUtil.isEmpty(param.getCode())) {
+		if(StringUtils.isEmpty(param.getEmail()) || StringUtils.isEmpty(param.getPassword())
+				|| StringUtils.isEmpty(param.getSerialNo()) || StringUtils.isEmpty(param.getCode())) {
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, Constant.PARMS_CHECK_MSG);
 		}
-		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword())){
+		if(StringUtils.isEmpty(param.getEmail()) || StringUtils.isEmpty(param.getPassword())){
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "邮箱或密码不能为空");
-		}else if(StringUtil.isEmpty(param.getSerialNo())){
+		}else if(StringUtils.isEmpty(param.getSerialNo())){
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "机器序列号不能为空");
-		}else if(StringUtil.isEmpty(param.getCode())){
+		}else if(StringUtils.isEmpty(param.getCode())){
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码不能为空");
 		}
 		return accountServiceImpl.register(param);
@@ -84,7 +85,7 @@ public class LoginController {
 	@ResponseBody
 	public ResponseDto login(@RequestBody Account param) {
 		logger.info("用户登录{}", JsonUtil.toJsonString(param));
-		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword())) {
+		if(StringUtils.isEmpty(param.getEmail()) || StringUtils.isEmpty(param.getPassword())) {
 			return new ResponseDto(Constant.FAIL_CODE, null, "邮箱、密码不能为空");
 		}
 		return accountServiceImpl.login(param);
@@ -109,7 +110,7 @@ public class LoginController {
 	@ResponseBody
 	public ResponseDto checkVerifyCode(@RequestBody AccountDto param) {
 		logger.info("重置密码前校验验证码{}", JsonUtil.toJsonString(param));
-		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getCode())) {
+		if(StringUtils.isEmpty(param.getEmail()) || StringUtils.isEmpty(param.getCode())) {
 			return new ResponseDto(Constant.FAIL_CODE, null, "邮箱或验证码不能为空");
 		}
 		try {
@@ -137,9 +138,9 @@ public class LoginController {
 	@ResponseBody
 	public ResponseDto resetPassword(@RequestBody AccountDto param) {
 		logger.info("重置密码{}", JsonUtil.toJsonString(param));
-		if(StringUtil.isEmpty(param.getEmail()) || StringUtil.isEmpty(param.getPassword())) {
+		if(StringUtils.isEmpty(param.getEmail()) || StringUtils.isEmpty(param.getPassword())) {
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "邮箱或密码不能为空");
-		}else if(StringUtil.isEmpty(param.getCode())){
+		}else if(StringUtils.isEmpty(param.getCode())){
 			return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码不能为空");
 		}
 		return accountServiceImpl.resetPassword(param);

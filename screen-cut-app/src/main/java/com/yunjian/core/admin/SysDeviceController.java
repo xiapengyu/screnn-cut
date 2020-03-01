@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.SysRoleEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.ExcelUtil;
-import com.yunjian.common.utils.FileUtil;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IDeviceService;
@@ -69,8 +64,16 @@ public class SysDeviceController extends AbstractController {
     @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params) {
         logger.info("分页查询设备列表{}", JsonUtil.toJsonString(params));
+
+        SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
+        SysRoleEntity role = (SysRoleEntity) HttpContextUtils.getLoginUser().get("role");
+        int isDealer = 0;
+        if(role!=null && role.getRoleId()==2) { //2：经销商
+            params.put("creatorId", user.getUserId());
+            isDealer = 1;
+        }
         PageUtils page = deviceService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("page", page).put("isDealer", isDealer);
     }
 
     /**
@@ -143,6 +146,16 @@ public class SysDeviceController extends AbstractController {
         query.ne("user_id", 1L).orderByDesc("create_time");
         List<SysUserEntity> userList = sysUserService.list(query);
         return R.ok().put("userList", userList);
+    }
+
+    /**
+     * 查询有权限的经销商列表
+     */
+    @PostMapping("/queryCurrentSysUser")
+    public R queryCurrentSysUser() {
+        logger.info("查询有权限的经销商列表");
+        SysUserEntity loginUser = getUser();
+        return R.ok().put("loginUser", loginUser);
     }
 
     /**

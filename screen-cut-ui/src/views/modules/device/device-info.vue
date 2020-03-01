@@ -30,8 +30,8 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
-        <el-button type="primary" @click="addHandle()">新增</el-button>
-        <el-button type="primary" @click="importDeviceHandle()">导入设备</el-button>
+        <el-button type="primary" @click="addHandle()" v-if="isDealer==1">新增</el-button>
+        <el-button type="primary" @click="importDeviceHandle()" v-if="isDealer==1">导入设备</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -127,6 +127,7 @@
   export default {
     data () {
       return {
+        isDealer: 0,
         dataForm: {
           serialNo: '',
           creatorName: '',
@@ -172,6 +173,7 @@
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
+            this.isDealer = data.isDealer
           } else {
             this.dataList = []
             this.totalPage = 0

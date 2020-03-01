@@ -49,6 +49,7 @@
       init (id) {
         this.dataForm.id = id || 0
         this.visible = true
+        this.tags = []
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }

@@ -5,12 +5,10 @@
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
       <el-form-item label="序列码" prop="serialNo" :class="{ 'is-required': true }">
-        <el-input v-model="dataForm.serialNo" placeholder="序列码" :disabled="this.dataForm.op===0"></el-input>
+        <el-input v-model="dataForm.serialNo" placeholder="序列码" disabled></el-input>
       </el-form-item>
-      <el-form-item label="经销商" prop="creatorId" :class="{ 'is-required': true }">
-          <el-select v-model="dataForm.creatorId" :disabled="this.dataForm.op===0">
-            <el-option v-for="item in userList" :key="item.id" :label="item.company" :value="item.id" />
-          </el-select>
+      <el-form-item label="经销商" prop="creatorName" :class="{ 'is-required': true }">
+        <el-input v-model="dataForm.creatorName" placeholder="经销商" disabled></el-input>
       </el-form-item>
       <el-form-item label="类型" prop="type" :class="{ 'is-required': true }">
         <el-radio-group v-model="dataForm.type" :disabled="this.dataForm.op===0">
@@ -47,18 +45,12 @@
           op: 0,
           id: 0,
           serialNo: '',
-          distributorId: '',
+          creatorName: '',
           type: 1,
           status: 1,
           remainTimes: 0
         },
         dataRule: {
-          serialNo: [
-            { required: true, message: '序列码不能为空', trigger: 'blur' }
-          ],
-          distributorId: [
-            { required: true, message: '经销商不能为空', trigger: 'blur' }
-          ],
           type: [
             { required: true, message: '类型不能为空', trigger: 'blur' }
           ],
@@ -87,7 +79,7 @@
             if (data && data.code === 0) {
               this.dataForm.id = data.device.id
               this.dataForm.serialNo = data.device.serialNo
-              this.dataForm.distributorId = data.device.distributorId
+              this.dataForm.creatorName = data.device.creatorName
               this.dataForm.type = data.device.type
               this.dataForm.remainTimes = data.device.remainTimes
               this.dataForm.status = data.device.status
@@ -110,8 +102,6 @@
               method: 'post',
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
-                'serialNo': this.dataForm.serialNo,
-                'distributorId': this.dataForm.distributorId,
                 'type': this.dataForm.type,
                 'remainTimes': this.dataForm.remainTimes,
                 'status': this.dataForm.status

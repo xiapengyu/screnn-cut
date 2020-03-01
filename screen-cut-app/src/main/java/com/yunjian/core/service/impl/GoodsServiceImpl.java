@@ -176,9 +176,9 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 		boolean isAsc = (params.getIsAsc() == null || params.getIsAsc() == 0) ? false : true;
 		if(!StringUtils.isEmpty(params.getSortField())){
 			if("disAccount".equals(params.getSortField())){
-				query.orderBy(true, isAsc, "disAccount");
+				query.orderBy(true, isAsc, "discount_price");
 			}else if("saleAmount".equals(params.getSortField())){
-				query.orderBy(true, isAsc, "saleAmount");
+				query.orderBy(true, isAsc, "sale_amount");
 			}else{
 				query.orderByDesc("create_time");
 			}

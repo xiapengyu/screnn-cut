@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
+import io.swagger.models.auth.In;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +16,6 @@ import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.mapper.DeviceMapper;
@@ -62,9 +59,10 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 		if (!StringUtils.isEmpty(status)) {
 			queryWrapper.eq("status", status);
 		}
-		SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
-		if(loginUser.getUserId() != Constant.SUPER_ADMIN){
-			queryWrapper.eq("creator_id", loginUser.getUserId().intValue());
+
+		String userId = StringUtil.obj2String(params.get("creatorId"));
+		if(!StringUtils.isEmpty(userId)){
+			queryWrapper.eq("creator_id", Integer.parseInt(userId));
 		}
 		IPage<Device> page = this.page(new Query<Device>().getPage(params), queryWrapper);
 		return new PageUtils(page);
@@ -84,8 +82,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 				Device device = new Device();
 				device.setSerialNo(StringUtil.obj2String(params.get("serialNo")));
 				device.setType(Integer.parseInt(StringUtil.obj2String(params.get("type"))));
-				String creatorId = StringUtil.obj2String(params.get("creatorId"));
-				SysUserEntity user = sysUserService.getOne(new QueryWrapper<SysUserEntity>().eq("user_id", Long.parseLong(creatorId)));
+				SysUserEntity sysUserEntity = HttpContextUtils.getLoginSysUserEntity();
+				SysUserEntity user = sysUserService.getOne(new QueryWrapper<SysUserEntity>().eq("user_id", sysUserEntity.getUserId()));
 				device.setCreatorId(user.getUserId());
 				device.setCreatorName(user.getCompany());
 				device.setStatus(1);
@@ -99,18 +97,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 				this.save(device);
 			} else { // 修改
 				Device device = this.getOne(new QueryWrapper<Device>().eq("id", Integer.parseInt(id)));
-				if(tmp != null  && !StringUtils.isEmpty(serialNo) && tmp.getId() != Integer.parseInt(id)) {
-					return R.error("设备序列码已经存在");
-				}
-				device.setSerialNo(StringUtil.obj2String(params.get("serialNo")));
 				device.setType(Integer.parseInt(StringUtil.obj2String(params.get("type"))));
-				String creatorId = StringUtil.obj2String(params.get("creatorId"));
-				SysUserEntity user = sysUserService.getOne(new QueryWrapper<SysUserEntity>().eq("user_id", Long.parseLong(creatorId)));
-				device.setCreatorId(user.getUserId());
-				device.setCreatorName(user.getCompany());
-				device.setStatus(1);
-				device.setBuyTime(null);
-				device.setEmail(StringUtil.obj2String(params.get("email")));
+				device.setStatus(Integer.parseInt(StringUtil.obj2String(params.get("status"))));
 				device.setRemainTimes(Integer.parseInt(StringUtil.obj2String(params.get("remainTimes"))));
 				device.setUpdateTime(new Date());
 				this.saveOrUpdate(device);

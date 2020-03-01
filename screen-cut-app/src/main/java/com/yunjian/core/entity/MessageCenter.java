@@ -31,6 +31,8 @@ public class MessageCenter implements Serializable {
      */
     private Integer accountId;
 
+    private String accountEmail;
+
     /**
      * 标题
      */

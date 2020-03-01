@@ -57,3 +57,8 @@ template:
     url: http://134.175.242.78:8001/upload/template/distributorTemplate.xls
   device:
     url: http://134.175.242.78:8001/upload/template/deviceTemplate.xls
+
+jpush:
+  appKey: 86678fd9f03c28ee5b9a094b
+  masterSecret: d5f9d38b6ebd09cd44bf4bfc
+  apnsproduction: true

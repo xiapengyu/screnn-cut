@@ -4,6 +4,7 @@ import com.yunjian.common.utils.PageUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.PushMsg;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -21,5 +22,7 @@ public interface IPushMsgService extends IService<PushMsg> {
 	PageUtils queryPage(Map<String, Object> params);
 
 	R savePushMsg(Map<String, Object> params);
+
+	public void pushByAlias(List<String> aliasList, String title, String content);
 
 }
