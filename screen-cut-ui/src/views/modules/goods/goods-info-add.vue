@@ -111,7 +111,7 @@
     methods: {
       init () {
         this.visible = true
-        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadImage'
+        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadFilesToNginx'
         this.dataForm.isDiscount = 0
         this.typeIdList = []
         this.goodsImageList = []

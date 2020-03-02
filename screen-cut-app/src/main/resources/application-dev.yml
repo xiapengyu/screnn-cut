@@ -51,6 +51,12 @@ spring:
 tomcat:
   file:
     server: http://134.175.242.78:8001/upload/
+
+nginx:
+  file:
+    host: http://134.175.242.78:8002/
+    location: app/files/
+    alias: /project/webapps/upload/
     
 template:
   distributor:

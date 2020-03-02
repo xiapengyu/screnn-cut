@@ -59,7 +59,7 @@
       init (id) {
         this.dataForm.id = id || 0
         this.visible = true
-        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadImage'
+        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadFilesToNginx'
         if (this.$refs['dataForm'] !== undefined) {
           this.$refs['dataForm'].resetFields()
         }

@@ -106,7 +106,7 @@
       init (id, op) {
         this.dataForm.id = id
         this.dataForm.op = op
-        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadImage'
+        this.uploadUrl = window.SITE_CONFIG.baseUrl + '/sys/image/uploadFilesToNginx'
         this.dataForm.isDiscount = 0
         this.dataForm.discountPrice = 0
         this.typeIdList = []

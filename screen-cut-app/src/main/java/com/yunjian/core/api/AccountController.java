@@ -67,9 +67,7 @@ public class AccountController {
 		logger.info("检查用户是否有可用的切割次数");
 		Account account = SecurityContext.getUserPrincipal();
 		Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
-		Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>()
-				.eq("serial_no", a.getSerialNo()));
-		if(device.getType() != 1 && device.getRemainTimes() == 0){
+		if(a.getType() != 1 && a.getRemainTimes() == 0){
 			return new ResponseDto(Constant.SUCCESS_CODE, 0, Constant.SUCCESS_MESSAGE);
 		}else{
 			return new ResponseDto(Constant.SUCCESS_CODE, 1, Constant.SUCCESS_MESSAGE);
@@ -87,14 +85,12 @@ public class AccountController {
 			//更新用户次数
 			Account account = SecurityContext.getUserPrincipal();
 			Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
-			Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>()
-					.eq("serial_no", a.getSerialNo()));
 			//有限次数的用户不更新切割次数
-			if(device.getType() != 1){
+			if(a.getType() != 1){
 				//更新设备次数
-				device.setUseTimes(device.getUseTimes() + 1);
-				device.setRemainTimes(device.getRemainTimes() - 1);
-				deviceServiceImpl.saveOrUpdate(device);
+				a.setUseTimes(a.getUseTimes() + 1);
+				a.setRemainTimes(a.getRemainTimes() - 1);
+				accountServiceImpl.saveOrUpdate(a);
 			}
 		} catch (Exception e) {
 			logger.info("切割成功通知用户失败", e);

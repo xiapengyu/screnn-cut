@@ -55,7 +55,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/sys/image/uploadImage", "anon");
-        filterMap.put("/sys/distributor/uploadDistributorFile", "anon");
+        filterMap.put("/sys/image/uploadFilesToNginx", "anon");
         filterMap.put("/sys/user/uploadUserInfoFile", "anon");
         filterMap.put("/sys/phone/uploadPltFile", "anon");
         filterMap.put("/sys/device/uploadDeviceFile", "anon");

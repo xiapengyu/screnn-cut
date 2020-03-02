@@ -3,6 +3,7 @@ package com.yunjian.core.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yunjian.core.service.IAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class IndexController {
     @Autowired
     private IDeviceService deviceService;
 
+    @Autowired
+    private IAccountService accountService;
+
     /**
      *查询首页数据
      * @return
@@ -54,13 +58,13 @@ public class IndexController {
         dto.setAdList(adImageList);
         //切割次数信息
         Account account = SecurityContext.getUserPrincipal();
-        Device device = deviceService.getOne(new QueryWrapper<Device>().eq("serial_no", account.getSerialNo()));
-        if(device.getType() == 1){
+        Account a = accountService.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
+        if(a.getType() == 1){
             dto.setAccountType(1);
         }else{
             dto.setAccountType(2);
-            dto.setUnUseAmount(device.getRemainTimes());
-            dto.setUseAmount(device.getUseTimes());
+            dto.setUnUseAmount(a.getRemainTimes());
+            dto.setUseAmount(a.getUseTimes());
         }
         response.setData(dto);
         return response;

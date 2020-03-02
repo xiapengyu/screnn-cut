@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.Device;
 import io.swagger.models.auth.In;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.core.entity.Device;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.mapper.DeviceMapper;
 import com.yunjian.core.service.IDeviceService;

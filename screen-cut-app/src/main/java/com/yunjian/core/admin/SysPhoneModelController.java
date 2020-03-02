@@ -140,7 +140,8 @@ public class SysPhoneModelController {
             if (originName.lastIndexOf(".") >= 0){
                 extName = originName.substring(file.getOriginalFilename().lastIndexOf("."));
             }
-            ResponseDto response = imageService.uploadFile(file.getBytes(), fileUploadServer + "plt/", extName);
+            //ResponseDto response = imageService.uploadFile(file.getBytes(), fileUploadServer + "plt/", extName);
+            ResponseDto response = imageService.uploadFilesToNginx(file.getBytes(), extName);
             Map<String, Object> plt = new HashMap<>();
             plt.put("uid", UUIDUtil.getUUID());
             plt.put("url", response.getData());
