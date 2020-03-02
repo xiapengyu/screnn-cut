@@ -63,9 +63,9 @@ public class PushMsgServiceImpl extends ServiceImpl<PushMsgMapper, PushMsg> impl
             queryWrapper.like("content", content);
         }
 
-        SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
-        if (loginUser.getUserId() != Constant.SUPER_ADMIN) {
-            queryWrapper.eq("creator_id", loginUser.getUserId().intValue());
+        String userId = StringUtil.obj2String(params.get("creatorId"));
+        if(!StringUtils.isEmpty(userId)){
+            queryWrapper.eq("creator_id", Integer.parseInt(userId));
         }
 
         IPage<PushMsg> page = this.page(new Query<PushMsg>().getPage(params), queryWrapper);

@@ -8,6 +8,10 @@ public class AccountDto extends Account {
 	
 	private String code;
 
+	private Integer remainTimes;
+
+	private Integer useTimes;
+
 	public String getCode() {
 		return code;
 	}
@@ -16,4 +20,19 @@ public class AccountDto extends Account {
 		this.code = code;
 	}
 
+	public Integer getRemainTimes() {
+		return remainTimes;
+	}
+
+	public void setRemainTimes(Integer remainTimes) {
+		this.remainTimes = remainTimes;
+	}
+
+	public Integer getUseTimes() {
+		return useTimes;
+	}
+
+	public void setUseTimes(Integer useTimes) {
+		this.useTimes = useTimes;
+	}
 }

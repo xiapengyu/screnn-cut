@@ -34,13 +34,13 @@
         label="设备序列号">
       </el-table-column>
       <el-table-column
-        prop="useAmount"
+        prop="useTimes"
         header-align="center"
         align="center"
         label="已用次数">
       </el-table-column>
       <el-table-column
-        prop="unuseAmount"
+        prop="remainTimes"
         header-align="center"
         align="center"
         label="未用次数">

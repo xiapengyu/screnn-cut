@@ -1,8 +1,6 @@
 package com.yunjian.core.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,6 +8,7 @@ import com.yunjian.common.utils.*;
 import com.yunjian.core.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -197,7 +196,17 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 			queryWrapper.eq("dealer_id", loginUser.getUserId().intValue());
 		}
         IPage<Account> page = this.page(new Query<Account>().getPage(params), queryWrapper);
-        return new PageUtils(page);
+        List<Account> accountList = page.getRecords();
+		List<AccountDto> resultList = new ArrayList<>();
+        for (Account item : accountList){
+			AccountDto dto = new AccountDto();
+			BeanUtils.copyProperties(item, dto);
+			Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>().eq("serial_no", item.getSerialNo()));
+			dto.setRemainTimes(device.getRemainTimes());
+			dto.setUseTimes(device.getUseTimes());
+			resultList.add(dto);
+		}
+        return new PageUtils(resultList, (int)page.getTotal(), (int)page.getSize(), (int)page.getCurrent());
 	}
 
 	@Override

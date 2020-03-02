@@ -62,9 +62,10 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
         if(!StringUtils.isEmpty(status)){
             queryWrapper.like("status", status);
         }
-        SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser.getUserId() != Constant.SUPER_ADMIN){
-            queryWrapper.eq("creator_id", loginUser.getUserId().intValue());
+
+        String userId = StringUtil.obj2String(params.get("creatorId"));
+        if(!StringUtils.isEmpty(userId)){
+            queryWrapper.eq("creator_id", Integer.parseInt(userId));
         }
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
         IPage<RedeemCode> page = this.page(new Query<RedeemCode>().getPage(params), queryWrapper);

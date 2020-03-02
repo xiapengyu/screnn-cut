@@ -28,7 +28,7 @@ public class AccountController {
 	private IAccountService accountServiceImpl;
 
 	@Autowired
-	private IDeviceService deviceService;
+	private IDeviceService deviceServiceImpl;
 	
 	/**
 	 *修改用户信息
@@ -41,6 +41,7 @@ public class AccountController {
 		logger.info("修改用户信息{}", JsonUtil.toJsonString(param));
 		return accountServiceImpl.modifyAccountInfo(param);
 	}
+
 	/**
 	 *修改用户密码
 	 * @param param
@@ -57,6 +58,25 @@ public class AccountController {
 	}
 
 	/**
+	 * 检查用户是否有可用的切割次数
+	 * @return
+	 */
+	@RequestMapping(value="/checkUserCutTimes", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDto checkUserCutTimes() {
+		logger.info("检查用户是否有可用的切割次数");
+		Account account = SecurityContext.getUserPrincipal();
+		Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
+		Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>()
+				.eq("serial_no", a.getSerialNo()));
+		if(device.getType() != 1 && device.getRemainTimes() == 0){
+			return new ResponseDto(Constant.SUCCESS_CODE, 0, Constant.SUCCESS_MESSAGE);
+		}else{
+			return new ResponseDto(Constant.SUCCESS_CODE, 1, Constant.SUCCESS_MESSAGE);
+		}
+	}
+
+	/**
 	 * 切割成功通知用户
 	 */
 	@PostMapping("/successNotify")
@@ -66,15 +86,15 @@ public class AccountController {
 		try {
 			//更新用户次数
 			Account account = SecurityContext.getUserPrincipal();
-			Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account));
-			Device device = deviceService.getOne(new QueryWrapper<Device>()
+			Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
+			Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>()
 					.eq("serial_no", a.getSerialNo()));
 			//有限次数的用户不更新切割次数
 			if(device.getType() != 1){
 				//更新设备次数
 				device.setUseTimes(device.getUseTimes() + 1);
 				device.setRemainTimes(device.getRemainTimes() - 1);
-				deviceService.saveOrUpdate(device);
+				deviceServiceImpl.saveOrUpdate(device);
 			}
 		} catch (Exception e) {
 			logger.info("切割成功通知用户失败", e);

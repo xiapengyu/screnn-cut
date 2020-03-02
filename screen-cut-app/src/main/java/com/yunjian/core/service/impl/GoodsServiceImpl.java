@@ -61,6 +61,10 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 			queryWrapper.eq("creator_id", loginUser.getUserId());
 		}
 
+		String userId = StringUtil.obj2String(params.get("creatorId"));
+		if(!StringUtils.isEmpty(userId)){
+			queryWrapper.eq("creator_id", Integer.parseInt(userId));
+		}
 		IPage<Goods> page = this.page(new Query<Goods>().getPage(params), queryWrapper);
 		return new PageUtils(page);
 	}

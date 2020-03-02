@@ -1,10 +1,14 @@
 package com.yunjian.core.admin;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.druid.util.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.*;
+import com.yunjian.core.dto.GoodsImageDto;
+import com.yunjian.core.entity.*;
+import com.yunjian.core.service.IGoodsImgService;
+import com.yunjian.core.service.IGoodsService;
+import com.yunjian.core.service.IGoodsTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.druid.util.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.R;
-import com.yunjian.common.utils.StringUtil;
-import com.yunjian.core.dto.GoodsImageDto;
-import com.yunjian.core.entity.Goods;
-import com.yunjian.core.entity.GoodsImg;
-import com.yunjian.core.entity.GoodsType;
-import com.yunjian.core.service.IGoodsImgService;
-import com.yunjian.core.service.IGoodsService;
-import com.yunjian.core.service.IGoodsTypeService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -54,8 +48,17 @@ public class SysGoodsController {
     @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         logger.info("分页查询商品列表{}", JsonUtil.toJsonString(params));
+
+        SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
+        SysRoleEntity role = (SysRoleEntity) HttpContextUtils.getLoginUser().get("role");
+        int isDealer = 0;
+        if(role!=null && role.getRoleId()==2) { //2：经销商
+            params.put("creatorId", user.getUserId());
+            isDealer = 1;
+        }
+
         PageUtils page = goodsService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("page", page).put("isDealer", isDealer);
     }
 
     /**
@@ -95,7 +98,7 @@ public class SysGoodsController {
     }
 
     /**
-     * 删除商品
+     * 删除商品（逻辑删除）
      */
     @PostMapping("/delete")
     public R delete(@RequestBody Map<String, Object> params){
@@ -103,7 +106,9 @@ public class SysGoodsController {
         try {
             String id = StringUtil.obj2String(params.get("id"));
             if(!StringUtils.isEmpty(id)){
-            	goodsService.remove(new QueryWrapper<Goods>().eq("id", id));
+                Goods goods = goodsService.getOne(new QueryWrapper<Goods>().eq("id", id));
+                goods.setDeleteFlag(0);
+                goodsService.saveOrUpdate(goods);
                 return R.ok();
             }else{
                 return R.error("参数错误");

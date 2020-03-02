@@ -10,7 +10,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clearQueryData()">重置</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()" v-if="isDealer==1">新增</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -89,6 +89,7 @@
           title: '',
           content: ''
         },
+        isDealer: 0,
         dataList: [],
         pageIndex: 1,
         pageSize: 10,
@@ -123,6 +124,7 @@
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
             this.positionList = data.positionList
+            this.isDealer = data.isDealer
           } else {
             this.dataList = []
             this.totalPage = 0
