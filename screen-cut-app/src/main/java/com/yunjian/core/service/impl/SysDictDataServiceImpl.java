@@ -27,23 +27,25 @@ import javax.annotation.Resource;
 @Service("sysDictDataService")
 public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataDao, SysDictDataEntity> implements SysDictDataService {
 
-	@Resource
-	private SysDictDataDao sysDictDataDao;    @Override
+    @Resource
+    private SysDictDataDao sysDictDataDao;
+
+    @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        String dictType = (String)params.get("dictType");
-        String dictLabel = (String)params.get("dictLabel");
+        String dictType = (String) params.get("dictType");
+        String dictLabel = (String) params.get("dictLabel");
 
         IPage<SysDictDataEntity> page = this.page(
                 new Query<SysDictDataEntity>().getPage(params),
                 new QueryWrapper<SysDictDataEntity>()
-                        .eq(StringUtils.isNotBlank(dictType),"dict_type", dictType)
-                        .like(StringUtils.isNotBlank(dictLabel),"dict_label", dictLabel)
+                        .eq(StringUtils.isNotBlank(dictType), "dict_type", dictType)
+                        .like(StringUtils.isNotBlank(dictLabel), "dict_label", dictLabel)
         );
         return new PageUtils(page);
     }
 
-	@Override
-	public void changeLocal(String language) {
-		sysDictDataDao.sysDictDataDao(language);
-	}
+    @Override
+    public void changeLocal(String language) {
+        sysDictDataDao.sysDictDataDao(language);
+    }
 }
