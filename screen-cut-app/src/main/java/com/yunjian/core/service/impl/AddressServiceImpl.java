@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.yunjian.common.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,6 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.common.utils.PageUtils;
-import com.yunjian.common.utils.Query;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
@@ -74,7 +71,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 			this.saveOrUpdate(address);
 		} catch (Exception e) {
 			logger.error("保存地址出错", e);
-			return new ResponseDto(Constant.FAIL_CODE, null, Constant.FAIL_MESSAGE);
+			return new ResponseDto(Constant.FAIL_CODE, null, LanguageUtils.getValueByKey("address.save.error"));
 		}
 		return response;
 	}
@@ -85,7 +82,7 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
 		Address defaultAddress = this
 				.getOne(new QueryWrapper<Address>().eq("account_id", account.getId()).eq("is_default", 1));
 		if(defaultAddress != null && defaultAddress.getId() == param.getId()){
-			return new ResponseDto(Constant.FAIL_CODE, null, "不能删除默认收货地址");
+			return new ResponseDto(Constant.FAIL_CODE, null, LanguageUtils.getValueByKey("address.delete.default.error"));
 		}
 		this.remove(new QueryWrapper<Address>().eq("id", param.getId()));
 		return new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);

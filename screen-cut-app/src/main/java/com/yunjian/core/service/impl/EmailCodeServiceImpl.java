@@ -2,6 +2,7 @@ package com.yunjian.core.service.impl;
 
 import java.util.Date;
 
+import com.yunjian.common.utils.LanguageUtils;
 import com.yunjian.common.utils.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,35 +28,35 @@ import com.yunjian.core.service.IEmailCodeService;
 @Service
 public class EmailCodeServiceImpl extends ServiceImpl<EmailCodeMapper, EmailCode> implements IEmailCodeService {
 
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Override
-	public ResponseDto sendEmailCode(Account param) {
-		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
-		try {
-			// 生成六位随机数字
-			//String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-			String code = "123456";
-			
-			//删除旧的验证码
-			this.remove(new QueryWrapper<EmailCode>().eq("email", param.getEmail()));
-			//保存新的验证码
-			Date now = new Date();
-			EmailCode record = new EmailCode();
-			record.setCode(code);
-			record.setEmail(param.getEmail());
-			record.setExpireTime(new Date(now.getTime() + Constant.CODE_EXPIRE_TIME));
-			record.setUpdateTime(now);
-			record.setDeleteFlag(1);
-			this.save(record);
-			//发送邮件
-			logger.info("发送邮件:收件人[{}],验证码[{}]", param.getEmail(), code);
-			//MailUtils.sendMail(param.getEmail(), code);
-		} catch (Exception e) {
-			logger.error("发送邮件报错", e);
-			return new ResponseDto(Constant.FAIL_CODE, null, "发送邮件报错失败");
-		}
-		return response;
-	}
-	
+    @Override
+    public ResponseDto sendEmailCode(Account param) {
+        ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
+        try {
+            // 生成六位随机数字
+            //String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
+            String code = "123456";
+
+            //删除旧的验证码
+            this.remove(new QueryWrapper<EmailCode>().eq("email", param.getEmail()));
+            //保存新的验证码
+            Date now = new Date();
+            EmailCode record = new EmailCode();
+            record.setCode(code);
+            record.setEmail(param.getEmail());
+            record.setExpireTime(new Date(now.getTime() + Constant.CODE_EXPIRE_TIME));
+            record.setUpdateTime(now);
+            record.setDeleteFlag(1);
+            this.save(record);
+            //发送邮件
+            logger.info("发送邮件:收件人[{}],验证码[{}]", param.getEmail(), code);
+            //MailUtils.sendMail(param.getEmail(), code);
+        } catch (Exception e) {
+            logger.error("获取邮件验证码报错", e);
+            return new ResponseDto(Constant.FAIL_CODE, null, LanguageUtils.getValueByKey("email.code.fail"));
+        }
+        return response;
+    }
+
 }
