@@ -2,6 +2,7 @@ package com.yunjian.core.config;
 
 import javax.servlet.DispatcherType;
 
+import com.yunjian.common.filter.LanguageFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +51,19 @@ public class FilterConfig {
 		registration.setFilter(new SessionFilter());
 		registration.addUrlPatterns("/api/*");
 		registration.setName("sessionFilter");
+		registration.setOrder(Integer.MAX_VALUE);
+		return registration;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Bean
+	public FilterRegistrationBean LanguageFilterRegistration() {
+		FilterRegistrationBean registration = new FilterRegistrationBean();
+		registration.setDispatcherTypes(DispatcherType.REQUEST);
+		registration.setFilter(new LanguageFilter());
+		registration.addUrlPatterns("/api/*");
+		registration.addUrlPatterns("/app/*");
+		registration.setName("languageFilter");
 		registration.setOrder(Integer.MAX_VALUE);
 		return registration;
 	}
