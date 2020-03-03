@@ -10,7 +10,6 @@
     <div slot="title" v-else-if="dataForm.id">修改</div>
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px" size="mini">
       <el-input v-if="false" v-model="dataForm.id"></el-input>
-
       <el-row :gutter="20">
         <el-col :span="12">
           <div class="grid-content bg-purple">

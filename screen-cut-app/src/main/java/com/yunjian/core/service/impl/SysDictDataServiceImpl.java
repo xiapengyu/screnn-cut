@@ -16,9 +16,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 @Service("sysDictDataService")
 public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataDao, SysDictDataEntity> implements SysDictDataService {
 
+	@Resource
+	private SysDictDataDao sysDictDataDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -33,4 +37,9 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataDao, SysDictD
         );
         return new PageUtils(page);
     }
+
+	@Override
+	public void changeLocal(String language) {
+		sysDictDataDao.sysDictDataDao(language);
+	}
 }

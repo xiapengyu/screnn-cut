@@ -73,6 +73,17 @@ public class SysDictDataController extends AbstractController {
 		sysDictDataService.saveOrUpdate(dictData);
 		return R.ok();
 	}
+	
+	/**
+	 * 修改配置
+	 */
+	@SysLog("更改语言")
+	@PostMapping("/changeLocal")
+	public R changeLocal(@RequestBody Map<String, Object> params){
+		String language = (String) params.get("language");
+		sysDictDataService.changeLocal(language);
+		return R.ok();
+	}
 
 
 	/**
