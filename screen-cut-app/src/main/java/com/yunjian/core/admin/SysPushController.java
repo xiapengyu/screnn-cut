@@ -5,12 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.yunjian.common.utils.*;
-import com.yunjian.core.dto.PushDto;
-import com.yunjian.core.entity.Account;
-import com.yunjian.core.entity.SysUserEntity;
-import com.yunjian.core.service.IAccountService;
-import com.yunjian.core.service.IMessageCenterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.HttpContextUtils;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.R;
+import com.yunjian.common.utils.StringUtil;
+import com.yunjian.core.dto.PushDto;
+import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.PushMsg;
+import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IPushMsgService;
 
 /**
@@ -38,8 +41,6 @@ public class SysPushController {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private IMessageCenterService messageCenterServiceImpl;
     @Autowired
     private IPushMsgService pushMsgServiceImpl;
     @Autowired
