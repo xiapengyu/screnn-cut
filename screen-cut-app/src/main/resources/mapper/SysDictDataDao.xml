@@ -2,5 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yunjian.core.dao.SysDictDataDao">
-	
+	<update id="sysDictDataDao" parameterType="java.lang.String">
+		update sys_dict_data set dict_value=#{language} where dict_type='local'
+	</update>
 </mapper>

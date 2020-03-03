@@ -22,10 +22,13 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 @Service("sysDictDataService")
 public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataDao, SysDictDataEntity> implements SysDictDataService {
 
-    @Override
+	@Resource
+	private SysDictDataDao sysDictDataDao;    @Override
     public PageUtils queryPage(Map<String, Object> params) {
         String dictType = (String)params.get("dictType");
         String dictLabel = (String)params.get("dictLabel");
@@ -38,4 +41,9 @@ public class SysDictDataServiceImpl extends ServiceImpl<SysDictDataDao, SysDictD
         );
         return new PageUtils(page);
     }
+
+	@Override
+	public void changeLocal(String language) {
+		sysDictDataDao.sysDictDataDao(language);
+	}
 }

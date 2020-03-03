@@ -18,4 +18,6 @@ import java.util.Map;
  */
 public interface SysDictDataService extends IService<SysDictDataEntity> {
     public PageUtils queryPage(Map<String, Object> params);
+
+	public void changeLocal(String language);
 }
