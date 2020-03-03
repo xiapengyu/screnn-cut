@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.yunjian.common.utils.*;
-import com.yunjian.core.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,23 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.HttpContextUtils;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.MD5Util;
+import com.yunjian.common.utils.PageUtils;
+import com.yunjian.common.utils.Query;
+import com.yunjian.common.utils.R;
+import com.yunjian.common.utils.StringUtil;
+import com.yunjian.common.utils.UUIDUtil;
 import com.yunjian.core.dto.AccountDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
+import com.yunjian.core.entity.Account;
+import com.yunjian.core.entity.AccountCache;
+import com.yunjian.core.entity.Device;
+import com.yunjian.core.entity.EmailCode;
+import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.mapper.AccountMapper;
 import com.yunjian.core.service.IAccountCacheService;
 import com.yunjian.core.service.IAccountService;
@@ -55,37 +67,51 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 		ResponseDto response = new ResponseDto(Constant.SUCCESS_CODE, null, Constant.SUCCESS_MESSAGE);
 		try {
 			Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>().eq("serial_no", param.getSerialNo()));
-			if (device == null){
-				return new ResponseDto(Constant.FAIL_CODE, null, "序列码不存在");
-			}else if (this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail())) != null) {
+			Account emailAccount = this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail()));
+			if(emailAccount == null){     //新注册用户
+				if(device == null){
+					return new ResponseDto(Constant.FAIL_CODE, null, "序列码不存在");
+				}else if(this.getOne(new QueryWrapper<Account>().eq("serial_no", param.getSerialNo())) != null){
+					return new ResponseDto(Constant.FAIL_CODE, null, "序列码已经被其他用户注册");
+				}
+				EmailCode emailCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())
+						.eq("email", param.getEmail()).eq("delete_flag", 1).gt("expire_time", new Date()));
+				if(emailCode != null) {
+					Account account = new Account();
+					account.setEmail(param.getEmail());
+					account.setPassword(MD5Util.getMD5String(param.getPassword().trim()));
+					account.setAvatar("");
+					account.setSerialNo(param.getSerialNo());
+					account.setCreateTime(new Date());
+					account.setUpdateTime(new Date());
+					account.setDeleteFlag(1);
+					account.setPhoneModelId(null);
+					account.setPhoneModelName("");
+					account.setUserName("");
+					account.setPhone("");
+					account.setDealerId(device.getCreatorId().intValue());
+					account.setStatus(1);
+					account.setRemainTimes(device.getRemainTimes());
+					account.setUseTimes(device.getUseTimes());
+					account.setType(device.getType());
+					this.save(account);
+					// 删除验证码
+					emailCodeServiceImpl.remove(new QueryWrapper<EmailCode>().eq("id", emailCode.getId()));
+				}else {
+					return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码输入错误");
+				}
+			}else if(emailAccount != null && StringUtils.isEmpty(emailAccount.getSerialNo())){    //重新注册用户
+				if(device.getType() != emailAccount.getType()){
+					return new ResponseDto(Constant.FAIL_CODE, null, "用户类型与设备类型不一致");
+				}
+				emailAccount.setSerialNo(device.getSerialNo());
+				emailAccount.setUpdateTime(new Date());
+				if(device.getType() == 2 && emailAccount.getType() == 2){
+					emailAccount.setRemainTimes(emailAccount.getRemainTimes() + device.getRemainTimes());
+				}
+				this.saveOrUpdate(emailAccount);
+			}else if(emailAccount != null && !StringUtils.isEmpty(emailAccount.getSerialNo())){
 				return new ResponseDto(Constant.FAIL_CODE, null, "该邮箱已经注册");
-			} else if (this.getOne(new QueryWrapper<Account>().eq("serial_no", param.getSerialNo())) != null) {
-				return new ResponseDto(Constant.FAIL_CODE, null, "序列码已经被注册");
-			}
-			
-			EmailCode emalCode = emailCodeServiceImpl.getOne(new QueryWrapper<EmailCode>().eq("code", param.getCode())
-					.eq("email", param.getEmail()).eq("delete_flag", 1).gt("expire_time", new Date()));
-			if(emalCode != null) {
-				Account account = new Account();
-				account.setEmail(param.getEmail());
-				account.setPassword(MD5Util.getMD5String(param.getPassword().trim()));
-				account.setAvatar("");
-				account.setSerialNo(param.getSerialNo());
-				account.setCreateTime(new Date());
-				account.setUpdateTime(new Date());
-				account.setDeleteFlag(1);
-				account.setPhoneModelId(null);
-				account.setPhoneModelName("");
-				account.setUserName("");
-				account.setPhone("");
-				account.setDealerId(device.getCreatorId().intValue());
-				account.setStatus(1);
-				this.save(account);
-				
-				// 删除验证码
-				emailCodeServiceImpl.remove(new QueryWrapper<EmailCode>().eq("id", emalCode.getId()));
-			}else {
-				return new ResponseDto(Constant.PARMS_ERROR_CODE, null, "验证码输入错误");
 			}
 		} catch (Exception e) {
 			logger.error("用户注册失败", e);
@@ -100,7 +126,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 		try {
 			Account account = this.getOne(new QueryWrapper<Account>().eq("email", param.getEmail()).eq("password",
 					MD5Util.getMD5String(param.getPassword())));
-			if (account != null) {
+			if (account != null && !StringUtils.isEmpty(account.getSerialNo())) {
 				// 删除旧缓存
 				accountCacheServiceImpl.remove(new QueryWrapper<AccountCache>().eq("account_id", account.getId()));
 
@@ -120,7 +146,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
 				resultMap.put("account", account);
 				resultMap.put("token", token);
 				response.setData(resultMap);
-			} else {
+			} else if(account != null && StringUtils.isEmpty(account.getSerialNo())){
+				return new ResponseDto(Constant.FAIL_CODE, null, "账户关联的设备已删除请重新注册");
+			}else if(account == null) {
 				return new ResponseDto(Constant.FAIL_CODE, null, "用户名或密码错误");
 			}
 		} catch (Exception e) {

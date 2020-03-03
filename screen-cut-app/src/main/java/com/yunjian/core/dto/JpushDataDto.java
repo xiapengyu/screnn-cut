@@ -5,8 +5,6 @@ import java.util.Map;
 
 public class JpushDataDto {
 
-    private static final long serialVersionUID = 1L;
-
     // 服务源（云呼叫）
     private String source;
     // 极光推送注册别名

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yunjian.common.utils.*;
 import com.yunjian.core.entity.RedeemCode;
+import com.yunjian.core.entity.SysRoleEntity;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IRedeemCodeService;
 import org.slf4j.Logger;
@@ -42,8 +43,17 @@ public class SysRedeemCodeController {
     @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         logger.info("分页查询兑换码列表{}", JsonUtil.toJsonString(params));
+
+        SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
+        SysRoleEntity role = (SysRoleEntity) HttpContextUtils.getLoginUser().get("role");
+        int isDealer = 0;
+        if(role!=null && role.getRoleId()==2) { //2：经销商
+            params.put("creatorId", user.getUserId());
+            isDealer = 1;
+        }
+
         PageUtils page = redeemCodeService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("page", page).put("isDealer", isDealer);
     }
 
     /**

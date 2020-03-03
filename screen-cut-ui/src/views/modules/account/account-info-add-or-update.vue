@@ -3,38 +3,37 @@
     :title="dataForm.op===0 ? '查看' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
+    <div slot="title" v-if="dataForm.op==0">{{$t('message.read')}}</div>
+    <div slot="title" v-else-if="dataForm.op!=0">{{$t('message.edit')}}</div>
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <el-form-item label="用户名" prop="userName">
-          <el-input v-model="dataForm.userName" placeholder="用户名" disabled></el-input>
+      <el-form-item :label="$t('message.userName')" prop="userName">
+          <el-input v-model="dataForm.userName" :placeholder="$t('message.userName')" disabled></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dataForm.email" placeholder="邮箱" disabled></el-input>
+      <el-form-item :label="$t('message.email')" prop="email">
+          <el-input v-model="dataForm.email" :placeholder="$t('message.email')" disabled></el-input>
       </el-form-item>
       <!-- <el-form-item label="头像" prop="avatar">
           <img :src="dataForm.avatar" alt="" height="200" width="200">
       </el-form-item> -->
-      <el-form-item label="注册序列号" prop="serialNo">
-          <el-input v-model="dataForm.serialNo" placeholder="注册序列号" disabled></el-input>
+      <el-form-item :label="$t('message.serialNo')" prop="serialNo">
+          <el-input v-model="dataForm.serialNo" :placeholder="$t('message.serialNo')" disabled></el-input>
       </el-form-item>
-      <el-form-item label="手机型号" prop="phoneModelName">
-          <el-input v-model="dataForm.phoneModelName" placeholder="手机型号" disabled></el-input>
+      <el-form-item :label="$t('message.usedTimes')" prop="useAmount">
+          <el-input-number v-model="dataForm.useAmount" controls-position="right" :min="0" :label="$t('message.usedTimes')" disabled></el-input-number>
       </el-form-item>
-      <el-form-item label="已用次数" prop="useAmount">
-          <el-input-number v-model="dataForm.useAmount" controls-position="right" :min="0" label="已用次数" disabled></el-input-number>
+      <el-form-item :label="$t('message.surplusTimes')" prop="unuseAmount" :class="{ 'is-required': true }">
+        <el-input-number v-model="dataForm.unuseAmount" controls-position="right" :min="0" :label="$t('message.surplusTimes')" :disabled="this.dataForm.op===0"></el-input-number>
       </el-form-item>
-      <el-form-item label="未用次数" prop="unuseAmount" :class="{ 'is-required': true }">
-        <el-input-number v-model="dataForm.unuseAmount" controls-position="right" :min="0" label="未用次数" :disabled="this.dataForm.op===0"></el-input-number>
-      </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status">
+      <el-form-item :label="$t('message.status')" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status" :disabled="this.dataForm.op===0">
-          <el-radio :label="0">禁用</el-radio>
-          <el-radio :label="1">正常</el-radio>
+          <el-radio :label="0">{{$t('message.able')}}</el-radio>
+          <el-radio :label="1">{{$t('message.ok')}}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">关闭</el-button>
-      <el-button v-show="dataForm.op===1" type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button @click="visible = false">{{$t('message.close')}}</el-button>
+      <el-button v-show="dataForm.op===1" type="primary" @click="dataFormSubmit()">{{$t('message.submit')}}</el-button>
     </span>
   </el-dialog>
 </template>

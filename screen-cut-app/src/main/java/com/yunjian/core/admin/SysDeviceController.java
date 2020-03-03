@@ -1,37 +1,32 @@
 package com.yunjian.core.admin;
 
 
+import com.alibaba.druid.util.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yunjian.common.utils.*;
+import com.yunjian.core.entity.Account;
+import com.yunjian.core.entity.Device;
+import com.yunjian.core.entity.SysRoleEntity;
+import com.yunjian.core.entity.SysUserEntity;
+import com.yunjian.core.service.IAccountService;
+import com.yunjian.core.service.IDeviceService;
+import com.yunjian.core.service.SysUserService;
+import net.sf.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.yunjian.common.utils.*;
-import com.yunjian.core.entity.SysRoleEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.druid.util.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.entity.SysUserEntity;
-import com.yunjian.core.service.IDeviceService;
-import com.yunjian.core.service.SysUserService;
-
-import net.sf.json.JSONArray;
 
 /**
  * <p>
@@ -51,6 +46,8 @@ public class SysDeviceController extends AbstractController {
     private IDeviceService deviceService;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private IAccountService accountService;
 
     @Value("${template.device.url}")
     private String deviceTemplate = "";
@@ -84,7 +81,17 @@ public class SysDeviceController extends AbstractController {
         logger.info("删除设备{}", JsonUtil.toJsonString(params));
         String id = StringUtil.obj2String(params.get("id"));
         if (!StringUtils.isEmpty(id)) {
-            return deviceService.deleteDevice(id);
+            QueryWrapper<Device> query = new QueryWrapper<Device>().eq("id", Integer.parseInt(id));
+            Device device = deviceService.getOne(query);
+            String serialNo = device.getSerialNo();
+            //删除设备
+            deviceService.remove(query);
+            //用户解绑设备
+            Account account = accountService.getOne(new QueryWrapper<Account>().eq("serial_no", serialNo));
+            account.setSerialNo("");
+            accountService.saveOrUpdate(account);
+            return R.ok();
+            //return deviceService.deleteDevice(id);
         } else {
             return R.error("参数错误");
         }

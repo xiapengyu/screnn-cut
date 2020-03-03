@@ -57,4 +57,24 @@ public class SysImageController {
         }
     }
 
+    /**
+     * 上传文件到nginx文件服务器(多处复用)
+     */
+    @PostMapping("/uploadFilesToNginx")
+    public R uploadFilesToNginx(@RequestParam("file") MultipartFile file){
+        try {
+            String name = file.getOriginalFilename();
+            String extName = "";
+            logger.info("上传文件[{}]", name);
+            if (name.lastIndexOf(".") >= 0){
+                extName = name.substring(file.getOriginalFilename().lastIndexOf("."));
+            }
+            ResponseDto response = imageService.uploadFilesToNginx(file.getBytes(), extName);
+            return R.ok().put("imagePath", response.getData());
+        } catch (IOException e) {
+            logger.info("上传文件失败", e);
+            return R.error("上传文件失败");
+        }
+    }
+
 }

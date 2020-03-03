@@ -18,9 +18,8 @@ import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.Ad;
-import com.yunjian.core.entity.Device;
+import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IAdService;
-import com.yunjian.core.service.IDeviceService;
 
 @RestController
 @RequestMapping("/api/index")
@@ -32,7 +31,7 @@ public class IndexController {
     private IAdService adService;
 
     @Autowired
-    private IDeviceService deviceService;
+    private IAccountService accountService;
 
     /**
      *查询首页数据
@@ -54,13 +53,13 @@ public class IndexController {
         dto.setAdList(adImageList);
         //切割次数信息
         Account account = SecurityContext.getUserPrincipal();
-        Device device = deviceService.getOne(new QueryWrapper<Device>().eq("serial_no", account.getSerialNo()));
-        if(device.getType() == 1){
+        Account a = accountService.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
+        if(a.getType() == 1){
             dto.setAccountType(1);
         }else{
             dto.setAccountType(2);
-            dto.setUnUseAmount(device.getRemainTimes());
-            dto.setUseAmount(device.getUseTimes());
+            dto.setUnUseAmount(a.getRemainTimes());
+            dto.setUseAmount(a.getUseTimes());
         }
         response.setData(dto);
         return response;

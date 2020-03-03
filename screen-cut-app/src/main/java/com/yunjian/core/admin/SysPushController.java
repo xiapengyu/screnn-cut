@@ -23,6 +23,7 @@ import com.yunjian.common.utils.StringUtil;
 import com.yunjian.core.dto.PushDto;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.PushMsg;
+import com.yunjian.core.entity.SysRoleEntity;
 import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IPushMsgService;
@@ -52,8 +53,17 @@ public class SysPushController {
     @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         logger.info("分页查询推送消息列表{}", JsonUtil.toJsonString(params));
+
+        SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
+        SysRoleEntity role = (SysRoleEntity) HttpContextUtils.getLoginUser().get("role");
+        int isDealer = 0;
+        if(role!=null && role.getRoleId()==2) { //2：经销商
+            params.put("creatorId", user.getUserId());
+            isDealer = 1;
+        }
+
         PageUtils page = pushMsgServiceImpl.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("page", page).put("isDealer", isDealer);
     }
 
     /**

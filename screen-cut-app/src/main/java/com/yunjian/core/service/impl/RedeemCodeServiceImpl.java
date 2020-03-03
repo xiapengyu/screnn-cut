@@ -62,9 +62,10 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
         if(!StringUtils.isEmpty(status)){
             queryWrapper.like("status", status);
         }
-        SysUserEntity loginUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
-        if(loginUser.getUserId() != Constant.SUPER_ADMIN){
-            queryWrapper.eq("creator_id", loginUser.getUserId().intValue());
+
+        String userId = StringUtil.obj2String(params.get("creatorId"));
+        if(!StringUtils.isEmpty(userId)){
+            queryWrapper.eq("creator_id", Integer.parseInt(userId));
         }
         queryWrapper.eq("delete_flag", 1).orderByDesc("create_time");
         IPage<RedeemCode> page = this.page(new Query<RedeemCode>().getPage(params), queryWrapper);
@@ -144,8 +145,8 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
             record.setCreateTime(new Date());
             redeemRecordService.saveOrUpdate(record);
 
-            device.setRemainTimes(device.getRemainTimes() + code.getTimes());
-            deviceService.saveOrUpdate(device);
+            a.setRemainTimes(device.getRemainTimes() + code.getTimes());
+            accountService.saveOrUpdate(a);
         } catch (Exception e) {
             logger.error("扫描兑换码异常", e);
             //回退操作
@@ -188,7 +189,8 @@ public class RedeemCodeServiceImpl extends ServiceImpl<RedeemCodeMapper, RedeemC
             //生成二维码图片，上传到文件服务器，返回图片地址
             InputStream in = QRCodeUtil.createQRCode(content, 1500, fileName);
             byte[] bytes = this.inputStream2byte(in);
-            ResponseDto response = imageService.uploadImage(bytes, fileUploadServer + "qrcode/", ".png");
+            ResponseDto response = imageService.uploadFilesToNginx(bytes, ".png");
+            //ResponseDto response = imageService.uploadImage(bytes, fileUploadServer + "qrcode/", ".png");
             String imageUrl = response.getData().toString();
             qrCodeUrl = imageUrl;
         } catch (Exception e) {

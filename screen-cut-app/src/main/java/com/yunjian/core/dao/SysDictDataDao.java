@@ -18,6 +18,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SysDictDataDao extends BaseMapper<SysDictDataEntity> {
 
-
+	void sysDictDataDao(String language);
 	
 }

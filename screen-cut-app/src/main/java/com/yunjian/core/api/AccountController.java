@@ -1,20 +1,21 @@
 package com.yunjian.core.api;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yunjian.common.utils.StringUtil;
-import com.yunjian.core.dto.GoodsDetailDto;
-import com.yunjian.core.dto.SecurityContext;
-import com.yunjian.core.entity.Device;
-import com.yunjian.core.service.IDeviceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
 import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.service.IAccountService;
 
@@ -27,9 +28,6 @@ public class AccountController {
 	@Autowired
 	private IAccountService accountServiceImpl;
 
-	@Autowired
-	private IDeviceService deviceService;
-	
 	/**
 	 *修改用户信息
 	 * @param param
@@ -41,6 +39,7 @@ public class AccountController {
 		logger.info("修改用户信息{}", JsonUtil.toJsonString(param));
 		return accountServiceImpl.modifyAccountInfo(param);
 	}
+
 	/**
 	 *修改用户密码
 	 * @param param
@@ -57,6 +56,23 @@ public class AccountController {
 	}
 
 	/**
+	 * 检查用户是否有可用的切割次数
+	 * @return
+	 */
+	@RequestMapping(value="/checkUserCutTimes", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseDto checkUserCutTimes() {
+		logger.info("检查用户是否有可用的切割次数");
+		Account account = SecurityContext.getUserPrincipal();
+		Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
+		if(a.getType() != 1 && a.getRemainTimes() == 0){
+			return new ResponseDto(Constant.SUCCESS_CODE, 0, Constant.SUCCESS_MESSAGE);
+		}else{
+			return new ResponseDto(Constant.SUCCESS_CODE, 1, Constant.SUCCESS_MESSAGE);
+		}
+	}
+
+	/**
 	 * 切割成功通知用户
 	 */
 	@PostMapping("/successNotify")
@@ -66,15 +82,13 @@ public class AccountController {
 		try {
 			//更新用户次数
 			Account account = SecurityContext.getUserPrincipal();
-			Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account));
-			Device device = deviceService.getOne(new QueryWrapper<Device>()
-					.eq("serial_no", a.getSerialNo()));
+			Account a = accountServiceImpl.getOne(new QueryWrapper<Account>().eq("id", account.getId()));
 			//有限次数的用户不更新切割次数
-			if(device.getType() != 1){
+			if(a.getType() != 1){
 				//更新设备次数
-				device.setUseTimes(device.getUseTimes() + 1);
-				device.setRemainTimes(device.getRemainTimes() - 1);
-				deviceService.saveOrUpdate(device);
+				a.setUseTimes(a.getUseTimes() + 1);
+				a.setRemainTimes(a.getRemainTimes() - 1);
+				accountServiceImpl.saveOrUpdate(a);
 			}
 		} catch (Exception e) {
 			logger.info("切割成功通知用户失败", e);

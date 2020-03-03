@@ -2,7 +2,6 @@ package com.yunjian.core.api;
 
 import java.util.Date;
 
-import com.yunjian.common.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yunjian.common.utils.Constant;
 import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.common.utils.LanguageUtils;
 import com.yunjian.core.dto.AccountDto;
 import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.entity.Account;
@@ -48,7 +48,7 @@ public class LoginController {
 	public ResponseDto getEmailCode(@RequestBody Account param) {
 		logger.info("获取邮箱验证码{}", JsonUtil.toJsonString(param));
 		if(StringUtils.isEmpty(param.getEmail())) {
-			return new ResponseDto(Constant.FAIL_CODE, null, "请输入正确的邮箱地址");
+			return new ResponseDto(Constant.FAIL_CODE, null, LanguageUtils.getValueByKey("email.isNull"));
 		}
 		return emailCodeServiceImpl.sendEmailCode(param);
 	}

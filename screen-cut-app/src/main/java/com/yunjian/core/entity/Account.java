@@ -80,4 +80,10 @@ public class Account implements Serializable {
 
     private Integer dealerId;
 
+    private Integer type;
+
+    private Integer remainTimes;
+
+    private Integer useTimes;
+
 }
