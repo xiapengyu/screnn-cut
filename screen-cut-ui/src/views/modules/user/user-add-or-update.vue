@@ -3,43 +3,45 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="dataForm.userName" placeholder="登录帐号"></el-input>
+    <div slot="title" v-if="!dataForm.id">{{$t('message.add')}}</div>
+    <div slot="title" v-if="dataForm.id">{{$t('message.edit')}}</div>
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="140px">
+      <el-form-item :label="$t('message.userName')" prop="userName">
+        <el-input v-model="dataForm.userName" :placeholder="$t('message.loginAccount')"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password" :class="{ 'is-required': !dataForm.id }">
-        <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
+      <el-form-item :label="$t('message.password')" prop="password" :class="{ 'is-required': !dataForm.id }">
+        <el-input v-model="dataForm.password" type="password" :placeholder="$t('message.password')"></el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="comfirmPassword" :class="{ 'is-required': !dataForm.id }">
-        <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码"></el-input>
+      <el-form-item :label="$t('message.passwordConfirm')" prop="comfirmPassword" :class="{ 'is-required': !dataForm.id }">
+        <el-input v-model="dataForm.comfirmPassword" type="password" :placeholder="$t('message.passwordConfirm')"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="dataForm.email" placeholder="邮箱"></el-input>
+      <el-form-item :label="$t('message.email')" prop="email">
+        <el-input v-model="dataForm.email" :placeholder="$t('message.email')"></el-input>
       </el-form-item>
-      <el-form-item label="手机号" prop="mobile">
-        <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
+      <el-form-item :label="$t('message.phoneNo')" prop="mobile">
+        <el-input v-model="dataForm.mobile" :placeholder="$t('message.phoneNo')"></el-input>
       </el-form-item>
-      <el-form-item label="公司" prop="company">
-        <el-input v-model="dataForm.company" placeholder="公司"></el-input>
+      <el-form-item :label="$t('message.company')" prop="company">
+        <el-input v-model="dataForm.company" :placeholder="$t('message.company')"></el-input>
       </el-form-item>
-      <el-form-item label="联系人" prop="contact">
-        <el-input v-model="dataForm.contact" placeholder="联系人"></el-input>
+      <el-form-item :label="$t('message.contact')" prop="contact">
+        <el-input v-model="dataForm.contact" :placeholder="$t('message.contact')"></el-input>
       </el-form-item>
-      <el-form-item label="角色" size="mini" prop="roleIdList">
+      <el-form-item :label="$t('message.role')" size="mini" prop="roleIdList">
         <el-checkbox-group v-model="dataForm.roleIdList">
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status">
+      <el-form-item :label="$t('message.status')" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">
-          <el-radio :label="0">禁用</el-radio>
-          <el-radio :label="1">正常</el-radio>
+          <el-radio :label="0">{{$t('message.able')}}</el-radio>
+          <el-radio :label="1">{{$t('message.ok')}}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button @click="visible = false">{{$t('message.cancle')}}</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">{{$t('message.submit')}}</el-button>
     </span>
   </el-dialog>
 </template>

@@ -2,11 +2,11 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.email" placeholder="邮箱" clearable></el-input>
+        <el-input v-model="dataForm.email" :placeholder="$t('message.email')" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clearQueryData()">重置</el-button>
+        <el-button @click="getDataList()">{{$t('message.search')}}</el-button>
+        <el-button @click="clearQueryData()">{{$t('message.clean')}}</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -25,34 +25,34 @@
         prop="email"
         header-align="center"
         align="center"
-        label="邮箱">
+        :label="$t('message.email')">
       </el-table-column>
       <el-table-column
         prop="serialNo"
         header-align="center"
         align="center"
-        label="设备序列号">
+        :label="$t('message.serialNo')">
       </el-table-column>
       <el-table-column
         prop="useTimes"
         header-align="center"
         align="center"
-        label="已用次数">
+        :label="$t('message.usedTimes')">
       </el-table-column>
       <el-table-column
         prop="remainTimes"
         header-align="center"
         align="center"
-        label="未用次数">
+        :label="$t('message.surplusTimes')">
       </el-table-column>
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态">
+        :label="$t('message.status')">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
-          <el-tag v-else size="small">正常</el-tag>
+          <el-tag v-if="scope.row.status === 0" size="small" type="danger">{{$t('message.able')}}</el-tag>
+          <el-tag v-else size="small">{{$t('message.ok')}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -60,18 +60,18 @@
         header-align="center"
         align="center"
         width="180"
-        label="创建时间">
+        :label="$t('message.createTime')">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
         width="150"
-        label="操作">
+        :label="$t('message.operation')">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">查看</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">{{$t('message.read')}}</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">{{$t('message.edit')}}</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{$t('message.del')}}</el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -2,10 +2,10 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.redeemNo" placeholder="兑换编码" clearable></el-input>
+        <el-input v-model="dataForm.redeemNo" :placeholder="$t('message.redeemCode')" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="dataForm.status" @change="choseStatus(dataForm.status)" placeholder="状态" style="width:100px;">
+        <el-select v-model="dataForm.status" @change="choseStatus(dataForm.status)" :placeholder="$t('message.status')" style="width:100px;">
           <el-option
             v-for="item in statusList"
             :key="item.id"
@@ -15,13 +15,13 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clearQueryData()">重置</el-button>
-        <el-button type="primary" @click="addHandle()" v-if="isDealer==1">新增</el-button>
-        <el-button type="primary" @click="batchEnable()" :disabled="dataListSelections.length <= 0">批量启用</el-button>
-        <el-button type="danger" @click="batchDisable()" :disabled="dataListSelections.length <= 0">批量禁用</el-button>
-        <el-button type="danger"  @click="batchDelete()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
-        <el-button type="primary"  @click="modifyHandle()">按批次更新</el-button>
+        <el-button @click="getDataList()">{{$t('message.search')}}</el-button>
+        <el-button @click="clearQueryData()">{{$t('message.clean')}}</el-button>
+        <el-button type="primary" @click="addHandle()" v-if="isDealer==1">{{$t('message.add')}}</el-button>
+        <el-button type="primary" @click="batchEnable()" :disabled="dataListSelections.length <= 0">{{$t('message.batchAble')}}</el-button>
+        <el-button type="danger" @click="batchDisable()" :disabled="dataListSelections.length <= 0">{{$t('message.batchAble')}}</el-button>
+        <el-button type="danger"  @click="batchDelete()" :disabled="dataListSelections.length <= 0">{{$t('message.batchEnable')}}</el-button>
+        <el-button type="primary"  @click="modifyHandle()">{{$t('message.updateByBatchNo')}}</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -47,20 +47,21 @@
         prop="batchNo"
         header-align="center"
         align="center"
-        width="60"
-        label="批次">
+        width="100"
+        :label="$t('message.batchNo')">
       </el-table-column>
       <el-table-column
         prop="redeemNo"
         header-align="center"
         align="center"
-        label="兑换编码">
+        :label="$t('message.redeemCode')">
       </el-table-column>
       <el-table-column
         prop="url"
         header-align="center"
         align="center"
-        label="二维码">
+        width="100"
+        :label="$t('message.qrCode')">
         <!-- <template slot-scope="scope">
           <div><img :src="scope.row.url"  min-width="55" height="55"></div>
         </template> -->
@@ -75,17 +76,17 @@
         prop="times"
         header-align="center"
         align="center"
-        label="切割次数">
+        :label="$t('message.times')">
       </el-table-column>
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态">
+        :label="$t('message.status')">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 0" size="small" type="danger">禁用</el-tag>
-          <el-tag v-else-if="scope.row.status === 1" size="small" >启用</el-tag>
-          <el-tag v-else size="small">已兑换</el-tag>
+          <el-tag v-if="scope.row.status === 0" size="small" type="danger">{{$t('message.disable')}}</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small" >{{$t('message.able')}}</el-tag>
+          <el-tag v-else size="small">{{$t('message.redeemed')}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -93,18 +94,18 @@
         header-align="center"
         align="center"
         width="180"
-        label="创建时间">
+        :label="$t('message.createTime')">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
         width="150"
-        label="操作">
+        :label="$t('message.batchNo')">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">查看</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">修改</el-button>
-          <el-button v-show="scope.row.status < 2" type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">{{$t('message.read')}}</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">{{$t('message.edit')}}</el-button>
+          <el-button v-show="scope.row.status < 2" type="text" size="small" @click="deleteHandle(scope.row.id)">{{$t('message.del')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
