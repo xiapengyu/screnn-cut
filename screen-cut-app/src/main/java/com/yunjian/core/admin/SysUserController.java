@@ -172,6 +172,18 @@ public class SysUserController extends AbstractController {
 		String token = request.getHeader("token");
 		return R.ok().put("userTemplate", userTemplate).put("token", token);
 	}
+	
+	/**
+	 * 下载经销商信息模板
+	 */
+	@PostMapping("/changeLocal")
+	public R changeLocal(@RequestBody Map<String, Object> params) {
+		String language = (String) params.get("language");
+		SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
+		user.setLanguage(language);
+		sysUserService.changeLocal(user);
+		return R.ok();
+	}
 
 	/**
 	 * 导入并保存经销商信息

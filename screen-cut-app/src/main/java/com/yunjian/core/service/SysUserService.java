@@ -61,4 +61,6 @@ public interface SysUserService extends IService<SysUserEntity> {
 
 	R saveBatchRecord(List<SysUserEntity> resultList);
 
+	void changeLocal(SysUserEntity user);
+
 }
