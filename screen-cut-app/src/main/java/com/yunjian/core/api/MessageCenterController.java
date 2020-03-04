@@ -116,7 +116,8 @@ public class MessageCenterController {
      * @param param
      * @return
      */
-    @RequestMapping(value = "/deleteMsg", method = RequestMethod.POST)
+    @SuppressWarnings("unchecked")
+	@RequestMapping(value = "/deleteMsg", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDto deleteMsg(@RequestBody Map<String, Object> param) {
         logger.info("删除消息通知信息{}", JsonUtil.toJsonString(param));

@@ -1,7 +1,6 @@
 package com.yunjian.core.dto;
 
 import java.io.Serializable;
-import java.util.Locale;
 import java.util.Properties;
 
 import com.yunjian.core.entity.Account;

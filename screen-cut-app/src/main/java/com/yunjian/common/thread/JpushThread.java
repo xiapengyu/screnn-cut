@@ -1,14 +1,14 @@
 package com.yunjian.common.thread;
 
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.core.dto.JpushDataDto;
-import com.yunjian.core.service.JPushService;
-import com.yunjian.core.service.impl.JPushServiceImpl;
+import java.util.Collection;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.Map;
+import com.yunjian.common.utils.JsonUtil;
+import com.yunjian.core.dto.JpushDataDto;
+import com.yunjian.core.service.JPushService;
 
 public class JpushThread implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(JpushThread.class);

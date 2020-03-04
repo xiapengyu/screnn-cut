@@ -1,20 +1,16 @@
 package com.yunjian.core.service.impl;
 
-import com.yunjian.common.utils.JsonUtil;
-import com.yunjian.core.dto.SecurityContext;
-import com.yunjian.core.service.InitService;
+import java.io.InputStream;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Locale;
-import java.util.Properties;
-
-import javax.annotation.PostConstruct;
+import com.yunjian.core.dto.SecurityContext;
+import com.yunjian.core.service.InitService;
 
 @Service
 public class InitServiceImpl implements InitService {

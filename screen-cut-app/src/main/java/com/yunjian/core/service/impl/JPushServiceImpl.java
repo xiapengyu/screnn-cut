@@ -1,5 +1,17 @@
 package com.yunjian.core.service.impl;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.yunjian.common.utils.Constant;
+import com.yunjian.core.dto.JpushDataDto;
+import com.yunjian.core.dto.ResponseDto;
+import com.yunjian.core.service.JPushService;
+
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jpush.api.JPushClient;
@@ -11,17 +23,6 @@ import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.notification.AndroidNotification;
 import cn.jpush.api.push.model.notification.IosNotification;
 import cn.jpush.api.push.model.notification.Notification;
-import com.yunjian.common.utils.Constant;
-import com.yunjian.core.dto.JpushDataDto;
-import com.yunjian.core.dto.ResponseDto;
-import com.yunjian.core.service.JPushService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.Map;
 
 @Service
 public class JPushServiceImpl implements JPushService {

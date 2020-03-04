@@ -1,12 +1,12 @@
 package com.yunjian.common.utils;
 
-import com.yunjian.core.dto.SecurityContext;
+import java.util.Locale;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
+import com.yunjian.core.dto.SecurityContext;
 
 public class LanguageUtils {
 

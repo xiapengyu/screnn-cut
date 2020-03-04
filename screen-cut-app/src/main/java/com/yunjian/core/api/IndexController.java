@@ -3,7 +3,6 @@ package com.yunjian.core.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yunjian.core.service.IAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,8 @@ import com.yunjian.core.dto.ResponseDto;
 import com.yunjian.core.dto.SecurityContext;
 import com.yunjian.core.entity.Account;
 import com.yunjian.core.entity.Ad;
-import com.yunjian.core.entity.Device;
+import com.yunjian.core.service.IAccountService;
 import com.yunjian.core.service.IAdService;
-import com.yunjian.core.service.IDeviceService;
 
 @RestController
 @RequestMapping("/api/index")
@@ -31,9 +29,6 @@ public class IndexController {
 
     @Autowired
     private IAdService adService;
-
-    @Autowired
-    private IDeviceService deviceService;
 
     @Autowired
     private IAccountService accountService;
