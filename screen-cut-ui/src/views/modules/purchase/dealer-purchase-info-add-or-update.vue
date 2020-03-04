@@ -5,74 +5,74 @@
     :visible.sync="visible"
     append-to-body>
     <!-- 自定义动态的弹窗标题 -->
-    <div slot="title" v-if="dataForm.opt==1">详情</div>
-    <div slot="title" v-else-if="!dataForm.id">新增</div>
-    <div slot="title" v-else-if="dataForm.id">修改</div>
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="100px" size="mini">
+    <div slot="title" v-if="dataForm.opt==1">{{$t('message.read')}}</div>
+    <div slot="title" v-else-if="!dataForm.id">{{$t('message.add')}}</div>
+    <div slot="title" v-else-if="dataForm.id">{{$t('message.edit')}}</div>
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="120px" size="mini">
       <el-input v-if="false" v-model="dataForm.id"></el-input>
       <el-row :gutter="20">
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-form-item label="采购单号" prop="orderNo"  v-if="dataForm.id!=0" >
+            <el-form-item :label="$t('message.orderNo')" prop="orderNo"  v-if="dataForm.id!=0" >
               <el-input v-model="dataForm.orderNo" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="经销商名称" prop="dealerName" >
-              <el-input v-model="dataForm.dealerName" placeholder="必填"></el-input>
+            <el-form-item :label="$t('message.dealerName')" prop="dealerName" >
+              <el-input v-model="dataForm.dealerName" :placeholder="$t('message.required')"></el-input>
             </el-form-item>
-            <el-form-item label="其他联系方式" prop="otherContact">
-              <el-input v-model="dataForm.otherContact" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.otherContact')" prop="otherContact">
+              <el-input v-model="dataForm.otherContact" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="刀片数" prop="bladeNo" >
-              <el-input v-model="dataForm.bladeNo" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.bladeNo')" prop="bladeNo" >
+              <el-input v-model="dataForm.bladeNo" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="刀片说明" prop="bladeExplain" >
-              <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.bladeExplain')" prop="bladeExplain" >
+              <el-input type="textarea" v-model="dataForm.bladeExplain" :rows="3" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="机器数" prop="deviceNo" >
-              <el-input v-model="dataForm.deviceNo" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.deviceNo')" prop="deviceNo" >
+              <el-input v-model="dataForm.deviceNo" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="机器说明" prop="deviceExplain">
-              <el-input type="textarea" v-model="dataForm.deviceExplain"  :rows="3" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.deviceExplain')" prop="deviceExplain">
+              <el-input type="textarea" v-model="dataForm.deviceExplain"  :rows="3" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-form-item label="公司" prop="company" >
-              <el-input v-model="dataForm.company" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.company')" prop="company" >
+              <el-input v-model="dataForm.company" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="经销商Email" prop="dealerEmail" >
-              <el-input v-model="dataForm.dealerEmail" placeholder="必填"></el-input>
+            <el-form-item :label="$t('message.dealerEmail')" prop="dealerEmail" >
+              <el-input v-model="dataForm.dealerEmail" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="订单状态" prop="status" v-if="dataForm.id!=0" >
+            <el-form-item :label="$t('message.status')" prop="status" v-if="dataForm.id!=0" >
               <el-select v-model="dataForm.status" >
-                <el-option label="未确认" value="1"></el-option>
-                <el-option label="已确认" value="2"></el-option>
-                <el-option label="已拒绝" value="3"></el-option>
+                <el-option :label="$t('message.noConfirm')" value="1"></el-option>
+                <el-option :label="$t('message.confirmed')" value="2"></el-option>
+                <el-option :label="$t('message.rejected')" value="3"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="膜数" prop="filmNo" >
-              <el-input v-model="dataForm.filmNo" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.filmNo')" prop="filmNo" >
+              <el-input v-model="dataForm.filmNo" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="膜说明" prop="filmExplain" >
-              <el-input type="textarea" v-model="dataForm.filmExplain" :rows="3" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.filmExplain')" prop="filmExplain" >
+              <el-input type="textarea" v-model="dataForm.filmExplain" :rows="3" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item label="次数" prop="useTimes" >
-              <el-input v-model="dataForm.useTimes" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.useTimes')" prop="useTimes" >
+              <el-input v-model="dataForm.useTimes" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
-            <el-form-item v-if="dataForm.id!=0" label="创建时间" prop="createTime">
+            <el-form-item v-if="dataForm.id!=0" :label="$t('message.createTime')" prop="createTime">
               <el-input :disabled="true" v-model="dataForm.createTime" ></el-input>
             </el-form-item>
-            <el-form-item label="回复"  prop="comment">
-              <el-input type="textarea" :rows="3" v-model="dataForm.comment" placeholder="选填"></el-input>
+            <el-form-item :label="$t('message.comment')"  prop="comment">
+              <el-input type="textarea" :rows="3" v-model="dataForm.comment" :placeholder="$t('message.optional')"></el-input>
             </el-form-item>
           </div>
         </el-col>
       </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">关闭</el-button>
-      <el-button @click="saveOrderInfo()" type="primary" v-if="dataForm.opt!=1">保存</el-button>
+      <el-button @click="visible = false">{{$t('message.close')}}</el-button>
+      <el-button @click="saveOrderInfo()" type="primary" v-if="dataForm.opt!=1">{{$t('message.save')}}</el-button>
     </span>
   </el-dialog>
 </template>

@@ -2,14 +2,14 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.orderNo" placeholder="采购单号" clearable></el-input>
+        <el-input v-model="dataForm.orderNo" :placeholder="$t('message.orderNo')" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.email" placeholder="电子邮箱" clearable></el-input>
+        <el-input v-model="dataForm.email" :placeholder="$t('message.email')" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clearQueryData()">重置</el-button>
+        <el-button @click="getDataList()">{{$t('message.search')}}</el-button>
+        <el-button @click="clearQueryData()">{{$t('message.clean')}}</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -22,7 +22,7 @@
         prop="orderNo"
         header-align="center"
         align="center"
-        label="采购单号">
+        :label="$t('message.orderNo')">
       </el-table-column>
       <!--<el-table-column
         prop="company"
@@ -40,13 +40,13 @@
         prop="userEmail"
         header-align="center"
         align="center"
-        label="客户邮箱">
+        :label="$t('message.userEmail')">
       </el-table-column>
       <el-table-column
         prop="phone"
         header-align="center"
         align="center"
-        label="电话">
+        :label="$t('message.phone')">
       </el-table-column>
       <!--<el-table-column
         prop="discountPrice"
@@ -76,34 +76,34 @@
         prop="remark"
         header-align="center"
         align="center"
-        label="备注">
+        :label="$t('message.remark')">
       </el-table-column>
       <el-table-column
           prop="status"
           header-align="center"
           align="center"
-          label="状态">
+          :label="$t('message.status')">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 1" size="small">未确认</el-tag>
-          <el-tag v-else-if="scope.row.status === 2" size="small" type="success">已确认</el-tag>
-          <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">已拒绝</el-tag>
+          <el-tag v-if="scope.row.status === 1" size="small">{{$t('message.noConfirm')}}</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small" type="success">{{$t('message.confirmed')}}</el-tag>
+          <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">{{$t('message.rejected')}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
         prop="createTime"
         header-align="center"
         align="center"
-        label="创建时间">
+        :label="$t('message.createTime')">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
         width="200"
-        label="操作">
+        :label="$t('message.operation')">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.id)">详情</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="text" size="small" @click="queryDetailHandle(scope.row.id)">{{$t('message.read')}}</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{$t('message.del')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -126,17 +126,18 @@
       :title="dataForm.status==2 ? '确认' : '拒绝'"
       :visible.sync="confirmDialogVisible"
       width="50%">
-
+      <div slot="title" v-if="dataForm.status==2">{{$t('message.submit')}}</div>
+      <div slot="title" v-else-if="dataForm.status!=2">{{$t('message.reject')}}</div>
       <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="confirmSubmit()" label-width="100px">
         <el-input v-if="false" prop="id" v-model="dataForm.id"></el-input>
-        <el-form-item label="回复" prop="comment">
-          <el-input type="textarea" v-model="dataForm.comment" placeholder="回复内容" :rows="5"></el-input>
+        <el-form-item :label="$t('message.comment')" prop="comment">
+          <el-input type="textarea" v-model="dataForm.comment" :placeholder="$t('message.comment')" :rows="5"></el-input>
         </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="confirmDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmSubmit()">确 定</el-button>
+        <el-button @click="confirmDialogVisible = false">{{$t('message.cancle')}}</el-button>
+        <el-button type="primary" @click="confirmSubmit()">{{$t('message.submit')}}</el-button>
       </span>
     </el-dialog>
   </div>

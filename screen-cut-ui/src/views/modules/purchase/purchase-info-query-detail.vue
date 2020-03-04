@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="'采购单详情'"
+    :title="$t('message.detail')"
     :close-on-click-modal="false"
     :visible.sync="visible"
     append-to-body>
@@ -8,25 +8,25 @@
     <div>
       <table style="width: 100%;">
         <tr>
-          <td style="width: 50%;"><div><div class="info-label">采购单号:</div> <div class="info-value">{{ order.orderNo }}</div></div></td>
-          <td><div><div class="info-label">收货人姓名:</div> <div class="info-value">{{ order.userName }}</div></div></td>
+          <td style="width: 50%;"><div><div class="info-label">{{$t('message.orderNo')}}:</div> <div class="info-value">{{ order.orderNo }}</div></div></td>
+          <td><div><div class="info-label">{{$t('message.clientName')}}:</div> <div class="info-value">{{ order.userName }}</div></div></td>
         </tr>
         <tr>
-          <td style="width: 50%;"><div><div class="info-label">客户邮箱:</div> <div class="info-value">{{ order.userEmail }}</div></div></td>
-          <td><div><div class="info-label">收货人联系方式:</div> <div class="info-value">{{ order.phone }}</div></div></td>
+          <td style="width: 50%;"><div><div class="info-label">{{$t('message.clientEmail')}}:</div> <div class="info-value">{{ order.userEmail }}</div></div></td>
+          <td><div><div class="info-label">{{$t('message.clientPhone')}}:</div> <div class="info-value">{{ order.phone }}</div></div></td>
         </tr>
         <tr>
-          <td style="width: 50%;"><div><div class="info-label">配送单状态::</div> <div class="info-value">
-            <el-tag v-if="order.status === 1" size="small">未确认</el-tag>
-            <el-tag v-else-if="order.status === 2" size="small" type="success">已确认</el-tag>
-            <el-tag v-else-if="order.status === 3" size="small" type="danger">已拒绝</el-tag>
+          <td style="width: 50%;"><div><div class="info-label">{{$t('message.status')}}:</div> <div class="info-value">
+            <el-tag v-if="order.status === 1" size="small">{{$t('message.noConfirm')}}</el-tag>
+            <el-tag v-else-if="order.status === 2" size="small" type="success">{{$t('message.confirmed')}}</el-tag>
+            <el-tag v-else-if="order.status === 3" size="small" type="danger">{{$t('message.rejected')}}</el-tag>
           </div></div></td>
         </tr>
         <tr>
-          <td colspan="2"><div><div class="info-label">配送地址:</div> <div class="info-value">{{ order.address }}</div></div></td>
+          <td colspan="2"><div><div class="info-label">{{$t('message.clientAddress')}}:</div> <div class="info-value">{{ order.address }}</div></div></td>
         </tr>
         <tr>
-          <td colspan="2"><div><div class="info-label">备注:</div> <div class="info-value">{{ order.remark }}</div></div></td>
+          <td colspan="2"><div><div class="info-label">{{$t('message.remark')}}:</div> <div class="info-value">{{ order.remark }}</div></div></td>
         </tr>
       </table>
     </div>
@@ -34,40 +34,39 @@
     <div>
       <table style="width: 100%;">
         <tr>
-          <td><h3>采购单明细： </h3></td>
-          <td align="right"><h4>总价(￥)： {{ allTotalPrice }}</h4></td>
+          <td><h3>{{$t('message.orderGoodsList')}}： </h3></td>
+          <td align="right"><h4>{{$t('message.totalPrice')}}： {{ allTotalPrice }}</h4></td>
         </tr>
       </table>
     </div>
-
     <el-table fixed :data="this.detailList" v-loading="dataListLoading" border style="width: 100%;" height="500">
       <el-table-column
         prop="goods.name"
-        label="产品名称">
+        :label="$t('message.productName')">
       </el-table-column>
       <el-table-column
         prop="gosType.typeName"
-        width="100"
-        label="产品类型">
+        width="120"
+        :label="$t('message.productType')">
       </el-table-column>
       <el-table-column
         prop="goods.price"
         width="100"
-        label="单价￥">
+        :label="$t('message.unitPrice')">
       </el-table-column>
       <el-table-column
         prop="goods.discountPrice"
         width="120"
-        label="折扣价￥">
+        :label="$t('message.discountPrice')">
       </el-table-column>
       <el-table-column
         prop="amount"
         width="120"
-        label="数量">
+        :label="$t('message.amount')">
       </el-table-column>
     </el-table>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">关闭</el-button>
+      <el-button @click="visible = false">{{$t('message.cancle')}}</el-button>
     </span>
   </el-dialog>
 </template>

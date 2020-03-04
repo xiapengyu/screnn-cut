@@ -2,15 +2,15 @@
   <div class="mod-user">
     <el-form :inline="true"  :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.orderNo" placeholder="采购单号" clearable></el-input>
+        <el-input v-model="dataForm.orderNo" :placeholder="$t('message.orderNo')" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="dataForm.email" placeholder="电子邮箱" clearable></el-input>
+        <el-input v-model="dataForm.email" :placeholder="$t('message.email')" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clearQueryData()">重置</el-button>
-        <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button @click="getDataList()">{{$t('message.search')}}</el-button>
+        <el-button @click="clearQueryData()">{{$t('message.clean')}}</el-button>
+        <el-button type="primary" @click="addOrUpdateHandle()">{{$t('message.add')}}</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -23,40 +23,40 @@
         prop="orderNo"
         header-align="center"
         align="center"
-        label="采购单号">
+        :label="$t('message.orderNo')">
       </el-table-column>
       <el-table-column
         prop="company"
         header-align="center"
         align="center"
-        label="所属公司">
+        :label="$t('message.company')">
       </el-table-column>
       <el-table-column
         prop="dealerName"
         header-align="center"
         align="center"
-        label="经销商名称">
+        :label="$t('message.dealerName')">
       </el-table-column>
       <el-table-column
         prop="dealerEmail"
         header-align="center"
         align="center"
         width="160"
-        label="经销商邮箱">
+        :label="$t('message.dealerEmail')">
       </el-table-column>
       <el-table-column
         prop="otherContact"
         header-align="center"
         align="center"
         width="120"
-        label="其他联系方式">
+        :label="$t('message.otherContact')">
       </el-table-column>
       <<el-table-column
         prop="bladeNo"
         header-align="center"
         align="center"
         width="80"
-        label="刀片数">
+        :label="$t('message.bladeNo')">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
             <div slot="content">{{ scope.row.bladeExplain }}</div>
@@ -69,7 +69,7 @@
         header-align="center"
         align="center"
         width="80"
-        label="膜数">
+        :label="$t('message.filmNo')">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
             <div slot="content">{{ scope.row.filmExplain }}</div>
@@ -82,7 +82,7 @@
         header-align="center"
         align="center"
         width="80"
-        label="机器数">
+        :label="$t('message.deviceNo')">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" placement="top" :enterable="true">
             <div slot="content">{{ scope.row.deviceExplain }}</div>
@@ -95,24 +95,24 @@
         header-align="center"
         align="center"
         width="80"
-        label="次数">
+        :label="$t('message.useTimes')">
       </el-table-column>-->
       <el-table-column
         prop="comment"
         header-align="center"
         align="center"
-        label="回复说明">
+        :label="$t('message.comment')">
       </el-table-column>
       <el-table-column
           prop="status"
           header-align="center"
           align="center"
           width="80"
-          label="状态">
+          :label="$t('message.status')">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 1" size="small">未确认</el-tag>
-          <el-tag v-else-if="scope.row.status === 2" size="small" type="success">已确认</el-tag>
-          <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">已拒绝</el-tag>
+          <el-tag v-if="scope.row.status === 1" size="small">{{$t('message.noConfirm')}}</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small" type="success">{{$t('message.confirmed')}}</el-tag>
+          <el-tag v-else-if="scope.row.status === 3" size="small" type="danger">{{$t('message.rejected')}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -120,20 +120,20 @@
         header-align="center"
         align="center"
         width="160"
-        label="创建时间">
+        :label="$t('message.createTime')">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
         width="230"
-        label="操作">
+        :label="$t('message.operation')">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">详情</el-button>
-          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)" v-if="isDealer==0">确认</el-button>
-          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)" v-if="isDealer==0">拒绝</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 2)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">{{$t('message.read')}}</el-button>
+          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,2)" v-if="isDealer==0">{{$t('message.confirm')}}</el-button>
+          <el-button type="text" size="small" @click="showConfirmWin(scope.row.id,3)" v-if="isDealer==0">{{$t('message.reject')}}</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 2)">{{$t('message.edit')}}</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{$t('message.del')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -151,22 +151,22 @@
     <query-detail v-if="queryDetailVisible" ref="queryDetail" @refreshDataList="getDataList"></query-detail>
     <add-or-update v-if="addVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
 
-
     <el-dialog
       :title="dataForm.status==2 ? '确认' : '拒绝'"
       :visible.sync="confirmDialogVisible"
       width="50%">
-
+      <div slot="title" v-if="dataForm.status==2">{{$t('message.submit')}}</div>
+      <div slot="title" v-else-if="dataForm.status!=2">{{$t('message.reject')}}</div>
       <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="confirmSubmit()" label-width="100px">
         <el-input v-if="false" prop="id" v-model="dataForm.id"></el-input>
-        <el-form-item label="回复" prop="comment">
-          <el-input type="textarea" v-model="dataForm.comment" placeholder="回复内容" :rows="5"></el-input>
+        <el-form-item :label="$t('message.comment')" prop="comment">
+          <el-input type="textarea" v-model="dataForm.comment" :placeholder="$t('message.comment')" :rows="5"></el-input>
         </el-form-item>
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="confirmDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmSubmit()">确 定</el-button>
+        <el-button @click="confirmDialogVisible = false">{{$t('message.cancle')}}</el-button>
+        <el-button type="primary" @click="confirmSubmit()">{{$t('message.submit')}}</el-button>
       </span>
     </el-dialog>
   </div>
