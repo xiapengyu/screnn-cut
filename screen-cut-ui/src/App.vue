@@ -6,9 +6,5 @@
 
 <script>
   export default {
-    // created () {
-    //   this.lang = 'chinese'
-    //   this.$i18n.locale = this.lang
-    // }
   }
 </script>

@@ -2,6 +2,13 @@ import enLocale from 'element-ui/lib/locale/lang/en'
 
 const en = {
   message: {
+    'home': 'Home',
+    'sysName': 'Management',
+    'updatePassword': 'Password',
+    'oldPassword': 'Old Password',
+    'newPassword': 'New Password',
+    'confirmPassword': 'Confirm Password',
+    'quit': 'Quit',
     'setting': 'Setting',
     'sideBarSkin': 'Side Bar Skin',
     'language': 'Language',

@@ -174,7 +174,7 @@ public class SysUserController extends AbstractController {
 	}
 	
 	/**
-	 * 下载经销商信息模板
+	 * 切换语言
 	 */
 	@PostMapping("/changeLocal")
 	public R changeLocal(@RequestBody Map<String, Object> params) {

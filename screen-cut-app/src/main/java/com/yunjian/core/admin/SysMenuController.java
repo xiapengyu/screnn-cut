@@ -5,8 +5,10 @@ package com.yunjian.core.admin;
 import com.yunjian.common.annotation.SysLog;
 import com.yunjian.common.exception.RRException;
 import com.yunjian.common.utils.Constant;
+import com.yunjian.common.utils.HttpContextUtils;
 import com.yunjian.common.utils.R;
 import com.yunjian.core.entity.SysMenuEntity;
+import com.yunjian.core.entity.SysUserEntity;
 import com.yunjian.core.service.ShiroService;
 import com.yunjian.core.service.SysMenuService;
 
@@ -36,9 +38,23 @@ public class SysMenuController extends AbstractController {
 	 */
 	@GetMapping("/nav")
 	public R nav(){
+		SysUserEntity user = (SysUserEntity) HttpContextUtils.getLoginUser().get("sysUser");
 		List<SysMenuEntity> menuList = sysMenuService.getUserMenuList(getUserId());
+		if(user.getLanguage().equals("english")) {
+			resetMenu(menuList);
+		}
 		Set<String> permissions = shiroService.getUserPermissions(getUserId());
 		return R.ok().put("menuList", menuList).put("permissions", permissions);
+	}
+	
+	@SuppressWarnings({ "unused", "unchecked" })
+	private void resetMenu(List<SysMenuEntity> list) {
+		for(SysMenuEntity menu : list) {
+			menu.setName(menu.getEnglishName());
+			if(menu.getType()==0) {
+				resetMenu((List<SysMenuEntity>) menu.getList());
+			}
+		}
 	}
 	
 	/**

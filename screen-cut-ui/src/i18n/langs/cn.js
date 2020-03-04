@@ -2,6 +2,13 @@ import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 
 const chinese = {
   message: {
+    'home': '首页',
+    'updatePassword': '修改密码',
+    'oldPassword': '旧密码',
+    'newPassword': '新密码',
+    'confirmPassword': '确认密码',
+    'quit': '退出',
+    'sysName': '后台管理系统',
     'setting': '设置',
     'sideBarSkin': '侧边栏皮肤',
     'language': '语言',

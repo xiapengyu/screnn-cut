@@ -2,8 +2,8 @@
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
       <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;">后台管理系统</a>
-        <a class="site-navbar__brand-mini" href="javascript:;">ELADMIN</a>
+        <a class="site-navbar__brand-lg" href="javascript:;">{{$t('message.sysName')}}</a>
+        <a class="site-navbar__brand-mini" href="javascript:;">ADMIN</a>
       </h1>
     </div>
     <div class="site-navbar__body clearfix">
@@ -30,8 +30,8 @@
               <img src="~@/assets/img/avatar.jpg" :alt="userName">{{ userName }}
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="updatePasswordHandle()">修改密码</el-dropdown-item>
-              <el-dropdown-item @click.native="logoutHandle()">退出</el-dropdown-item>
+              <el-dropdown-item @click.native="updatePasswordHandle()">{{$t('message.updatePassword')}}</el-dropdown-item>
+              <el-dropdown-item @click.native="logoutHandle()">{{$t('message.quit')}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-menu-item>

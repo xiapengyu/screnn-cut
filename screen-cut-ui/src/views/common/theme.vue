@@ -24,6 +24,7 @@
 
 <script>
   export default {
+    inject: ['reload'],
     computed: {
       navbarLayoutType: {
         get () { return this.$store.state.common.navbarLayoutType },
@@ -61,10 +62,9 @@
         })
         this.lang = val
         this.$i18n.locale = this.lang
+        this.$router.go(0)
       }
-
     }
-
   }
 </script>
 

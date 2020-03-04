@@ -41,6 +41,7 @@ public class SysMenuEntity implements Serializable {
 	 * 菜单名称
 	 */
 	private String name;
+	private String englishName;
 
 	/**
 	 * 菜单URL

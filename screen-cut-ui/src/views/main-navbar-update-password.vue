@@ -1,25 +1,25 @@
 <template>
   <el-dialog
-    title="修改密码"
+    :title="$t('message.updatePassword')"
     :visible.sync="visible"
     :append-to-body="true">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-      <el-form-item label="账号">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="120px">
+      <el-form-item :label="$t('message.userName')">
         <span>{{ userName }}</span>
       </el-form-item>
-      <el-form-item label="原密码" prop="password">
+      <el-form-item :label="$t('message.oldPassword')" prop="password">
         <el-input type="password" v-model="dataForm.password"></el-input>
       </el-form-item>
-      <el-form-item label="新密码" prop="newPassword">
+      <el-form-item :label="$t('message.newPassword')" prop="newPassword">
         <el-input type="password" v-model="dataForm.newPassword"></el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="confirmPassword">
+      <el-form-item :label="$t('message.confirmPassword')" prop="confirmPassword">
         <el-input type="password" v-model="dataForm.confirmPassword"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button @click="visible = false">{{$t('message.cancle')}}</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">{{$t('message.submit')}}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -44,13 +44,13 @@
         },
         dataRule: {
           password: [
-            { required: true, message: '原密码不能为空', trigger: 'blur' }
+            { required: true, trigger: 'blur' }
           ],
           newPassword: [
-            { required: true, message: '新密码不能为空', trigger: 'blur' }
+            { required: true, trigger: 'blur' }
           ],
           confirmPassword: [
-            { required: true, message: '确认密码不能为空', trigger: 'blur' },
+            { required: true, trigger: 'blur' },
             { validator: validateConfirmPassword, trigger: 'blur' }
           ]
         }
