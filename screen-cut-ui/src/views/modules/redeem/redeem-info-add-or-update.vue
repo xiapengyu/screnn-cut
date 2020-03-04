@@ -3,30 +3,32 @@
     :title="dataForm.op===0 ? '查看' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
+    <div slot="title" v-if="dataForm.opt==0">{{$t('message.read')}}</div>
+    <div slot="title" v-else-if="dataForm!=0">{{$t('message.edit')}}</div>
     <el-form :model="dataForm" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <el-form-item label="批次" prop="batchNo">
-          <el-input v-model="dataForm.batchNo" placeholder="批次" disabled></el-input>
+      <el-form-item :label="$t('message.batchNo')" prop="batchNo">
+          <el-input v-model="dataForm.batchNo" :placeholder="$t('message.batchNo')" disabled></el-input>
       </el-form-item>
-      <el-form-item label="兑换编码" prop="redeemNo">
-          <el-input v-model="dataForm.redeemNo" placeholder="兑换编码" disabled></el-input>
+      <el-form-item :label="$t('message.redeemCode')" prop="redeemNo">
+          <el-input v-model="dataForm.redeemNo" :placeholder="$t('message.redeemCode')" disabled></el-input>
       </el-form-item>
-      <el-form-item label="二维码" prop="url">
+      <el-form-item :label="$t('message.qrCode')" prop="url">
           <img :src="dataForm.url" alt="" height="200" width="200">
       </el-form-item>
-      <el-form-item label="切割次数" prop="times">
-          <el-input v-model="dataForm.times" placeholder="切割次数" disabled></el-input>
+      <el-form-item :label="$t('message.qrCode')" prop="times">
+          <el-input v-model="dataForm.times" :placeholder="$t('message.qrCode')" disabled></el-input>
       </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status">
+      <el-form-item :label="$t('message.status')" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status" :disabled="this.dataForm.op===0">
-          <el-radio :label="0">禁用</el-radio>
-          <el-radio :label="1">启用</el-radio>
-          <el-radio :label="2">已兑换</el-radio>
+          <el-radio :label="0">{{$t('message.disable')}}</el-radio>
+          <el-radio :label="1">{{$t('message.able')}}</el-radio>
+          <el-radio :label="2">{{$t('message.redeemed')}}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">关闭</el-button>
-      <el-button v-show="dataForm.op===1" type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button @click="visible = false">{{$t('message.close')}}</el-button>
+      <el-button v-show="dataForm.op===1" type="primary" @click="dataFormSubmit()">{{$t('message.submit')}}</el-button>
     </span>
   </el-dialog>
 </template>

@@ -1,19 +1,19 @@
 <template>
   <el-dialog
-    title="新增"
+    :title="$t('message.add')"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <el-form-item label="兑换码数量" prop="count">
-          <el-input v-model="dataForm.count" placeholder="兑换码数量"></el-input>
+      <el-form-item :label="$t('message.count')" prop="count">
+          <el-input v-model="dataForm.count" :placeholder="$t('message.count')"></el-input>
       </el-form-item>
-      <el-form-item label="每张切割次数" prop="times">
-          <el-input v-model="dataForm.times" placeholder="每张兑换码切割次数"></el-input>
+      <el-form-item :label="$t('message.timesPerCode')" prop="times">
+          <el-input v-model="dataForm.times" :placeholder="$t('message.timesPerCode')"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">关闭</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button @click="visible = false">{{$t('message.close')}}</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">{{$t('message.submit')}}</el-button>
     </span>
   </el-dialog>
 </template>

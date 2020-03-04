@@ -1,24 +1,24 @@
 <template>
-  <el-dialog title="新增"
+  <el-dialog :title="$t('message.add')"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
       <el-input v-if="false" v-model="dataForm.id"></el-input>
-      <el-form-item label="名称" prop="name" :class="{ 'is-required': true }">
-        <el-input v-model="dataForm.name" placeholder="名称"></el-input>
+      <el-form-item :label="$t('message.name')" prop="name" :class="{ 'is-required': true }">
+        <el-input v-model="dataForm.name" :placeholder="$t('message.name')"></el-input>
       </el-form-item>
-      <el-form-item label="描述" prop="comment" :class="{ 'is-required': true }">
-        <el-input type='textarea' rows="5" placeholder="描述" v-model="dataForm.comment"></el-input>
+      <el-form-item :label="$t('message.recommend')" prop="comment" :class="{ 'is-required': true }">
+        <el-input type='textarea' rows="5" :placeholder="$t('message.recommend')" v-model="dataForm.comment"></el-input>
       </el-form-item>
-      <el-form-item label="价格" prop="price" :class="{ 'is-required': true }">
+      <el-form-item :label="$t('message.price')" prop="price" :class="{ 'is-required': true }">
           <el-input v-model="dataForm.price" placeholder="0.00">
             <template slot="append">元</template>
           </el-input>
       </el-form-item>
-      <el-form-item label="是否打折" size="mini" prop="isDiscount" :class="{ 'is-required': true }">
+      <el-form-item :label="$t('message.isdiscount')" size="mini" prop="isDiscount" :class="{ 'is-required': true }">
         <el-radio-group v-model="dataForm.isDiscount" @change="radioChange(dataForm.isDiscount)">
-          <el-radio :label="0">否</el-radio>
-          <el-radio :label="1">是</el-radio>
+          <el-radio :label="0">{{$t('message.no')}}</el-radio>
+          <el-radio :label="1">$t('message.yes')</el-radio>
         </el-radio-group>
       </el-form-item>
       <!-- <el-table-column
@@ -31,17 +31,17 @@
           <el-tag v-else size="small">否</el-tag>
         </template>
       </el-table-column> -->
-      <el-form-item label="折扣价" prop="discountPrice" v-if="dataForm.isDiscount === 1">
+      <el-form-item :label="$t('message.discountPrice')" prop="discountPrice" v-if="dataForm.isDiscount === 1">
           <el-input v-model="dataForm.discountPrice" placeholder="0.00">
             <template slot="append">元</template>
           </el-input>
       </el-form-item>
-      <el-form-item label="商品类型" :class="{ 'is-required': true }">
+      <el-form-item :label="$t('message.goodsType')" :class="{ 'is-required': true }">
         <el-checkbox-group v-model="typeIdList">
           <el-checkbox v-for="item in this.typeList" @change="change(item)" :key="item.id" :label="item.id">{{item.typeName}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item label="图片" :class="{ 'is-required': true }">
+      <el-form-item :label="$t('message.img')" :class="{ 'is-required': true }">
           <el-upload
             list-type="picture-card"
             ref="refresh"
@@ -56,19 +56,19 @@
             <img width="100%" :src="dialogImageUrl" alt="">
           </el-dialog>
         </el-form-item>
-      <el-form-item label="库存" prop="stock" :class="{ 'is-required': true }">
-          <el-input-number v-model="dataForm.stock" controls-position="right" :min="0" label="库存"></el-input-number>
+      <el-form-item :label="$t('message.stock')" prop="stock" :class="{ 'is-required': true }">
+          <el-input-number v-model="dataForm.stock" controls-position="right" :min="0" :label="$t('message.stock')"></el-input-number>
       </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status" :class="{ 'is-required': true }">
+      <el-form-item :label="$t('message.status')" size="mini" prop="status" :class="{ 'is-required': true }">
         <el-radio-group v-model="dataForm.status">
-          <el-radio :label="0">下架</el-radio>
-          <el-radio :label="1">上架</el-radio>
+          <el-radio :label="0">{{$t('message.putaway')}}</el-radio>
+          <el-radio :label="1">{{$t('message.soldOut')}}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="close()">取消</el-button>
-      <el-button @click="saveGoodsInfo()">保存</el-button>
+      <el-button @click="close()">{{$t('message.cancle')}}</el-button>
+      <el-button @click="saveGoodsInfo()">$t('message.submit')</el-button>
     </span>
   </el-dialog>
 </template>

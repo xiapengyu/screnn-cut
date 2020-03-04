@@ -1,22 +1,22 @@
 <template>
   <el-dialog
-    title="更新"
+    :title="$t('message.update')"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
-      <el-form-item label="兑换码批次" prop="batchNo" :class="{ 'is-required': true }">
-          <el-input v-model="dataForm.batchNo" placeholder="兑换码批次"></el-input>
+      <el-form-item :label="$t('message.redeemCode')" prop="batchNo" :class="{ 'is-required': true }">
+          <el-input v-model="dataForm.batchNo" :placeholder="$t('message.redeemCode')"></el-input>
       </el-form-item>
-      <el-form-item label="状态" size="mini" prop="status">
+      <el-form-item :label="$t('message.status')" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status" >
-          <el-radio :label="0">禁用</el-radio>
-          <el-radio :label="1">启用</el-radio>
+          <el-radio :label="0">{{$t('message.disable')}}</el-radio>
+          <el-radio :label="1">{{$t('message.able')}}</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">关闭</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button @click="visible = false">{{$t('message.cancle')}}</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">{{$t('message.submit')}}</el-button>
     </span>
   </el-dialog>
 </template>

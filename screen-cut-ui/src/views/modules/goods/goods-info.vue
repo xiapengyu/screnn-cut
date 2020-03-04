@@ -2,12 +2,12 @@
   <div class="mod-user">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.name" placeholder="名称" clearable></el-input>
+        <el-input v-model="dataForm.name" :placeholder="$t('message.name')" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clearQueryData()">重置</el-button>
-        <el-button type="primary" @click="addHandle()" v-if="isDealer==1">新增</el-button>
+        <el-button @click="getDataList()">{{$t('message.search')}}</el-button>
+        <el-button @click="clearQueryData()">{{$t('message.clean')}}</el-button>
+        <el-button type="primary" @click="addHandle()" v-if="isDealer==1">{{$t('message.add')}}</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -26,74 +26,74 @@
         prop="name"
         header-align="center"
         align="center"
-        label="名称">
+        :label="$t('message.name')">
       </el-table-column>
       <el-table-column
         prop="comment"
         header-align="center"
         align="center"
-        label="介绍">
+        :label="$t('message.recommend')">
       </el-table-column>
       <el-table-column
         prop="price"
         header-align="center"
         align="center"
-        label="价格">
+        :label="$t('message.price')">
       </el-table-column>
       <el-table-column
         prop="isDiscount"
         header-align="center"
         align="center"
-        label="是否打折">
+        :label="$t('message.isDiscount')">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.isDiscount === 1" size="small">是</el-tag>
-          <el-tag v-else-if="scope.row.isDiscount === 0" size="small">否</el-tag>
+          <el-tag v-if="scope.row.isDiscount === 1" size="small">{{$t('message.yes')}}</el-tag>
+          <el-tag v-else-if="scope.row.isDiscount === 0" size="small">{{$t('message.no')}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
         prop="discountPrice"
         header-align="center"
         align="center"
-        label="折后价格">
+        :label="$t('message.discountPrice')">
       </el-table-column>
       <el-table-column
         prop="saleAmount"
         header-align="center"
         align="center"
-        label="销量">
+        :label="$t('message.saleAmount')">
       </el-table-column>
       <el-table-column
         prop="stock"
         header-align="center"
         align="center"
-        label="库存">
+        :label="$t('message.stock')">
       </el-table-column>
       <el-table-column
         prop="status"
         header-align="center"
         align="center"
-        label="状态">
+        :label="$t('message.status')">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.status === 1" size="small">上架</el-tag>
-          <el-tag v-else-if="scope.row.status === 0" size="small">下架</el-tag>
+          <el-tag v-if="scope.row.status === 1" size="small">{{$t('message.putaway')}}</el-tag>
+          <el-tag v-else-if="scope.row.status === 0" size="small">{{$t('message.soldOut')}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
         prop="createTime"
         header-align="center"
         align="center"
-        label="创建时间">
+        :label="$t('message.createTime')">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
         width="150"
-        label="操作">
+        :label="$t('message.operation')">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">查看</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 0)">{{$t('message.read')}}</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id, 1)">{{$t('message.edit')}}</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{$t('message.del')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -115,7 +115,7 @@
 <script>
   import AddGoods from './goods-info-add'
   import AddOrUpdate from './goods-info-add-or-update'
-  
+
   export default {
     data () {
       return {

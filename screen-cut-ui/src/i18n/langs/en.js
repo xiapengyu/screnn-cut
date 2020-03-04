@@ -21,6 +21,7 @@ const en = {
     'createTime': 'createTime',
     'operation': 'operation',
     'edit': 'Edit',
+    'update': 'Update',
     'del': 'Del',
     'redeemCode': 'Redeem Code',
     'clean': 'Clean',
@@ -41,7 +42,23 @@ const en = {
     'serialNo': 'Serial No.',
     'usedTimes': 'Used Times',
     'surplusTimes': 'Surplus Times',
-    'close': 'Close'
+    'close': 'Close',
+    'count': 'Count',
+    'timesPerCode': 'Times Per Code',
+    'name': 'Name',
+    'recommend': 'Recommend',
+    'price': 'Price',
+    'isDiscount': 'Is Discount',
+    'yes': 'Yes',
+    'no': 'No',
+    'discountPrice': 'Discount Price',
+    'saleAmount': 'Sale Amount',
+    'stock': 'Stock',
+    'putaway': 'Putaway',
+    'soldOut': 'Sold Out',
+    'goodsType': 'goods Type',
+    'img': 'Image',
+    'other': ''
   },
   ...enLocale
 }

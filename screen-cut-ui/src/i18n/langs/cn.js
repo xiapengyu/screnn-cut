@@ -21,6 +21,7 @@ const chinese = {
     'createTime': '创建时间',
     'operation': '操作',
     'edit': '修改',
+    'update': '更新',
     'del': '删除',
     'redeemCode': '兑换码',
     'clean': '重置',
@@ -41,7 +42,23 @@ const chinese = {
     'serialNo': '序列号',
     'usedTimes': '已用次数',
     'surplusTimes': '未用次数',
-    'close': '关闭'
+    'close': '关闭',
+    'count': '兑换码数量',
+    'timesPerCode': '每张次数',
+    'name': '名称',
+    'recommend': '介绍',
+    'price': '价格',
+    'isDiscount': '是否打折',
+    'yes': '是',
+    'no': '否',
+    'discountPrice': '折扣价格',
+    'saleAmount': '销量',
+    'stock': '库存',
+    'putaway': '上架',
+    'soldOut': '下架',
+    'goodsType': '商品类型',
+    'img': '图片',
+    'other': ''
   },
   ...zhLocale
 }
