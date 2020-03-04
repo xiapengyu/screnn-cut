@@ -42,24 +42,23 @@
     methods: {
       changeLocal (val) {
         this.language = val
-        // this.$http({
-        //   url: this.$http.adornUrl('/sys/dictData/changeLocal'),
-        //   method: 'post',
-        //   // data: this.$http.adornData(val, false)
-        //   data: this.$http.adornData({
-        //     'language': val
-        //   })
-        // }).then(({data}) => {
-        //   if (data && data.code === 0) {
-        //     this.$message({
-        //       message: '操作成功',
-        //       type: 'success',
-        //       duration: 3000
-        //     })
-        //   } else {
-        //     this.$message.error(data.msg)
-        //   }
-        // })
+        this.$http({
+          url: this.$http.adornUrl('/sys/user/changeLocal'),
+          method: 'post',
+          data: this.$http.adornData({
+            'language': val
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.$message({
+              message: '操作成功',
+              type: 'success',
+              duration: 3000
+            })
+          } else {
+            this.$message.error(data.msg)
+          }
+        })
         this.lang = val
         this.$i18n.locale = this.lang
       }

@@ -76,6 +76,8 @@ public class SysUserEntity implements Serializable {
 	 */
 	private Long createUserId;
 
+	private String language;
+	
 	/**
 	 * 创建时间
 	 */

@@ -71,6 +71,8 @@
             this.loading = false
             this.userId = data.user.userId
             this.userName = data.user.username
+            this.lang = data.user.language
+            this.$i18n.locale = this.lang
           }
         })
       }
